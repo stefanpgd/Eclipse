@@ -4,11 +4,11 @@
 
 int main()
 {
-	Renderer renderer;
+	Renderer* renderer = Renderer::GetInstance();
 
 	try
 	{
-		renderer.Run();
+		renderer->Run();
 	}
 	catch (const std::exception& e)
 	{

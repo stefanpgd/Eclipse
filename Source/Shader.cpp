@@ -41,7 +41,7 @@ Shader::Shader(const std::string vertexName, const std::string fragmentName)
 	}
 	catch (std::ifstream::failure& e)
 	{
-		throw std::runtime_error("Error: shader file not succesfully read.");
+		throw std::runtime_error(e);
 	}
 
 	const char* vShaderCode = vertexCode.c_str();

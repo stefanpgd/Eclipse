@@ -13,6 +13,12 @@
     <ClCompile Include="Source\ImGui\imgui_widgets.cpp" />
     <ClCompile Include="Source\MeshRenderer.cpp" />
     <ClCompile Include="Source\Shader.cpp" />
+    <ClCompile Include="Source\Object.cpp" />
+    <ClCompile Include="Source\Transform.cpp" />
+    <ClCompile Include="Source\Material.cpp" />
+    <ClCompile Include="Source\precomp.cpp" />
+    <ClCompile Include="Source\DefaultMaterial.cpp" />
+    <ClCompile Include="Source\Camera.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Renderer.h" />
@@ -28,6 +34,11 @@
     <ClInclude Include="Source\MeshRenderer.h" />
     <ClInclude Include="Source\precomp.h" />
     <ClInclude Include="Source\Shader.h" />
+    <ClInclude Include="Source\Object.h" />
+    <ClInclude Include="Source\Transform.h" />
+    <ClInclude Include="Source\Material.h" />
+    <ClInclude Include="Source\DefaultMaterial.h" />
+    <ClInclude Include="Source\Camera.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Source\Shaders\default.vert" />
