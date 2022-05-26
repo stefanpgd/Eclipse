@@ -58,11 +58,15 @@ void Renderer::Update()
 	MeshRenderer renderer;
 	renderer.Initialize();
 
+	glm::mat4 model(1.0f);
+	model = glm::rotate(model, glm::radians(20.0f), glm::vec3(0.5, 0.25, 0.5));
+	shader.SetMat4("model", model);
+
 	while (!glfwWindowShouldClose(window))
 	{
 		ProcessInput(window);
 
-		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+		glClearColor(0.05f, 0.05f, 0.05f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		renderer.Draw();
