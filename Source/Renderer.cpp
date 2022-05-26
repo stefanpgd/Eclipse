@@ -2,6 +2,8 @@
 #include "Renderer.h"
 #include <iostream>
 #include <stdexcept>
+#include "Shader.h"
+#include "MeshRenderer.h"
 
 #include "ImGui/imgui.h"
 #include "ImGui/imgui_impl_glfw.h"
@@ -36,6 +38,8 @@ void Renderer::Initialize()
 	{
 		throw std::runtime_error("Failed to initialize GLAD");
 	}
+
+	glEnable(GL_DEPTH_TEST);
 }
 
 void Renderer::Update()
@@ -48,11 +52,20 @@ void Renderer::Update()
 	ImGui_ImplGlfw_InitForOpenGL(window, true);
 	ImGui_ImplOpenGL3_Init("#version 330");
 
+	Shader shader("default.vert", "default.frag");
+	shader.Use();
+
+	MeshRenderer renderer;
+	renderer.Initialize();
+
 	while (!glfwWindowShouldClose(window))
 	{
-		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
 		ProcessInput(window);
+
+		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		renderer.Draw();
 
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();

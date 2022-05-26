@@ -12,6 +12,7 @@
     <ClCompile Include="Source\ImGui\imgui_tables.cpp" />
     <ClCompile Include="Source\ImGui\imgui_widgets.cpp" />
     <ClCompile Include="Source\MeshRenderer.cpp" />
+    <ClCompile Include="Source\Shader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Renderer.h" />
@@ -26,5 +27,10 @@
     <ClInclude Include="Source\ImGui\imstb_truetype.h" />
     <ClInclude Include="Source\MeshRenderer.h" />
     <ClInclude Include="Source\precomp.h" />
+    <ClInclude Include="Source\Shader.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Source\Shaders\default.vert" />
+    <None Include="Source\Shaders\default.frag" />
   </ItemGroup>
 </Project>
