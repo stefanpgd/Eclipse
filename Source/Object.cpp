@@ -12,8 +12,11 @@ Object::Object()
 	camera = Camera::GetInstance();
 }
 
-void Object::Update()
+void Object::Update(float deltaTime)
 {
+	transform.Rotation.x += 20.0f * deltaTime;
+	transform.Rotation.y += 15.0f * deltaTime;
+	transform.Rotation.z += 5.0f * deltaTime;
 }
 
 void Object::Draw()

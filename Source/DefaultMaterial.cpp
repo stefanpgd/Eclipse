@@ -12,4 +12,5 @@ void DefaultMaterial::ActivateMaterial(glm::mat4& model, glm::mat4& view, glm::m
 	shader->Use();
 	mat4 MVP = projection * view * model;
 	shader->SetMat4("MVP", MVP);
+	shader->SetMat4("model", model);
 }
