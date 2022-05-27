@@ -4,10 +4,19 @@
 #include "DefaultMaterial.h"
 #include "Object.h"
 
-
 Object::Object()
 {
-	material = new DefaultMaterial();
+	int r = rand() % 100;
+
+	if (r < 5)
+	{
+		material = new DefaultMaterial("phantom.png");
+	}
+	else
+	{
+		material = new DefaultMaterial();
+	}
+
 	meshRenderer.Initialize();
 	camera = Camera::GetInstance();
 }

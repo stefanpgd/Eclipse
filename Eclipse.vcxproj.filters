@@ -19,6 +19,9 @@
     <ClCompile Include="Source\precomp.cpp" />
     <ClCompile Include="Source\DefaultMaterial.cpp" />
     <ClCompile Include="Source\Camera.cpp" />
+    <ClCompile Include="Source\Sprite.cpp" />
+    <ClCompile Include="Source\Texture.cpp" />
+    <ClCompile Include="Source\stb_image.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Renderer.h" />
@@ -39,6 +42,8 @@
     <ClInclude Include="Source\Material.h" />
     <ClInclude Include="Source\DefaultMaterial.h" />
     <ClInclude Include="Source\Camera.h" />
+    <ClInclude Include="Source\Sprite.h" />
+    <ClInclude Include="Source\Texture.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Source\Shaders\default.vert" />

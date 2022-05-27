@@ -90,7 +90,6 @@ void Renderer::Update()
 		obj->transform.Rotation = vec3(RandomInRange(-350.0f, 350.0f), RandomInRange(-350.0f, 350.0f), RandomInRange(-350.0f, 350.0f));
 		float scale = RandomInRange(0.25f, 1.5f);
 		obj->transform.Scale = vec3(scale);
-
 		objects.push_back(obj);
 	}
 
@@ -178,8 +177,18 @@ void Renderer::ProcessSingleInputEvents(int key, int action)
 
 	if (key == GLFW_KEY_I && action == GLFW_PRESS)
 	{
-		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 		FocusWindow = true;
+	}
+
+	if (key == GLFW_KEY_LEFT_SHIFT && action == GLFW_PRESS)
+	{
+		Camera::GetInstance()->CameraMovementSpeed = 10.0f;
+	}
+	
+	if (key == GLFW_KEY_LEFT_SHIFT && action == GLFW_RELEASE)
+	{
+		Camera::GetInstance()->CameraMovementSpeed = 2.5f;
 	}
 }
 

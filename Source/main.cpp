@@ -18,3 +18,9 @@ int main()
 
 	return EXIT_SUCCESS;
 }
+
+// Things to do:
+// Maintain a personal manual to reference to, it will also help with learning
+// 3D Model loading
+// Exclude the libs from the dependencies
+// Library that re-uses textures to avoid allocating to much RAM
