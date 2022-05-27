@@ -83,15 +83,7 @@ void Renderer::Update()
 	ImGui_ImplGlfw_InitForOpenGL(window, true);
 	ImGui_ImplOpenGL3_Init("#version 330");
 
-	for (int i = 0; i < 1000; i++)
-	{
-		Object* obj = new Object();
-		obj->transform.Position = vec3(RandomInRange(-15.0f, 15.0f), RandomInRange(-15.0f, 15.0f), RandomInRange(-15.0f, 15.0f));
-		obj->transform.Rotation = vec3(RandomInRange(-350.0f, 350.0f), RandomInRange(-350.0f, 350.0f), RandomInRange(-350.0f, 350.0f));
-		float scale = RandomInRange(0.25f, 1.5f);
-		obj->transform.Scale = vec3(scale);
-		objects.push_back(obj);
-	}
+	Object sponza;
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -102,18 +94,10 @@ void Renderer::Update()
 		glClearColor(0.05f, 0.05f, 0.05f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+		sponza.Draw();
+
 		ProcessContinuesInputEvents();
 		camera->Update(deltaTime);
-
-		for (int i = 0; i < objects.size(); i++)
-		{
-			objects[i]->Update(deltaTime);
-		}
-
-		for (int i = 0; i < objects.size(); i++)
-		{
-			objects[i]->Draw();
-		}
 
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
@@ -183,7 +167,7 @@ void Renderer::ProcessSingleInputEvents(int key, int action)
 
 	if (key == GLFW_KEY_LEFT_SHIFT && action == GLFW_PRESS)
 	{
-		Camera::GetInstance()->CameraMovementSpeed = 10.0f;
+		Camera::GetInstance()->CameraMovementSpeed = 500.0f;
 	}
 	
 	if (key == GLFW_KEY_LEFT_SHIFT && action == GLFW_RELEASE)

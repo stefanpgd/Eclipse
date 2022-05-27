@@ -22,6 +22,8 @@
     <ClCompile Include="Source\Sprite.cpp" />
     <ClCompile Include="Source\Texture.cpp" />
     <ClCompile Include="Source\stb_image.cpp" />
+    <ClCompile Include="Source\Mesh.cpp" />
+    <ClCompile Include="Source\Model.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Renderer.h" />
@@ -44,6 +46,8 @@
     <ClInclude Include="Source\Camera.h" />
     <ClInclude Include="Source\Sprite.h" />
     <ClInclude Include="Source\Texture.h" />
+    <ClInclude Include="Source\Mesh.h" />
+    <ClInclude Include="Source\Model.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Source\Shaders\default.vert" />

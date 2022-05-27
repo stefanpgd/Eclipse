@@ -19,6 +19,6 @@ void main()
 		vec3 start = vec3(1.0, 1.0, 1.0);
 		float c = 1 - FragPosition.z * 0.05;
 		vec3 normalColor = (Normal * 0.5) + 0.5;
-		FragColor = vec4(normalColor * c, 1.0);
+		FragColor = vec4(normalColor, 1.0);
 	}
 }

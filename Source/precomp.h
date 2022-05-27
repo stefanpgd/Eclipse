@@ -15,5 +15,5 @@
 #include <glm/detail/type_mat.hpp>
 
 using namespace glm;
-const unsigned int ScreenWidth = 720;
-const unsigned int ScreenHeight = 480;
+const unsigned int ScreenWidth = 1280;
+const unsigned int ScreenHeight = 720;

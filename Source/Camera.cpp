@@ -11,7 +11,7 @@ void Camera::Initialize(glm::vec3 position, glm::vec3 front, glm::vec3 up, float
 		Yaw = yaw;
 		Pitch = pitch;
 
-		projectionMatrix = glm::perspective(glm::radians(FOV), (float)ScreenWidth / (float)ScreenHeight, 0.1f, 100.0f);
+		projectionMatrix = glm::perspective(glm::radians(FOV), (float)ScreenWidth / (float)ScreenHeight, 0.1f, 100000.0f);
 		isInitialized = true;
 	}
 }
@@ -74,7 +74,7 @@ void Camera::ProcessMouseMovement(double xPos, double yPos, bool constrainPitch)
 	lastX = xpos;
 	lastY = ypos;
 
-	float speed = CameraMovementSpeed * deltaTime;
+	float speed = CameraTiltSpeed * deltaTime;
 	xOffset *= speed;
 	yOffset *= speed;
 
@@ -105,5 +105,5 @@ void Camera::ProcessMouseScroll(float yOffset)
 	if (FOV > 45.0f)
 		FOV = 45.0f;
 
-	projectionMatrix = glm::perspective(glm::radians(FOV), (float)ScreenWidth / (float)ScreenHeight, 0.1f, 1000.0f);
+	projectionMatrix = glm::perspective(glm::radians(FOV), (float)ScreenWidth / (float)ScreenHeight, 0.1f, 100000.0f);
 }

@@ -1,4 +1,5 @@
 #include "precomp.h"
+#include "Model.h"
 #include "MeshRenderer.h"
 
 void MeshRenderer::Initialize()
@@ -13,8 +14,8 @@ void MeshRenderer::Initialize()
 
 	// Setup attributes
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);					// Vertex Pos
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float))); // Texture Coords
-	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(5 * sizeof(float))); // Normals
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float))); // Texture Coords
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float))); // Normals
 	glEnableVertexAttribArray(0);
 	glEnableVertexAttribArray(1);
 	glEnableVertexAttribArray(2);
@@ -27,6 +28,16 @@ void MeshRenderer::Initialize()
 	meshSetup = true;
 }
 
+void MeshRenderer::Initialize(std::string fileName)
+{
+	std::string path = "Assets/Models/" + fileName;
+
+	model = new Model(path);
+
+	meshSetup = true;
+	usesModel = true;
+}
+
 void MeshRenderer::Draw()
 {
 	if (!meshSetup)
@@ -34,6 +45,13 @@ void MeshRenderer::Draw()
 		throw std::runtime_error("ERROR: Mesh has not yet been initialized, so draw calls can't be made!");
 	}
 
-	glBindVertexArray(VAO);
-	glDrawArrays(GL_TRIANGLES, 0, vertexCount);
+	if (usesModel)
+	{
+		model->Draw();
+	}
+	else
+	{
+		glBindVertexArray(VAO);
+		glDrawArrays(GL_TRIANGLES, 0, vertexCount);
+	}
 }

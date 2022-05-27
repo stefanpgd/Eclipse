@@ -6,26 +6,14 @@
 
 Object::Object()
 {
-	int r = rand() % 100;
-
-	if (r < 5)
-	{
-		material = new DefaultMaterial("phantom.png");
-	}
-	else
-	{
-		material = new DefaultMaterial();
-	}
-
-	meshRenderer.Initialize();
+	material = new DefaultMaterial();
+	meshRenderer.Initialize("Sponza.obj");
 	camera = Camera::GetInstance();
 }
 
 void Object::Update(float deltaTime)
 {
-	transform.Rotation.x += 20.0f * deltaTime;
-	transform.Rotation.y += 15.0f * deltaTime;
-	transform.Rotation.z += 5.0f * deltaTime;
+
 }
 
 void Object::Draw()
