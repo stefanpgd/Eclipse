@@ -44,6 +44,10 @@ public:
     float CameraMovementSpeed = 2.5f;
     float CameraTiltSpeed = 1.0f;
 
+    // Projection
+    float Near = 0.1f;
+    float Far = 5000.0f;
+
 private:
     bool isInitialized = false;
 

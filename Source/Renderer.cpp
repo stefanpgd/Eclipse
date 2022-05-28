@@ -83,13 +83,16 @@ void Renderer::Update()
 	ImGui_ImplGlfw_InitForOpenGL(window, true);
 	ImGui_ImplOpenGL3_Init("#version 330");
 
-	for (int i = 0; i < 500; i++)
+	/*for (int i = 0; i < 500; i++)
 	{
 		Object* bunny = new Object("Bunny.obj");
 		bunny->transform.Position = vec3(RandomInRange(-3.5f, 3.5f), RandomInRange(-3.5f, 3.5f), RandomInRange(-3.5f, 3.5f));
 		bunny->transform.Rotation = vec3(RandomInRange(-350.0f, 350.0f), RandomInRange(-350.0f, 350.0f), RandomInRange(-350.0f, 350.0f));
 		objects.push_back(bunny);
-	}
+	}*/
+
+	Object* sponza = new Object("sponza.obj");
+	objects.push_back(sponza);
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -102,7 +105,7 @@ void Renderer::Update()
 
 		for (int i = 0; i < objects.size(); i++)
 		{
-			objects[i]->Update(deltaTime);
+			//objects[i]->Update(deltaTime);
 		}
 
 		for (int i = 0; i < objects.size(); i++)
@@ -113,18 +116,18 @@ void Renderer::Update()
 		ProcessContinuesInputEvents();
 		camera->Update(deltaTime);
 
-		ImGui_ImplOpenGL3_NewFrame();
-		ImGui_ImplGlfw_NewFrame();
-		ImGui::NewFrame();
-		ImGui::Begin("Hello World");
-		ImGui::SetWindowPos(ImVec2(0, 0));
-		ImGui::InputFloat3("Cam Position", &camera->CameraPosition[0]);
-		ImGui::InputFloat3("Cam Front", &camera->CameraFront[0]);
-		ImGui::InputFloat3("Cam Up", &camera->CameraUp[0]);
-		ImGui::End();
-		ImGui::Render();
+		//ImGui_ImplOpenGL3_NewFrame();
+		//ImGui_ImplGlfw_NewFrame();
+		//ImGui::NewFrame();
+		//ImGui::Begin("Hello World");
+		//ImGui::SetWindowPos(ImVec2(0, 0));
+		//ImGui::InputFloat3("Cam Position", &camera->CameraPosition[0]);
+		//ImGui::InputFloat3("Cam Front", &camera->CameraFront[0]);
+		//ImGui::InputFloat3("Cam Up", &camera->CameraUp[0]);
+		//ImGui::End();
+		//ImGui::Render();
 
-		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+		//ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}

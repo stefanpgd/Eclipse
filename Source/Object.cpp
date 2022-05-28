@@ -2,18 +2,19 @@
 #include "MeshRenderer.h"
 #include "Camera.h"
 #include "DefaultMaterial.h"
+#include "DepthMaterial.h"
 #include "Object.h"
 
 Object::Object()
 {
-	material = new DefaultMaterial();
+	material = new DepthMaterial();
 	meshRenderer.Initialize();
 	camera = Camera::GetInstance();
 }
 
 Object::Object(std::string fileName)
 {
-	material = new DefaultMaterial();
+	material = new DepthMaterial();
 	meshRenderer.Initialize(fileName);
 	camera = Camera::GetInstance();
 }
