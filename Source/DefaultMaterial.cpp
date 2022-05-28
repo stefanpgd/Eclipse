@@ -1,5 +1,6 @@
 #include "precomp.h"
 #include "Shader.h"
+#include "TextureLibrary.h"
 #include "Texture.h"
 #include "DefaultMaterial.h"
 
@@ -11,7 +12,7 @@ DefaultMaterial::DefaultMaterial()
 DefaultMaterial::DefaultMaterial(std::string textureName)
 {
 	shader = new Shader("default.vert", "default.frag");
-	texture = new Texture(textureName);
+	texture = TextureLibrary::GetInstance()->GetTexture(textureName);
 }
 
 void DefaultMaterial::ActivateMaterial(glm::mat4& model, glm::mat4& view, glm::mat4& projection)

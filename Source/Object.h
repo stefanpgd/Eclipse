@@ -9,6 +9,7 @@ class Object
 {
 public:
 	Object();
+	Object(std::string fileName);
 
 	virtual void Update(float deltaTime);
 	virtual void Draw();

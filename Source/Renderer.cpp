@@ -83,7 +83,13 @@ void Renderer::Update()
 	ImGui_ImplGlfw_InitForOpenGL(window, true);
 	ImGui_ImplOpenGL3_Init("#version 330");
 
-	Object sponza;
+	for (int i = 0; i < 500; i++)
+	{
+		Object* bunny = new Object("Bunny.obj");
+		bunny->transform.Position = vec3(RandomInRange(-3.5f, 3.5f), RandomInRange(-3.5f, 3.5f), RandomInRange(-3.5f, 3.5f));
+		bunny->transform.Rotation = vec3(RandomInRange(-350.0f, 350.0f), RandomInRange(-350.0f, 350.0f), RandomInRange(-350.0f, 350.0f));
+		objects.push_back(bunny);
+	}
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -94,7 +100,15 @@ void Renderer::Update()
 		glClearColor(0.05f, 0.05f, 0.05f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		sponza.Draw();
+		for (int i = 0; i < objects.size(); i++)
+		{
+			objects[i]->Update(deltaTime);
+		}
+
+		for (int i = 0; i < objects.size(); i++)
+		{
+			objects[i]->Draw();
+		}
 
 		ProcessContinuesInputEvents();
 		camera->Update(deltaTime);

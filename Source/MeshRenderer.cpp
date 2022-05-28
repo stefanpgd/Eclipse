@@ -1,5 +1,6 @@
 #include "precomp.h"
 #include "Model.h"
+#include "ModelLibrary.h"
 #include "MeshRenderer.h"
 
 void MeshRenderer::Initialize()
@@ -32,7 +33,7 @@ void MeshRenderer::Initialize(std::string fileName)
 {
 	std::string path = "Assets/Models/" + fileName;
 
-	model = new Model(path);
+	model = ModelLibrary::GetInstance()->GetModel(path);
 
 	meshSetup = true;
 	usesModel = true;

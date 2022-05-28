@@ -24,6 +24,8 @@
     <ClCompile Include="Source\stb_image.cpp" />
     <ClCompile Include="Source\Mesh.cpp" />
     <ClCompile Include="Source\Model.cpp" />
+    <ClCompile Include="Source\ModelLibrary.cpp" />
+    <ClCompile Include="Source\TextureLibrary.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Renderer.h" />
@@ -48,6 +50,9 @@
     <ClInclude Include="Source\Texture.h" />
     <ClInclude Include="Source\Mesh.h" />
     <ClInclude Include="Source\Model.h" />
+    <ClInclude Include="Source\ModelLibrary.h" />
+    <ClInclude Include="Source\TextureLibrary.h" />
+    <ClInclude Include="Source\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Source\Shaders\default.vert" />

@@ -155,6 +155,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\ModelLibrary.cpp" />
     <ClCompile Include="Source\Mesh.cpp" />
     <ClCompile Include="Source\Model.cpp" />
     <ClCompile Include="Source\Camera.cpp" />
@@ -178,8 +179,10 @@
     <ClCompile Include="Source\Transform.cpp" />
     <ClCompile Include="Source\Sprite.cpp" />
     <ClCompile Include="Source\Texture.cpp" />
+    <ClCompile Include="Source\TextureLibrary.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\ModelLibrary.h" />
     <ClInclude Include="Source\Mesh.h" />
     <ClInclude Include="Source\Model.h" />
     <ClInclude Include="Source\Camera.h" />
@@ -199,9 +202,11 @@
     <ClInclude Include="Source\ImGui\imstb_truetype.h" />
     <ClInclude Include="Source\precomp.h" />
     <ClInclude Include="Source\Renderer.h" />
+    <ClInclude Include="Source\stb_image.h" />
     <ClInclude Include="Source\Transform.h" />
     <ClInclude Include="Source\Sprite.h" />
     <ClInclude Include="Source\Texture.h" />
+    <ClInclude Include="Source\TextureLibrary.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Source\Shaders\default.frag" />
