@@ -34,3 +34,5 @@ Bin
 Eclipse.vcxproj.user
 imgui.ini
 *.pdb
+
+!/Assets**
