@@ -19,6 +19,13 @@ Object::Object(std::string fileName)
 	camera = Camera::GetInstance();
 }
 
+Object::Object(std::string fileName, Material* material)
+{
+	this->material = material;
+	meshRenderer.Initialize(fileName);
+	camera = Camera::GetInstance();
+}
+
 void Object::Update(float deltaTime)
 {
 	transform.Rotation.x += 25.0f * deltaTime;
@@ -31,6 +38,6 @@ void Object::Draw()
 	if (isActive)
 	{
 		material->ActivateMaterial(transform.GetModelMatrix(), camera->GetViewMatrix(), camera->GetProjectionMatrix());
-		meshRenderer.Draw();
+		meshRenderer.Draw(material->shader);
 	}
 }

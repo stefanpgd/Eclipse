@@ -1,7 +1,9 @@
 #include "precomp.h"
+#include "Shader.h"
 #include "Mesh.h"
 
-Mesh::Mesh(std::vector<AVertex> vertices, std::vector<unsigned int> indices) : Vertices(vertices), Indices(indices)
+Mesh::Mesh(std::vector<AVertex> vertices, std::vector<unsigned int> indices, std::vector<ATexture> textures) : 
+	Vertices(vertices), Indices(indices), textures(textures)
 {
 	SetupMesh();
 }
@@ -34,8 +36,28 @@ void Mesh::SetupMesh()
 	glBindVertexArray(0);
 }
 
-void Mesh::Draw()
+void Mesh::Draw(Shader* shader)
 {
+	unsigned int diffuseNr = 1;
+	unsigned int specularNr = 1;
+	for (unsigned int i = 0; i < textures.size(); i++)
+	{
+		glActiveTexture(GL_TEXTURE0 + i); // activate proper texture unit before binding
+		// retrieve texture number (the N in diffuse_textureN)
+		std::string number;
+		std::string name = textures[i].Type;
+
+		if (name == "texture_diffuse")
+			number = std::to_string(diffuseNr++);
+		else if (name == "texture_specular")
+			number = std::to_string(specularNr++);
+
+		shader->SetInt(("material." + name + number).c_str(), i);
+		glBindTexture(GL_TEXTURE_2D, textures[i].ID);
+	}
+
+	glActiveTexture(GL_TEXTURE0);
+
 	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, Indices.size(), GL_UNSIGNED_INT, 0);
 }

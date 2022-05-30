@@ -10,6 +10,7 @@ class Object
 public:
 	Object();
 	Object(std::string fileName);
+	Object(std::string fileName, Material* material);
 
 	virtual void Update(float deltaTime);
 	virtual void Draw();

@@ -155,6 +155,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\DiffuseMaterial.cpp" />
     <ClCompile Include="Source\DepthMaterial.cpp" />
     <ClCompile Include="Source\ModelLibrary.cpp" />
     <ClCompile Include="Source\Mesh.cpp" />
@@ -183,6 +184,7 @@
     <ClCompile Include="Source\TextureLibrary.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\DiffuseMaterial.h" />
     <ClInclude Include="Source\DepthMaterial.h" />
     <ClInclude Include="Source\ModelLibrary.h" />
     <ClInclude Include="Source\Mesh.h" />
@@ -214,6 +216,7 @@
     <None Include="Source\Shaders\default.frag" />
     <None Include="Source\Shaders\default.vert" />
     <None Include="Source\Shaders\depthTest.frag" />
+    <None Include="Source\Shaders\diffuse.frag" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -27,6 +27,7 @@
     <ClCompile Include="Source\ModelLibrary.cpp" />
     <ClCompile Include="Source\TextureLibrary.cpp" />
     <ClCompile Include="Source\DepthMaterial.cpp" />
+    <ClCompile Include="Source\DiffuseMaterial.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Renderer.h" />
@@ -55,10 +56,12 @@
     <ClInclude Include="Source\TextureLibrary.h" />
     <ClInclude Include="Source\stb_image.h" />
     <ClInclude Include="Source\DepthMaterial.h" />
+    <ClInclude Include="Source\DiffuseMaterial.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Source\Shaders\default.vert" />
     <None Include="Source\Shaders\default.frag" />
     <None Include="Source\Shaders\depthTest.frag" />
+    <None Include="Source\Shaders\diffuse.frag" />
   </ItemGroup>
 </Project>

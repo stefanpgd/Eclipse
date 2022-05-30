@@ -20,8 +20,5 @@ void main()
 		float c = 1 - FragPosition.z * 0.05;
 		vec3 normalColor = (Normal * 0.5) + 0.5;
 		FragColor = vec4(normalColor, 1.0);
-		
-		vec3 depth = vec3(gl_FragCoord.z * -1.0 + 1.0);
-		FragColor = vec4(depth, 1.0);
 	}
 }

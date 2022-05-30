@@ -1,6 +1,7 @@
 #include "precomp.h"
 #include "Model.h"
 #include "ModelLibrary.h"
+#include "Shader.h"
 #include "MeshRenderer.h"
 
 void MeshRenderer::Initialize()
@@ -39,7 +40,7 @@ void MeshRenderer::Initialize(std::string fileName)
 	usesModel = true;
 }
 
-void MeshRenderer::Draw()
+void MeshRenderer::Draw(Shader* shader)
 {
 	if (!meshSetup)
 	{
@@ -48,7 +49,7 @@ void MeshRenderer::Draw()
 
 	if (usesModel)
 	{
-		model->Draw();
+		model->Draw(shader);
 	}
 	else
 	{

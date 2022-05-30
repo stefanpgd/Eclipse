@@ -5,6 +5,7 @@
 #include "MeshRenderer.h"
 #include "Camera.h"
 #include "Object.h"
+#include "DiffuseMaterial.h"
 
 #include "ImGui/imgui.h"
 #include "ImGui/imgui_impl_glfw.h"
@@ -83,7 +84,7 @@ void Renderer::Update()
 	ImGui_ImplGlfw_InitForOpenGL(window, true);
 	ImGui_ImplOpenGL3_Init("#version 330");
 
-	/*for (int i = 0; i < 500; i++)
+	/*for (int i = 0; i < 1000; i++)
 	{
 		Object* bunny = new Object("Bunny.obj");
 		bunny->transform.Position = vec3(RandomInRange(-3.5f, 3.5f), RandomInRange(-3.5f, 3.5f), RandomInRange(-3.5f, 3.5f));
@@ -91,7 +92,8 @@ void Renderer::Update()
 		objects.push_back(bunny);
 	}*/
 
-	Object* sponza = new Object("sponza.obj");
+	DiffuseMaterial* diffuseMat = new DiffuseMaterial();
+	Object* sponza = new Object("Sponza/sponza.obj", diffuseMat);
 	objects.push_back(sponza);
 
 	while (!glfwWindowShouldClose(window))

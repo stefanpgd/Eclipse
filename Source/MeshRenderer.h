@@ -1,6 +1,7 @@
 #pragma once
 
 class Model;
+class Shader;
 
 class MeshRenderer
 {
@@ -8,7 +9,7 @@ public:
 	void Initialize();
 	void Initialize(std::string fileName);
 
-	void Draw();
+	void Draw(Shader* shader);
 
 private:
 	Model* model = nullptr;
