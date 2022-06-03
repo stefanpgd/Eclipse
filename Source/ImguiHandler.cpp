@@ -1,7 +1,4 @@
 #include "Precomp.h"
-#include "ImGui/imgui.h"
-#include "ImGui/imgui_impl_glfw.h"
-#include "ImGui/imgui_impl_opengl3.h"
 
 void ImguiHandler::Initialize(GLFWwindow* window)
 {
@@ -30,8 +27,8 @@ void ImguiHandler::Draw()
 	if (windowActivated)
 	{
 		windowActivated = false;
-		printf("Error 'ImguiHandler': When manually activating windows, make sure to disable them as well.\n");
 		DisableWindow();
+		throw std::runtime_error("ERROR: 'ImguiHandler': When manually activating windows, make sure to disable them as well.\n");
 	}
 
 	ImGui::Render();

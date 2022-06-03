@@ -2,10 +2,10 @@
 #include "Renderer.h"
 
 #include "Shader.h"
-#include "MeshRenderer.h"
 #include "Camera.h"
 #include "Object.h"
 #include "DiffuseMaterial.h"
+#include "SceneLoader.h"
 
 inline float Random01()
 {
@@ -87,6 +87,9 @@ void Renderer::Update()
 	Object* sponza = new Object("Sponza/sponza.obj", diffuseMat);
 	objects.push_back(sponza);
 
+	SceneLoader loader;
+	loader.LoadScene(sponza);
+
 	while (!glfwWindowShouldClose(window))
 	{
 		float currentFrame = static_cast<float>(glfwGetTime());
@@ -98,7 +101,15 @@ void Renderer::Update()
 		imgui->Update();
 
 		ProcessContinuesInputEvents();
-		camera->Update(deltaTime);
+
+		if (FocusWindow)
+		{
+			camera->Update(deltaTime);
+		}
+		else
+		{
+			camera->FirstMouse = true;
+		}
 
 		for (int i = 0; i < objects.size(); i++)
 		{
@@ -110,7 +121,11 @@ void Renderer::Update()
 			objects[i]->Draw();
 		}
 
-		imgui->CreateWindow(vec2(0, 0), vec2(300, 800), "Hello ImGui Window");
+		for (int i = 0; i < objects.size(); i++)
+		{
+			objects[i]->DisplayInfo();
+		}
+
 		imgui->Draw();
 
 		glfwSwapBuffers(window);
@@ -122,6 +137,9 @@ void Renderer::CloseRenderer()
 {
 	glfwDestroyWindow(window);
 	glfwTerminate();
+
+	SceneLoader loader;
+	loader.SaveScene("testScene", objects);
 }
 
 void Renderer::ProcessContinuesInputEvents()

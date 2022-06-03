@@ -7,6 +7,7 @@ public:
 
 	glm::mat4& GetModelMatrix();
 	void SetStatic(bool isStatic);
+	void SetTransformDataFromArray(float arr[9]);
 
 private:
 	void UpdateRotationMatrix();

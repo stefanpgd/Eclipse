@@ -36,6 +36,21 @@ void Transform::SetStatic(bool isStatic)
 	this->isStatic = isStatic;
 }
 
+void Transform::SetTransformDataFromArray(float arr[9])
+{
+	Position.x = arr[0];
+	Position.y = arr[1];
+	Position.z = arr[2];
+
+	Rotation.x = arr[3];
+	Rotation.y = arr[4];
+	Rotation.z = arr[5];
+
+	Scale.x = arr[6];
+	Scale.y = arr[7];
+	Scale.z = arr[8];
+}
+
 void Transform::UpdateRotationMatrix()
 {
 	glm::mat4 rotX = glm::mat4(1.0f);

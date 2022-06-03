@@ -1,9 +1,9 @@
 #pragma once
 
 #include "Transform.h"
+#include "MeshRenderer.h"
 
 class Material;
-class MeshRenderer;
 
 class Object
 {
@@ -15,9 +15,11 @@ public:
 	virtual void Update(float deltaTime);
 	virtual void Draw();
 
+	virtual void DisplayInfo();
+
 public:
 	Transform transform;
-	
+
 	std::string name{ "Object" };
 	bool isActive = true;
 

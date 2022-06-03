@@ -47,6 +47,7 @@ public:
     // Projection
     float Near = 0.1f;
     float Far = 5000.0f;
+    bool FirstMouse = true;
 
 private:
     bool isInitialized = false;
@@ -57,5 +58,4 @@ private:
     // Camera movement 
     float lastX = 0.0f;
     float lastY = 0.0f;
-    bool firstMouse = true;
 };
