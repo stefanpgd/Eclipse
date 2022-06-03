@@ -3,6 +3,7 @@
 struct GLFWwindow;
 class Camera;
 class Object;
+class ImguiHandler;
 #include <vector>
 
 void KeyboardCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
@@ -33,6 +34,7 @@ private:
 
 	Camera* camera;
 	GLFWwindow* window;
+	ImguiHandler* imgui;
 
 	std::vector<Object*> objects;
 

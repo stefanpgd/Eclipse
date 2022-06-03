@@ -7,10 +7,6 @@
 #include "Object.h"
 #include "DiffuseMaterial.h"
 
-#include "ImGui/imgui.h"
-#include "ImGui/imgui_impl_glfw.h"
-#include "ImGui/imgui_impl_opengl3.h"
-
 inline float Random01()
 {
 	return float(rand() / (RAND_MAX + 1.0));
@@ -71,19 +67,14 @@ void Renderer::Initialize()
 
 		camera = Camera::GetInstance();
 		camera->Initialize(vec3(0.0f, 0.0f, 1.0f), vec3(0.0f, 0.0f, -1.0f), vec3(0.0f, 1.0f, 0.0f));
+
+		imgui = ImguiHandler::GetInstance();
+		imgui->Initialize(window);
 	}
 }
 
 void Renderer::Update()
 {
-	IMGUI_CHECKVERSION();
-	ImGui::CreateContext();
-	ImGuiIO& io = ImGui::GetIO(); (void)io;
-	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
-	ImGui::StyleColorsDark();
-	ImGui_ImplGlfw_InitForOpenGL(window, true);
-	ImGui_ImplOpenGL3_Init("#version 330");
-
 	/*for (int i = 0; i < 1000; i++)
 	{
 		Object* bunny = new Object("Bunny.obj");
@@ -104,6 +95,10 @@ void Renderer::Update()
 
 		glClearColor(0.05f, 0.05f, 0.05f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		imgui->Update();
+
+		ProcessContinuesInputEvents();
+		camera->Update(deltaTime);
 
 		for (int i = 0; i < objects.size(); i++)
 		{
@@ -115,21 +110,9 @@ void Renderer::Update()
 			objects[i]->Draw();
 		}
 
-		ProcessContinuesInputEvents();
-		camera->Update(deltaTime);
+		imgui->CreateWindow(vec2(0, 0), vec2(300, 800), "Hello ImGui Window");
+		imgui->Draw();
 
-		//ImGui_ImplOpenGL3_NewFrame();
-		//ImGui_ImplGlfw_NewFrame();
-		//ImGui::NewFrame();
-		//ImGui::Begin("Hello World");
-		//ImGui::SetWindowPos(ImVec2(0, 0));
-		//ImGui::InputFloat3("Cam Position", &camera->CameraPosition[0]);
-		//ImGui::InputFloat3("Cam Front", &camera->CameraFront[0]);
-		//ImGui::InputFloat3("Cam Up", &camera->CameraUp[0]);
-		//ImGui::End();
-		//ImGui::Render();
-
-		//ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
