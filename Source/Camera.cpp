@@ -107,3 +107,27 @@ void Camera::ProcessMouseScroll(float yOffset)
 
 	projectionMatrix = glm::perspective(glm::radians(FOV), (float)ScreenWidth / (float)ScreenHeight, Near, Far);
 }
+
+void Camera::SetupCameraFromSaveData(CameraSaveData& data)
+{
+	CameraPosition.x = data.cameraPositionalInfo[0];
+	CameraPosition.y = data.cameraPositionalInfo[1];
+	CameraPosition.z = data.cameraPositionalInfo[2];
+
+	CameraFront.x = data.cameraPositionalInfo[3];
+	CameraFront.x = data.cameraPositionalInfo[4];
+	CameraFront.x = data.cameraPositionalInfo[5];
+
+	CameraUp.x = data.cameraPositionalInfo[6];
+	CameraUp.x = data.cameraPositionalInfo[7];
+	CameraUp.x = data.cameraPositionalInfo[8];
+
+	Yaw = data.cameraSettings[0];
+	Pitch = data.cameraSettings[1];
+	FOV = data.cameraSettings[2];
+
+	CameraMovementSpeed = data.cameraSettings[3];
+	CameraTiltSpeed = data.cameraSettings[4];
+
+	ProcessMouseMovement(0, 0);
+}

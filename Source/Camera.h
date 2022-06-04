@@ -8,6 +8,12 @@ enum class CameraDirection
     Right
 };
 
+struct CameraSaveData
+{
+    float cameraPositionalInfo[9];
+    float cameraSettings[5];
+};
+
 class Camera
 {
 public: 
@@ -18,7 +24,6 @@ public:
     }
 
 	void Initialize(glm::vec3 position, glm::vec3 front, glm::vec3 up, float yaw = -90.0f, float pitch = 0.0f);
-    
     void Update(float deltaTime);
 
     glm::mat4& GetViewMatrix();
@@ -27,6 +32,8 @@ public:
     void ProcessKeyboard(CameraDirection direction);
     void ProcessMouseMovement(double xPos, double yPos, bool constrainPitch = true);
     void ProcessMouseScroll(float yOffset);
+
+    void SetupCameraFromSaveData(CameraSaveData& data);
 
 public:
     float deltaTime;
@@ -46,7 +53,7 @@ public:
 
     // Projection
     float Near = 0.1f;
-    float Far = 5000.0f;
+    float Far = 10000.0f;
     bool FirstMouse = true;
 
 private:

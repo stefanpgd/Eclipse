@@ -5,6 +5,7 @@
 #include "Camera.h"
 #include "Object.h"
 #include "DiffuseMaterial.h"
+#include "DefaultMaterial.h"
 #include "SceneLoader.h"
 
 inline float Random01()
@@ -70,26 +71,18 @@ void Renderer::Initialize()
 
 		imgui = ImguiHandler::GetInstance();
 		imgui->Initialize(window);
+
+		SceneLoader sceneLoader;
+
+		if (!sceneLoader.LoadScene("testScene", objects))
+		{
+			CreateTestScene();
+		}
 	}
 }
 
 void Renderer::Update()
 {
-	/*for (int i = 0; i < 1000; i++)
-	{
-		Object* bunny = new Object("Bunny.obj");
-		bunny->transform.Position = vec3(RandomInRange(-3.5f, 3.5f), RandomInRange(-3.5f, 3.5f), RandomInRange(-3.5f, 3.5f));
-		bunny->transform.Rotation = vec3(RandomInRange(-350.0f, 350.0f), RandomInRange(-350.0f, 350.0f), RandomInRange(-350.0f, 350.0f));
-		objects.push_back(bunny);
-	}*/
-
-	DiffuseMaterial* diffuseMat = new DiffuseMaterial();
-	Object* sponza = new Object("Sponza/sponza.obj", diffuseMat);
-	objects.push_back(sponza);
-
-	SceneLoader loader;
-	loader.LoadScene(sponza);
-
 	while (!glfwWindowShouldClose(window))
 	{
 		float currentFrame = static_cast<float>(glfwGetTime());
@@ -142,11 +135,33 @@ void Renderer::CloseRenderer()
 	loader.SaveScene("testScene", objects);
 }
 
+void Renderer::CreateTestScene()
+{
+	/*for (int i = 0; i < 1000; i++)
+{
+	Object* bunny = new Object("Bunny.obj");
+	bunny->transform.Position = vec3(RandomInRange(-3.5f, 3.5f), RandomInRange(-3.5f, 3.5f), RandomInRange(-3.5f, 3.5f));
+	bunny->transform.Rotation = vec3(RandomInRange(-350.0f, 350.0f), RandomInRange(-350.0f, 350.0f), RandomInRange(-350.0f, 350.0f));
+	objects.push_back(bunny);
+}*/
+
+	DiffuseMaterial* diffuseMat = new DiffuseMaterial();
+	Object* sponza = new Object("Sponza/sponza.obj", diffuseMat);
+	objects.push_back(sponza);
+	sponza->materialIndex = 0;
+	sponza->name = "Sponza";
+
+	DefaultMaterial* defaultMat = new DefaultMaterial();
+	Object* Lucy = new Object("Lucy.obj", defaultMat);
+	objects.push_back(Lucy);
+	Lucy->materialIndex = 1;
+	Lucy->name = "Lucy";
+}
+
 void Renderer::ProcessContinuesInputEvents()
 {
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 	{
-
 		camera->ProcessKeyboard(CameraDirection::Front);
 	}
 

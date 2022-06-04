@@ -8,5 +8,5 @@ public:
 	SceneLoader();
 
 	void SaveScene(std::string sceneName, std::vector<Object*>& objects);
-	void LoadScene(Object* temp);
+	bool LoadScene(std::string sceneName, std::vector<Object*>& objects);
 };

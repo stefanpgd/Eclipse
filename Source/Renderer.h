@@ -27,6 +27,7 @@ private:
 	void Initialize();
 	void Update();
 	void CloseRenderer();
+	void CreateTestScene();
 
 private:
 	bool isRunning = false;
