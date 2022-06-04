@@ -24,7 +24,7 @@ public:
 	virtual void Update(float deltaTime);
 	virtual void Draw();
 
-	virtual void DisplayInfo();
+	virtual void EditorInfo();
 
 public:
 	Transform transform;

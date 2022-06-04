@@ -95,6 +95,8 @@ void Renderer::Update()
 
 		ProcessContinuesInputEvents();
 
+		camera->EditorInfo();
+
 		if (FocusWindow)
 		{
 			camera->Update(deltaTime);
@@ -116,7 +118,7 @@ void Renderer::Update()
 
 		for (int i = 0; i < objects.size(); i++)
 		{
-			objects[i]->DisplayInfo();
+			objects[i]->EditorInfo();
 		}
 
 		imgui->Draw();

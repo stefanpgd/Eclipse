@@ -79,14 +79,14 @@ void Object::Draw()
 	}
 }
 
-void Object::DisplayInfo()
+void Object::EditorInfo()
 {
 	ImguiHandler* imgui = ImguiHandler::GetInstance();
 	ImGui::SetNextWindowPos(ImVec2(0, 0));
 	imgui->ActivateWindow("Editor");
 	ImGui::PushID(ID);
 	ImGui::InputText(" - Object Name", &name[0], 50);
-	if (ImGui::CollapsingHeader(name.c_str(), true))
+	if (ImGui::CollapsingHeader(&name[0], true))
 	{
 		ImGui::Text("Transform");
 		ImGui::Separator();

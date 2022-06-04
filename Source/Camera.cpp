@@ -131,3 +131,31 @@ void Camera::SetupCameraFromSaveData(CameraSaveData& data)
 
 	ProcessMouseMovement(0, 0);
 }
+
+void Camera::EditorInfo()
+{
+	ImguiHandler* imgui = ImguiHandler::GetInstance();
+	ImGui::SetNextWindowPos(ImVec2(0, 0));
+	imgui->ActivateWindow("Editor");
+	ImGui::PushID(0);
+	if (ImGui::CollapsingHeader("Camera", true))
+	{
+		ImGui::Text("Positional Data");
+		ImGui::Separator();
+		ImGui::DragFloat3("Position", &CameraPosition[0], 1.0f);
+		ImGui::DragFloat3("Rotation", &CameraFront[0], 1.0f);
+		ImGui::DragFloat3("Scale", &CameraUp[0], 1.0f);
+
+		ImGui::Separator();
+		ImGui::Text("Camera Settings");
+		ImGui::DragFloat("Movement Speed", &CameraMovementSpeed, 0.1f);
+		ImGui::DragFloat("Tilt Speed", &CameraTiltSpeed, 0.1f);
+		ImGui::DragFloat("Projection - Near", &Near, 100.0f);
+		ImGui::DragFloat("Projection - Far", &Far, 100.0f);
+	}
+	ImGui::Separator();
+
+	ImGui::Spacing();
+	ImGui::PopID();
+	imgui->DisableWindow();
+}
