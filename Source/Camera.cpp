@@ -34,7 +34,8 @@ glm::mat4& Camera::GetProjectionMatrix()
 
 void Camera::ProcessKeyboard(CameraDirection direction)
 {
-	float velocity = CameraMovementSpeed * deltaTime;
+	float velocity = Sprinting ? CameraMovementSprintSpeed : CameraMovementSpeed;
+	velocity *= deltaTime;
 
 	switch (direction)
 	{
@@ -128,6 +129,7 @@ void Camera::SetupCameraFromSaveData(CameraSaveData& data)
 
 	CameraMovementSpeed = data.cameraSettings[3];
 	CameraTiltSpeed = data.cameraSettings[4];
+	CameraMovementSprintSpeed = data.cameraSettings[5];
 
 	ProcessMouseMovement(0, 0);
 }
@@ -135,20 +137,16 @@ void Camera::SetupCameraFromSaveData(CameraSaveData& data)
 void Camera::EditorInfo()
 {
 	ImguiHandler* imgui = ImguiHandler::GetInstance();
-	ImGui::SetNextWindowPos(ImVec2(0, 0));
+
 	imgui->ActivateWindow("Editor");
 	ImGui::PushID(0);
 	if (ImGui::CollapsingHeader("Camera", true))
 	{
-		ImGui::Text("Positional Data");
-		ImGui::Separator();
-		ImGui::DragFloat3("Position", &CameraPosition[0], 1.0f);
-		ImGui::DragFloat3("Rotation", &CameraFront[0], 1.0f);
-		ImGui::DragFloat3("Scale", &CameraUp[0], 1.0f);
-
+		ImGui::DragFloat3("Position", &CameraPosition[0], 10.0f);
 		ImGui::Separator();
 		ImGui::Text("Camera Settings");
 		ImGui::DragFloat("Movement Speed", &CameraMovementSpeed, 0.1f);
+		ImGui::DragFloat("Movement Sprint Speed", &CameraMovementSprintSpeed, 5.0f);
 		ImGui::DragFloat("Tilt Speed", &CameraTiltSpeed, 0.1f);
 		ImGui::DragFloat("Projection - Near", &Near, 100.0f);
 		ImGui::DragFloat("Projection - Far", &Far, 100.0f);

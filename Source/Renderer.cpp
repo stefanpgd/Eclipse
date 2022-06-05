@@ -1,4 +1,4 @@
-#include "precomp.h"
+#include "Precomp.h"
 #include "Renderer.h"
 
 #include "Shader.h"
@@ -83,12 +83,15 @@ void Renderer::Initialize()
 
 void Renderer::Update()
 {
+	ImguiHandler* imgui = ImguiHandler::GetInstance();
+
 	while (!glfwWindowShouldClose(window))
 	{
 		float currentFrame = static_cast<float>(glfwGetTime());
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 
+		glViewport(0, 0, ScreenWidth, ScreenHeight);
 		glClearColor(0.05f, 0.05f, 0.05f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		imgui->Update();
@@ -204,12 +207,12 @@ void Renderer::ProcessSingleInputEvents(int key, int action)
 
 	if (key == GLFW_KEY_LEFT_SHIFT && action == GLFW_PRESS)
 	{
-		Camera::GetInstance()->CameraMovementSpeed = 500.0f;
+		Camera::GetInstance()->Sprinting = true;
 	}
 	
 	if (key == GLFW_KEY_LEFT_SHIFT && action == GLFW_RELEASE)
 	{
-		Camera::GetInstance()->CameraMovementSpeed = 2.5f;
+		Camera::GetInstance()->Sprinting = false;
 	}
 }
 

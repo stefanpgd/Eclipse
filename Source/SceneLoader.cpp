@@ -55,6 +55,7 @@ void SceneLoader::SaveScene(std::string sceneName, std::vector<Object*>& objects
 	mySaveFile << camera->FOV << "\n";
 	mySaveFile << camera->CameraMovementSpeed << "\n";
 	mySaveFile << camera->CameraTiltSpeed << "\n";
+	mySaveFile << camera->CameraMovementSprintSpeed << "\n";
 
 	mySaveFile.close();
 }
@@ -105,7 +106,7 @@ bool SceneLoader::LoadScene(std::string sceneName, std::vector<Object*>& objects
 		}
 
 		// Camera Settings
-		for (int i = 0; i < 5; i++)
+		for (int i = 0; i < 6; i++)
 		{
 			std::getline(myScene, line);
 			cameraData.cameraSettings[i] = std::stof(line);

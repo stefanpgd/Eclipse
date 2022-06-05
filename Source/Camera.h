@@ -11,7 +11,7 @@ enum class CameraDirection
 struct CameraSaveData
 {
     float cameraPositionalInfo[9];
-    float cameraSettings[5];
+    float cameraSettings[6];
 };
 
 class Camera
@@ -50,7 +50,9 @@ public:
     
     // camera options
     float CameraMovementSpeed = 2.5f;
+    float CameraMovementSprintSpeed = 500.0f;
     float CameraTiltSpeed = 1.0f;
+    bool Sprinting = false;
 
     // Projection
     float Near = 0.1f;
