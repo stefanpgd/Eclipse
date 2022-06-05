@@ -76,7 +76,7 @@ void ImguiHandler::SetupStyle()
 	colors[ImGuiCol_FrameBg] = ImVec4(0.24f, 0.24f, 0.24f, 0.54f);
 	colors[ImGuiCol_FrameBgHovered] = ImVec4(0.64f, 0.64f, 0.64f, 0.40f);
 	colors[ImGuiCol_FrameBgActive] = ImVec4(1.00f, 1.00f, 1.00f, 0.67f);
-	colors[ImGuiCol_TitleBg] = ImVec4(0.59f, 0.24f, 0.00f, 1.00f);
+	colors[ImGuiCol_TitleBg] = ImVec4(0.70f, 0.25f, 0.00f, 1.00f);
 	colors[ImGuiCol_TitleBgActive] = ImVec4(0.90f, 0.45f, 0.00f, 1.00f);
 	colors[ImGuiCol_MenuBarBg] = ImVec4(0.18f, 0.18f, 0.18f, 1.00f);
 	colors[ImGuiCol_CheckMark] = ImVec4(1.00f, 1.00f, 1.00f, 1.00f);
