@@ -4,10 +4,10 @@ struct ATexture;
 
 class Shader;
 class Mesh;
-class aiNode;
-class aiMesh;
-class aiScene;
-class aiMaterial;
+struct aiNode;
+struct aiMesh;
+struct aiScene;
+struct aiMaterial;
 enum aiTextureType;
 
 class Model

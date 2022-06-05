@@ -82,7 +82,6 @@ void Object::Draw()
 void Object::EditorInfo()
 {
 	ImguiHandler* imgui = ImguiHandler::GetInstance();
-	ImGui::SetNextWindowPos(ImVec2(0, 0));
 	imgui->ActivateWindow("Editor");
 	ImGui::PushID(ID);
 	ImGui::InputText(" - Object Name", &name[0], 50);

@@ -19,18 +19,8 @@ public:
 	void ActivateWindow(std::string windowName);
 	void DisableWindow();
 
-	// Window Interaction
-	void DrawText(std::string text);
-	void DrawText(std::string windowName, std::string text);
-
-	void SliderFloat(std::string name, float& value, float min, float max);
-	void SliderFloat(std::string windowName, std::string name, float& value, float min, float max);
-	void SliderVector3(std::string name, glm::vec3& value, float min, float max);
-	void SliderVector3(std::string windowName, std::string name, glm::vec3& value, float min, float max);
-
-	void InputVector3(std::string name, glm::vec3& value);
-	void InputVector3(std::string windowName, std::string name, glm::vec3& value);
-
+private:
+	void SetupStyle();
 
 private:
 	GLFWwindow* window;
