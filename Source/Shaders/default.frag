@@ -16,9 +16,7 @@ void main()
 	}
 	else
 	{
-		vec3 start = vec3(1.0, 1.0, 1.0);
-		float c = 1 - FragPosition.z * 0.05;
-		vec3 normalColor = (Normal * 0.5) + 0.5;
+		vec3 normalColor = (normalize(Normal) * 0.5) + 0.5;
 		FragColor = vec4(normalColor, 1.0);
 	}
 }

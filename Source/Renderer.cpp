@@ -1,12 +1,12 @@
 #include "Precomp.h"
 #include "Renderer.h"
-
 #include "Shader.h"
 #include "Camera.h"
 #include "Object.h"
 #include "DiffuseMaterial.h"
 #include "DefaultMaterial.h"
 #include "SceneLoader.h"
+#include <filesystem>
 
 inline float Random01()
 {
@@ -16,6 +16,25 @@ inline float Random01()
 inline float RandomInRange(float min, float max)
 {
 	return min + (max - min) * Random01();
+}
+
+void GetAllModelFilesInDirectory(std::vector<std::string>& files, std::string path, std::string originalPath)
+{
+	for (const auto& file : std::filesystem::directory_iterator(path))
+	{
+		if (file.is_directory())
+		{
+			GetAllModelFilesInDirectory(files, file.path().string(), originalPath);
+		}
+
+		std::string filePath = file.path().string();
+		std::string fileType = filePath.substr(filePath.size() - 3);
+
+		if (fileType == "obj" || fileType == "fbx")
+		{
+			files.push_back(filePath.substr(originalPath.size() + 1));
+		}
+	}
 }
 
 void Renderer::Run()
@@ -78,6 +97,9 @@ void Renderer::Initialize()
 		{
 			CreateTestScene();
 		}
+
+		std::string path = "Assets/Models";
+		GetAllModelFilesInDirectory(modelFilePaths, path, path);
 	}
 }
 
@@ -124,6 +146,52 @@ void Renderer::Update()
 			objects[i]->EditorInfo();
 		}
 
+		imgui->ActivateWindow("Create Object");
+		
+		if (ImGui::BeginCombo("Models", modelFilePaths[activeModelIndex].c_str()))
+		{
+			for (int i = 0; i < modelFilePaths.size(); i++)
+			{
+				bool isSelected = (modelFilePaths[activeModelIndex] == modelFilePaths[i]);
+				if (ImGui::Selectable(modelFilePaths[i].c_str(), isSelected))
+				{
+					activeModelIndex = i;
+				}
+
+				if (isSelected)
+				{
+					ImGui::SetItemDefaultFocus();
+				}
+			}
+
+			ImGui::EndCombo();
+		}
+		
+		ImGui::DragFloat("Uniform Scale", &uniformScale, 1.0f);
+		ImGui::InputInt("Material Index", &selectedMaterial);
+		ImGui::InputText("Name", &newObjectName[0], 50);
+
+		if (ImGui::Button("Create Object"))
+		{
+			Material* mat;
+			if (selectedMaterial == 0)
+			{
+				mat = new DiffuseMaterial();
+			}
+			else
+			{
+				mat = new DefaultMaterial();
+			}
+
+			Object* newObj = new Object(modelFilePaths[activeModelIndex], mat);
+			newObj->materialIndex = selectedMaterial;
+			newObj->name = newObjectName;
+			newObj->transform.Scale = vec3(uniformScale);
+			objects.push_back(newObj);
+		}
+
+		imgui->DisableWindow();
+
 		imgui->Draw();
 
 		glfwSwapBuffers(window);
@@ -142,14 +210,6 @@ void Renderer::CloseRenderer()
 
 void Renderer::CreateTestScene()
 {
-	/*for (int i = 0; i < 1000; i++)
-{
-	Object* bunny = new Object("Bunny.obj");
-	bunny->transform.Position = vec3(RandomInRange(-3.5f, 3.5f), RandomInRange(-3.5f, 3.5f), RandomInRange(-3.5f, 3.5f));
-	bunny->transform.Rotation = vec3(RandomInRange(-350.0f, 350.0f), RandomInRange(-350.0f, 350.0f), RandomInRange(-350.0f, 350.0f));
-	objects.push_back(bunny);
-}*/
-
 	DiffuseMaterial* diffuseMat = new DiffuseMaterial();
 	Object* sponza = new Object("Sponza/sponza.obj", diffuseMat);
 	objects.push_back(sponza);
