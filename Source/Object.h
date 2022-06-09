@@ -17,6 +17,8 @@ class Object
 {
 public:
 	Object();
+	~Object();
+	Object(const Object& obj);
 	Object(std::string fileName);
 	Object(std::string fileName, Material* material);
 	Object(ObjectSaveData& data);
@@ -34,6 +36,8 @@ public:
 	int materialIndex;
 
 	bool isActive = true;
+	bool Deleted = false;
+	bool Duplicate = false;
 
 private:
 	int ID;

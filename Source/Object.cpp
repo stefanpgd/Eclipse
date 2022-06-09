@@ -14,6 +14,22 @@ Object::Object()
 	camera = Camera::GetInstance();
 }
 
+Object::~Object()
+{
+	camera = nullptr;
+	material = nullptr;
+}
+
+Object::Object(const Object& obj)
+{
+	ID = rand();
+	material = obj.material;
+	modelFileName = obj.modelFileName;
+	meshRenderer.Initialize(modelFileName);
+	camera = obj.camera;
+	transform = obj.transform;
+}
+
 Object::Object(std::string fileName)
 {
 	ID = rand();
@@ -98,10 +114,22 @@ void Object::EditorInfo()
 		ImGui::TextColored(ImVec4(0.5f, 1.0f, 0.7f, 1.0f), modelFileName.c_str());
 
 		ImGui::InputInt("Material Index", &materialIndex);
-	}
-	ImGui::Separator();
 
+		if (ImGui::Button("Duplicate"))
+		{
+			Duplicate = true;
+		}
+
+		ImGui::SameLine(0, 3);
+		if (ImGui::Button("Delete"))
+		{
+			Deleted = true;
+		}
+	}
+
+	ImGui::Separator();
 	ImGui::Spacing();
+
 	ImGui::PopID();
 	imgui->DisableWindow();
 }

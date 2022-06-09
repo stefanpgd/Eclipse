@@ -144,6 +144,20 @@ void Renderer::Update()
 		for (int i = 0; i < objects.size(); i++)
 		{
 			objects[i]->EditorInfo();
+
+			if (objects[i]->Duplicate)
+			{
+				Object* obj = new Object(*objects[i]);
+				objects.push_back(obj);
+				objects[i]->Duplicate = false;
+			}
+
+			if (objects[i]->Deleted)
+			{
+				Object* obj = objects[i];
+				delete obj;
+				objects[i] = nullptr;
+			}
 		}
 
 		imgui->ActivateWindow("Create Object");
@@ -193,6 +207,14 @@ void Renderer::Update()
 		imgui->DisableWindow();
 
 		imgui->Draw();
+
+		for (auto it = objects.begin(); it != objects.end(); it++)
+		{
+			if (*it == nullptr)
+			{
+				objects.erase(it--);
+			}
+		}
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
