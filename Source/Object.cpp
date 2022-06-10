@@ -95,41 +95,44 @@ void Object::Draw()
 	}
 }
 
-void Object::EditorInfo()
+void Object::EditorInfo(bool show)
 {
-	ImguiHandler* imgui = ImguiHandler::GetInstance();
-	imgui->ActivateWindow("Editor");
-	ImGui::PushID(ID);
-	ImGui::InputText(" - Object Name", &name[0], 50);
-	if (ImGui::CollapsingHeader(&name[0], true))
+	if (show)
 	{
-		ImGui::Text("Transform");
-		ImGui::Separator();
-		ImGui::DragFloat3("Position", &transform.Position[0], 1.0f);
-		ImGui::DragFloat3("Rotation", &transform.Rotation[0], 1.0f);
-		ImGui::DragFloat3("Scale", &transform.Scale[0], 1.0f);
+		ImGui::Begin("Editor");
+		ImGui::PushID(ID);
+		ImGui::InputText(" - Object Name", &name[0], 50);
 
-		ImGui::Separator();
-		ImGui::Text("Model Name/Location:");
-		ImGui::TextColored(ImVec4(0.5f, 1.0f, 0.7f, 1.0f), modelFileName.c_str());
-
-		ImGui::InputInt("Material Index", &materialIndex);
-
-		if (ImGui::Button("Duplicate"))
+		if (ImGui::CollapsingHeader(&name[0]))
 		{
-			Duplicate = true;
+			ImGui::Text("Transform");
+			ImGui::Separator();
+			ImGui::DragFloat3("Position", &transform.Position[0], 1.0f);
+			ImGui::DragFloat3("Rotation", &transform.Rotation[0], 1.0f);
+			ImGui::DragFloat3("Scale", &transform.Scale[0], 1.0f);
+
+			ImGui::Separator();
+			ImGui::Text("Model Name/Location:");
+			ImGui::TextColored(ImVec4(0.5f, 1.0f, 0.7f, 1.0f), modelFileName.c_str());
+
+			ImGui::InputInt("Material Index", &materialIndex);
+
+			if (ImGui::Button("Duplicate"))
+			{
+				Duplicate = true;
+			}
+
+			ImGui::SameLine(0, 3);
+			if (ImGui::Button("Delete"))
+			{
+				Deleted = true;
+			}
 		}
 
-		ImGui::SameLine(0, 3);
-		if (ImGui::Button("Delete"))
-		{
-			Deleted = true;
-		}
+		ImGui::Separator();
+		ImGui::Spacing();
+
+		ImGui::PopID();
+		ImGui::End();
 	}
-
-	ImGui::Separator();
-	ImGui::Spacing();
-
-	ImGui::PopID();
-	imgui->DisableWindow();
 }

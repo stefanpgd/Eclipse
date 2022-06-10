@@ -23,3 +23,5 @@
 using namespace glm;
 const unsigned int ScreenWidth = 1280;
 const unsigned int ScreenHeight = 720;
+
+static bool objectMenu = false;

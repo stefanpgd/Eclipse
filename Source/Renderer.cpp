@@ -108,6 +108,8 @@ void Renderer::Update()
 {
 	ImguiHandler* imgui = ImguiHandler::GetInstance();
 
+	bool showSceneDetails = false;
+
 	while (!glfwWindowShouldClose(window))
 	{
 		float currentFrame = static_cast<float>(glfwGetTime());
@@ -118,6 +120,20 @@ void Renderer::Update()
 		glClearColor(0.05f, 0.05f, 0.05f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		imgui->Update();
+
+		ImGui::Begin("Editor");
+		if (ImGui::BeginMainMenuBar())
+		{
+			if (ImGui::Button("Scene Details"))
+			{
+				showSceneDetails = !showSceneDetails;
+			}
+
+			ImGui::EndMainMenuBar();
+		}
+		ImGui::End();
+
+		ImGui::ShowDemoWindow();
 
 		ProcessContinuesInputEvents();
 
@@ -134,7 +150,7 @@ void Renderer::Update()
 
 		for (int i = 0; i < objects.size(); i++)
 		{
-			//objects[i]->Update(deltaTime);
+			objects[i]->Update(deltaTime);
 		}
 
 		for (int i = 0; i < objects.size(); i++)
@@ -144,7 +160,7 @@ void Renderer::Update()
 
 		for (int i = 0; i < objects.size(); i++)
 		{
-			objects[i]->EditorInfo();
+			objects[i]->EditorInfo(showSceneDetails);
 
 			if (objects[i]->Duplicate)
 			{
