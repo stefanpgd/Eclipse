@@ -1,0 +1,110 @@
+# Blender 3.2.0 MTL File: 'None'
+# www.blender.org
+
+newmtl Body
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd textures/rai0_body0_def_bsmout.png
+map_d textures/rai0_body0_def_bsmout.png
+
+newmtl Hair
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd textures/rai0_hair0_def_bsm_alpout.png
+map_d textures/rai0_hair0_def_bsm_alpout.png
+
+newmtl Hands
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd textures/rai0_hand0_def_bsmout.png
+map_d textures/rai0_hand0_def_bsmout.png
+
+newmtl Jaw
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd textures/rai0_jaw0_def_bsmout.png
+map_d textures/rai0_jaw0_def_bsmout.png
+
+newmtl Mask
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd textures/rai0_jaw0_def_bsmout.png
+map_d textures/rai0_jaw0_def_bsmout.png
+
+newmtl rai_decal
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd textures/rai0_stkr0_def_bsm_alpout.png
+map_d textures/rai0_stkr0_def_bsm_alpout.png
+
+newmtl rai_hand
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd textures/rai0_hand0_def_bsmout.png
+map_d textures/rai0_hand0_def_bsmout.png
+
+newmtl rai_head
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd textures/rai0_head1_def_bsmout.png
+map_d textures/rai0_head1_def_bsmout.png
+
+newmtl rai_jaw
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd textures/rai0_jaw0_def_bsmout.png
+map_d textures/rai0_jaw0_def_bsmout.png

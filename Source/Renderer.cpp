@@ -29,6 +29,7 @@ void GetAllModelFilesInDirectory(std::vector<std::string>& files, std::string pa
 
 		std::string filePath = file.path().string();
 		std::string fileType = filePath.substr(filePath.size() - 3);
+		// path.substr(0, path.find_last_of('/'));
 
 		if (fileType == "obj" || fileType == "fbx")
 		{
