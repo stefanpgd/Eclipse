@@ -30,6 +30,11 @@
     <ClCompile Include="Source\DiffuseMaterial.cpp" />
     <ClCompile Include="Source\ImguiHandler.cpp" />
     <ClCompile Include="Source\SceneLoader.cpp" />
+    <ClCompile Include="Source\ImGuizmo\GraphEditor.cpp" />
+    <ClCompile Include="Source\ImGuizmo\ImCurveEdit.cpp" />
+    <ClCompile Include="Source\ImGuizmo\ImGradient.cpp" />
+    <ClCompile Include="Source\ImGuizmo\ImGuizmo.cpp" />
+    <ClCompile Include="Source\ImGuizmo\ImSequencer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Renderer.h" />
@@ -61,6 +66,12 @@
     <ClInclude Include="Source\DiffuseMaterial.h" />
     <ClInclude Include="Source\ImguiHandler.h" />
     <ClInclude Include="Source\SceneLoader.h" />
+    <ClInclude Include="Source\ImGuizmo\GraphEditor.h" />
+    <ClInclude Include="Source\ImGuizmo\ImCurveEdit.h" />
+    <ClInclude Include="Source\ImGuizmo\ImGradient.h" />
+    <ClInclude Include="Source\ImGuizmo\ImGuizmo.h" />
+    <ClInclude Include="Source\ImGuizmo\ImSequencer.h" />
+    <ClInclude Include="Source\ImGuizmo\ImZoomSlider.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Source\Shaders\default.vert" />

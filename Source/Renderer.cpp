@@ -150,7 +150,7 @@ void Renderer::Update()
 
 		for (int i = 0; i < objects.size(); i++)
 		{
-			objects[i]->Update(deltaTime);
+			//objects[i]->Update(deltaTime);
 		}
 
 		for (int i = 0; i < objects.size(); i++)
