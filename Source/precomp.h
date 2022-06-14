@@ -20,6 +20,9 @@
 #include "ImGui/imgui_impl_glfw.h"
 #include "ImGui/imgui_impl_opengl3.h"
 
+// Gizmo package that links into ImGui
+#include "ImGuizmo/ImGuizmo.h"
+
 using namespace glm;
 const unsigned int ScreenWidth = 1280;
 const unsigned int ScreenHeight = 720;

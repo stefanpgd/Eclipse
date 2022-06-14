@@ -13,6 +13,8 @@ void ImguiHandler::Initialize(GLFWwindow* window)
 
 		ImGui_ImplGlfw_InitForOpenGL(window, true);
 		ImGui_ImplOpenGL3_Init("#version 330");
+
+		ImGuizmo::SetOrthographic(false);
 	}
 }
 
@@ -21,6 +23,7 @@ void ImguiHandler::Update()
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame();
+	ImGuizmo::BeginFrame();
 }
 
 void ImguiHandler::Draw()
