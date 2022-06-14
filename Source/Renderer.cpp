@@ -39,6 +39,7 @@ void GetAllModelFilesInDirectory(std::vector<std::string>& files, std::string pa
 }
 
 static ImGuizmo::OPERATION mCurrentGizmoOperation(ImGuizmo::TRANSLATE);
+bool useWindow = false;
 
 void EditTransform(float* cameraView, float* cameraProjection, float* matrix, bool editTransformDecomposition)
 {
@@ -110,6 +111,45 @@ void EditTransform(float* cameraView, float* cameraProjection, float* matrix, bo
 			ImGui::PopID();
 		}
 	}
+
+	ImGuiIO& io = ImGui::GetIO();
+	float viewManipulateRight = io.DisplaySize.x;
+	float viewManipulateTop = 0;
+	static ImGuiWindowFlags gizmoWindowFlags = 0;
+
+	//if (useWindow)
+	//{
+	//	ImGui::SetNextWindowSize(ImVec2(800, 400), ImGuiCond_Appearing);
+	//	ImGui::SetNextWindowPos(ImVec2(400, 20), ImGuiCond_Appearing);
+	//	ImGui::PushStyleColor(ImGuiCol_WindowBg, (ImVec4)ImColor(0.35f, 0.3f, 0.3f));
+	//	ImGui::Begin("Gizmo", 0, gizmoWindowFlags);
+	//	ImGuizmo::SetDrawlist();
+	//	float windowWidth = (float)ImGui::GetWindowWidth();
+	//	float windowHeight = (float)ImGui::GetWindowHeight();
+	//	ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, windowWidth, windowHeight);
+	//	viewManipulateRight = ImGui::GetWindowPos().x + windowWidth;
+	//	viewManipulateTop = ImGui::GetWindowPos().y;
+	//	ImGuiWindow* window = ImGui::GetCurrentWindow();
+	//	gizmoWindowFlags = ImGui::IsWindowHovered() && ImGui::IsMouseHoveringRect(window->InnerRect.Min, window->InnerRect.Max) ? ImGuiWindowFlags_NoMove : 0;
+	//}
+	//else
+	//{
+	ImGuizmo::SetRect(0, 0, io.DisplaySize.x, io.DisplaySize.y);
+	//}
+
+	mat4 id(1.0f);
+	//ImGuizmo::DrawGrid(cameraView, cameraProjection, value_ptr(id), 100.f);
+	//ImGuizmo::DrawCubes(cameraView, cameraProjection, matrix, 1);
+	ImGuizmo::Manipulate(cameraView, cameraProjection, mCurrentGizmoOperation, mCurrentGizmoMode, matrix, NULL, useSnap ? &snap[0] : NULL, boundSizing ? bounds : NULL, boundSizingSnap ? boundsSnap : NULL);
+
+	float matrixTranslation[3], matrixRotation[3], matrixScale[3];
+	ImGuizmo::DecomposeMatrixToComponents(matrix, matrixTranslation, matrixRotation, matrixScale);
+	vec3 objPos = vec3(matrixTranslation[0], matrixTranslation[1], matrixTranslation[2]);
+	vec3 camPos = Camera::GetInstance()->CameraPosition;
+
+	float camDistance = (camPos - objPos).length();
+	ImGuizmo::ViewManipulate(cameraView, camDistance, ImVec2(viewManipulateRight - 128, viewManipulateTop), ImVec2(128, 128), 0x10101010);
+
 }
 
 void Renderer::Run()
@@ -207,8 +247,6 @@ void Renderer::Update()
 		}
 		ImGui::End();
 
-		ImGui::ShowDemoWindow();
-
 		ProcessContinuesInputEvents();
 
 		camera->EditorInfo();
@@ -253,13 +291,19 @@ void Renderer::Update()
 			ImGui::Text(ImGuizmo::IsOver(ImGuizmo::SCALE) ? "Over scale gizmo" : "");
 		}
 
+		useWindow = FocusWindow;
+
 		ImGuizmo::SetID(0);
 		glm::mat4 transform(1.0f);
 		vec3 pos = objects[1]->transform.Position;
-		vec3 rot = objects[1]->transform.Position;
-		vec3 scale = objects[1]->transform.Position;
+		vec3 rot = objects[1]->transform.Rotation;
+		vec3 scale = objects[1]->transform.Scale;
 		ImGuizmo::RecomposeMatrixFromComponents(&pos[0], &rot[0], &scale[0], value_ptr(transform));
 		EditTransform(value_ptr(camera->GetViewMatrix()), value_ptr(camera->GetProjectionMatrix()), value_ptr(transform), true);
+		ImGuizmo::DecomposeMatrixToComponents(value_ptr(transform), &pos[0], &rot[0], &scale[0]);
+		objects[1]->transform.Position = pos;
+		objects[1]->transform.Rotation = rot;
+		objects[1]->transform.Scale = scale;
 		ImGui::End();
 
 		for (int i = 0; i < objects.size(); i++)
@@ -282,7 +326,7 @@ void Renderer::Update()
 		}
 
 		imgui->ActivateWindow("Create Object");
-		
+
 		if (ImGui::BeginCombo("Models", modelFilePaths[activeModelIndex].c_str()))
 		{
 			for (int i = 0; i < modelFilePaths.size(); i++)
@@ -301,7 +345,7 @@ void Renderer::Update()
 
 			ImGui::EndCombo();
 		}
-		
+
 		ImGui::DragFloat("Uniform Scale", &uniformScale, 1.0f);
 		ImGui::InputInt("Material Index", &selectedMaterial);
 		ImGui::InputText("Name", &newObjectName[0], 50);
@@ -412,7 +456,7 @@ void Renderer::ProcessSingleInputEvents(int key, int action)
 	{
 		Camera::GetInstance()->Sprinting = true;
 	}
-	
+
 	if (key == GLFW_KEY_LEFT_SHIFT && action == GLFW_RELEASE)
 	{
 		Camera::GetInstance()->Sprinting = false;

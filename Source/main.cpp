@@ -25,3 +25,4 @@ int main()
 // Start locking window positions
 // Console in game for logging/messages
 // Statistics menu ( FPS/Draw calls/Objects enc... ), check Demo/Examples/Simple Overlay
+// Right mouse-click to control camera
