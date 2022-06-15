@@ -99,7 +99,7 @@ void Object::EditorInfo(bool show)
 {
 	if (show)
 	{
-		ImGui::Begin("Editor");
+		ImGui::Begin("Editor", nullptr, ImGuiWindowFlags_NoMove);
 		ImGui::PushID(ID);
 		ImGui::InputText(" - Object Name", &name[0], 50);
 

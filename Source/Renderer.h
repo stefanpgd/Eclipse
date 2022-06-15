@@ -4,8 +4,10 @@ struct GLFWwindow;
 class Camera;
 class Object;
 class ImguiHandler;
+
 #include <vector>
 #include <string>
+#include "Editor.h"
 
 void KeyboardCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 void MouseCallback(GLFWwindow* window, double xPos, double yPos);
@@ -34,19 +36,12 @@ private:
 	bool isRunning = false;
 	bool isInitialized = false;
 
+	Editor editor;
 	Camera* camera;
 	GLFWwindow* window;
 	ImguiHandler* imgui;
 
 	std::vector<Object*> objects;
-	std::vector<std::string> modelFilePaths;
-	int activeModelIndex = 0;
-
-	// temp
-	int selectedModel = 0;
-	int selectedMaterial = 0;
-	std::string newObjectName;
-	float uniformScale = 1.0f;
 
 	bool FocusWindow = true;
 

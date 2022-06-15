@@ -6,7 +6,6 @@
 #include "DiffuseMaterial.h"
 #include "DefaultMaterial.h"
 #include "SceneLoader.h"
-#include <filesystem>
 
 inline float Random01()
 {
@@ -16,26 +15,6 @@ inline float Random01()
 inline float RandomInRange(float min, float max)
 {
 	return min + (max - min) * Random01();
-}
-
-void GetAllModelFilesInDirectory(std::vector<std::string>& files, std::string path, std::string originalPath)
-{
-	for (const auto& file : std::filesystem::directory_iterator(path))
-	{
-		if (file.is_directory())
-		{
-			GetAllModelFilesInDirectory(files, file.path().string(), originalPath);
-		}
-
-		std::string filePath = file.path().string();
-		std::string fileType = filePath.substr(filePath.size() - 3);
-		// path.substr(0, path.find_last_of('/'));
-
-		if (fileType == "obj" || fileType == "fbx")
-		{
-			files.push_back(filePath.substr(originalPath.size() + 1));
-		}
-	}
 }
 
 static ImGuizmo::OPERATION mCurrentGizmoOperation(ImGuizmo::TRANSLATE);
@@ -212,9 +191,6 @@ void Renderer::Initialize()
 		{
 			CreateTestScene();
 		}
-
-		std::string path = "Assets/Models";
-		GetAllModelFilesInDirectory(modelFilePaths, path, path);
 	}
 }
 
@@ -234,18 +210,6 @@ void Renderer::Update()
 		glClearColor(0.05f, 0.05f, 0.05f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		imgui->Update();
-
-		ImGui::Begin("Editor");
-		if (ImGui::BeginMainMenuBar())
-		{
-			if (ImGui::Button("Scene Details"))
-			{
-				showSceneDetails = !showSceneDetails;
-			}
-
-			ImGui::EndMainMenuBar();
-		}
-		ImGui::End();
 
 		ProcessContinuesInputEvents();
 
@@ -274,22 +238,6 @@ void Renderer::Update()
 		tr = glm::scale(tr, vec3(1.0f, 1.0f, 1.0f));
 
 		ImGui::Begin("Bob");
-
-		if (ImGuizmo::IsUsing())
-		{
-			ImGui::Text("Using Gizmo");
-		}
-		else
-		{
-			ImGui::Text("AAAA");
-			ImGui::Text(ImGuizmo::IsOver() ? "Over gizmo" : "");
-			ImGui::SameLine();
-			ImGui::Text(ImGuizmo::IsOver(ImGuizmo::TRANSLATE) ? "Over translate gizmo" : "");
-			ImGui::SameLine();
-			ImGui::Text(ImGuizmo::IsOver(ImGuizmo::ROTATE) ? "Over rotate gizmo" : "");
-			ImGui::SameLine();
-			ImGui::Text(ImGuizmo::IsOver(ImGuizmo::SCALE) ? "Over scale gizmo" : "");
-		}
 
 		useWindow = FocusWindow;
 
@@ -325,51 +273,7 @@ void Renderer::Update()
 			}
 		}
 
-		imgui->ActivateWindow("Create Object");
-
-		if (ImGui::BeginCombo("Models", modelFilePaths[activeModelIndex].c_str()))
-		{
-			for (int i = 0; i < modelFilePaths.size(); i++)
-			{
-				bool isSelected = (modelFilePaths[activeModelIndex] == modelFilePaths[i]);
-				if (ImGui::Selectable(modelFilePaths[i].c_str(), isSelected))
-				{
-					activeModelIndex = i;
-				}
-
-				if (isSelected)
-				{
-					ImGui::SetItemDefaultFocus();
-				}
-			}
-
-			ImGui::EndCombo();
-		}
-
-		ImGui::DragFloat("Uniform Scale", &uniformScale, 1.0f);
-		ImGui::InputInt("Material Index", &selectedMaterial);
-		ImGui::InputText("Name", &newObjectName[0], 50);
-
-		if (ImGui::Button("Create Object"))
-		{
-			Material* mat;
-			if (selectedMaterial == 0)
-			{
-				mat = new DiffuseMaterial();
-			}
-			else
-			{
-				mat = new DefaultMaterial();
-			}
-
-			Object* newObj = new Object(modelFilePaths[activeModelIndex], mat);
-			newObj->materialIndex = selectedMaterial;
-			newObj->name = newObjectName;
-			newObj->transform.Scale = vec3(uniformScale);
-			objects.push_back(newObj);
-		}
-
-		imgui->DisableWindow();
+		editor.DrawEditor(objects, deltaTime);
 
 		imgui->Draw();
 

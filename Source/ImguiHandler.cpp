@@ -28,41 +28,8 @@ void ImguiHandler::Update()
 
 void ImguiHandler::Draw()
 {
-	if (windowActivated)
-	{
-		windowActivated = false;
-		DisableWindow();
-		throw std::runtime_error("ERROR: 'ImguiHandler': When manually activating windows, make sure to disable them as well.\n");
-	}
-
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-}
-
-void ImguiHandler::CreateWindow(std::string title)
-{
-	ImGui::Begin(title.c_str(), nullptr);
-	ImGui::End();
-}
-
-void ImguiHandler::CreateWindow(vec2 position, vec2 size, std::string title)
-{
-	ImGui::SetNextWindowPos(ImVec2(position.x, position.y));
-	ImGui::SetNextWindowSize(ImVec2(size.x, size.y));
-	ImGui::Begin(title.c_str(), nullptr);
-	ImGui::End();
-}
-
-void ImguiHandler::ActivateWindow(std::string windowName)
-{
-	windowActivated = true;
-	ImGui::Begin(windowName.c_str(), nullptr);
-}
-
-void ImguiHandler::DisableWindow()
-{
-	windowActivated = false;
-	ImGui::End();
 }
 
 void ImguiHandler::SetupStyle()
@@ -81,7 +48,7 @@ void ImguiHandler::SetupStyle()
 	colors[ImGuiCol_FrameBgActive] = ImVec4(1.00f, 1.00f, 1.00f, 0.67f);
 	colors[ImGuiCol_TitleBg] = ImVec4(0.70f, 0.25f, 0.00f, 1.00f);
 	colors[ImGuiCol_TitleBgActive] = ImVec4(0.90f, 0.45f, 0.00f, 1.00f);
-	colors[ImGuiCol_MenuBarBg] = ImVec4(0.18f, 0.18f, 0.18f, 1.00f);
+	colors[ImGuiCol_MenuBarBg] = ImVec4(0.43f, 0.43f, 0.43f, 1.00f);
 	colors[ImGuiCol_CheckMark] = ImVec4(1.00f, 1.00f, 1.00f, 1.00f);
 	colors[ImGuiCol_SliderGrab] = ImVec4(1.00f, 1.00f, 1.00f, 1.00f);
 	colors[ImGuiCol_SliderGrabActive] = ImVec4(1.00f, 1.00f, 1.00f, 1.00f);

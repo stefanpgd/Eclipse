@@ -4,6 +4,7 @@
 #include "MeshRenderer.h"
 
 class Material;
+class Camera;
 
 struct ObjectSaveData
 {

@@ -138,22 +138,5 @@ void Camera::EditorInfo()
 {
 	ImguiHandler* imgui = ImguiHandler::GetInstance();
 
-	imgui->ActivateWindow("Editor");
-	ImGui::PushID(0);
-	if (ImGui::CollapsingHeader("Camera", true))
-	{
-		ImGui::DragFloat3("Position", &CameraPosition[0], 10.0f);
-		ImGui::Separator();
-		ImGui::Text("Camera Settings");
-		ImGui::DragFloat("Movement Speed", &CameraMovementSpeed, 0.1f);
-		ImGui::DragFloat("Movement Sprint Speed", &CameraMovementSprintSpeed, 5.0f);
-		ImGui::DragFloat("Tilt Speed", &CameraTiltSpeed, 0.1f);
-		ImGui::DragFloat("Projection - Near", &Near, 100.0f);
-		ImGui::DragFloat("Projection - Far", &Far, 100.0f);
-	}
-	ImGui::Separator();
-
-	ImGui::Spacing();
-	ImGui::PopID();
-	imgui->DisableWindow();
+	
 }
