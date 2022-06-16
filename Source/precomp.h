@@ -20,12 +20,14 @@
 #include "ImGui/imgui_internal.h"
 #include "ImGui/imgui_impl_glfw.h"
 #include "ImGui/imgui_impl_opengl3.h"
+#include "ImGui/imgui_stdlib.h"
 
 // Gizmo package that links into ImGui
 #include "ImGuizmo/ImGuizmo.h"
 
 using namespace glm;
-const unsigned int ScreenWidth = 1280;
-const unsigned int ScreenHeight = 720;
+const float AspectRatio = (16.0f / 9.0f);
+const unsigned int ScreenWidth = 1600;
+const unsigned int ScreenHeight = (unsigned int)(ScreenWidth / AspectRatio);
 
 static bool objectMenu = false;

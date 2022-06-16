@@ -1,6 +1,8 @@
 #pragma once
 
 #include <vector>
+#include <glm/glm.hpp>
+
 class Object;
 
 class Editor
@@ -16,6 +18,7 @@ private:
 	void DrawObjectDetails(Object* object);
 
 	void GetAllModelFilePaths(std::vector<std::string>& files, std::string path, std::string originalPath);
+	void DrawVector3Edit(const std::string& name, glm::vec3& data);
 
 private:
 	float lastDeltaTime = 1.0f;
@@ -42,4 +45,7 @@ private:
 	int activeModelIndex = 0;
 	int modelMaterialIndex = 0;
 	float modelUniformScale = 1.0f;
+
+	// Object Details
+	std::string placeholderName = "";
 };

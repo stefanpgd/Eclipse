@@ -8,13 +8,16 @@ void ImguiHandler::Initialize(GLFWwindow* window)
 
 		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
-		ImGuiIO& io = ImGui::GetIO(); (void)io;
+		ImGuiIO& io = ImGui::GetIO();
 		SetupStyle();
 
 		ImGui_ImplGlfw_InitForOpenGL(window, true);
 		ImGui_ImplOpenGL3_Init("#version 330");
 
 		ImGuizmo::SetOrthographic(false);
+
+		io.FontDefault = io.Fonts->AddFontFromFileTTF("Assets/Fonts/OpenSans-Regular.ttf", 15.5f);
+		io.Fonts->AddFontFromFileTTF("Assets/Fonts/OpenSans-Bold.ttf", 15.5f);
 	}
 }
 

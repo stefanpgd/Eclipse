@@ -163,6 +163,7 @@
     <ClCompile Include="Source\ImGuizmo\ImGradient.cpp" />
     <ClCompile Include="Source\ImGuizmo\ImGuizmo.cpp" />
     <ClCompile Include="Source\ImGuizmo\ImSequencer.cpp" />
+    <ClCompile Include="Source\ImGui\imgui_stdlib.cpp" />
     <ClCompile Include="Source\SceneLoader.cpp" />
     <ClCompile Include="Source\ImguiHandler.cpp" />
     <ClCompile Include="Source\DiffuseMaterial.cpp" />
@@ -201,6 +202,7 @@
     <ClInclude Include="Source\ImGuizmo\ImGuizmo.h" />
     <ClInclude Include="Source\ImGuizmo\ImSequencer.h" />
     <ClInclude Include="Source\ImGuizmo\ImZoomSlider.h" />
+    <ClInclude Include="Source\ImGui\imgui_stdlib.h" />
     <ClInclude Include="Source\SceneLoader.h" />
     <ClInclude Include="Source\ImguiHandler.h" />
     <ClInclude Include="Source\DiffuseMaterial.h" />

@@ -36,6 +36,7 @@
     <ClCompile Include="Source\ImGuizmo\ImGuizmo.cpp" />
     <ClCompile Include="Source\ImGuizmo\ImSequencer.cpp" />
     <ClCompile Include="Source\Editor.cpp" />
+    <ClCompile Include="Source\ImGui\imgui_stdlib.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Renderer.h" />
@@ -74,6 +75,7 @@
     <ClInclude Include="Source\ImGuizmo\ImSequencer.h" />
     <ClInclude Include="Source\ImGuizmo\ImZoomSlider.h" />
     <ClInclude Include="Source\Editor.h" />
+    <ClInclude Include="Source\ImGui\imgui_stdlib.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Source\Shaders\default.vert" />
