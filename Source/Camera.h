@@ -34,7 +34,6 @@ public:
     void ProcessMouseScroll(float yOffset);
 
     void SetupCameraFromSaveData(CameraSaveData& data);
-    void EditorInfo();
 
 public:
     float deltaTime;

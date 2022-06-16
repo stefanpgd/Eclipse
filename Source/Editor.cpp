@@ -5,6 +5,11 @@
 #include <filesystem>
 #include "DiffuseMaterial.h" // temp
 #include "DefaultMaterial.h" // temp
+#include "MeshRenderer.h"
+#include "Mesh.h"
+#include "Model.h"
+
+static ImGuizmo::OPERATION mCurrentGizmoOperation(ImGuizmo::TRANSLATE);
 
 Editor::Editor()
 {
@@ -19,13 +24,23 @@ void Editor::DrawEditor(std::vector<Object*>& objects, float deltaTime)
 	DrawMenubar();
 	DrawSceneWindow(objects);
 	DrawObjectDetails(objects[selectedObject]);
+	DrawGizmos(objects[selectedObject]);
 }
 
 void Editor::SetWindowParameters()
 {
 	ImGui::SetNextWindowPos(ImVec2(0, 20));
+	ImGui::SetNextWindowSize(ImVec2(280, 880));
 	ImGui::Begin("Scene Details", nullptr, ImGuiWindowFlags_NoMove);
 	ImGui::End();
+
+	if (showObjectDetails)
+	{
+		ImGui::SetNextWindowPos(ImVec2(1254, 20));
+		ImGui::SetNextWindowSize(ImVec2(350, 475));
+		ImGui::Begin("Object Details", nullptr, ImGuiWindowFlags_NoMove);
+		ImGui::End();
+	}
 }
 
 void Editor::DrawMenubar()
@@ -46,8 +61,9 @@ void Editor::DrawMenubar()
 		if (ImGui::Checkbox("Camera Settings", &showCameraSettings)) {}
 		if (ImGui::Checkbox("Object Details", &showObjectDetails)) {}
 		if (ImGui::Checkbox("Statistics", &showStatistics)) {}
+		if (ImGui::Checkbox("Gizmos", &showGizmos)) {}
 
-		ImGui::Dummy(ImVec2(ScreenWidth - 610, 0));
+		ImGui::Dummy(ImVec2(ScreenWidth - 685, 0));
 		ImGui::Text("FPS:");
 		ImGui::TextColored(ImVec4(0.21f, 1.0f, 0.42f, 1.0f), std::to_string(FPS).c_str());
 		ImGui::EndMainMenuBar();
@@ -61,6 +77,11 @@ void Editor::DrawSceneWindow(std::vector<Object*>& objects)
 	ImGuiIO& io = ImGui::GetIO();
 	auto boldFont = io.Fonts->Fonts[1];
 	ImGui::Begin("Scene Details", nullptr, ImGuiWindowFlags_NoMove);
+
+	if (selectedObject > objects.size() - 1)
+	{
+		selectedObject = 0;
+	}
 
 	if (showObjectCreation)
 	{
@@ -89,7 +110,7 @@ void Editor::DrawSceneWindow(std::vector<Object*>& objects)
 			ImGui::EndCombo();
 		}
 
-		ImGui::DragFloat("Uniform Scale", &modelUniformScale, 1.0f);
+		ImGui::DragFloat("Uniform Scale", &modelUniformScale, 1.0f, 0.0f, 0.0f, "%.0f");
 		ImGui::InputInt("Material Index", &modelMaterialIndex);
 		ImGui::InputText("Name", &newObjectName[0], 50);
 		ImGui::InputText("Model Dir", &modelFolderLoadPath[0], modelFolderLoadPath.size());
@@ -108,7 +129,7 @@ void Editor::DrawSceneWindow(std::vector<Object*>& objects)
 
 			Object* newObj = new Object(modelFilePaths[activeModelIndex], mat);
 			newObj->materialIndex = modelMaterialIndex;
-			newObj->name = newObjectName;
+			newObj->name = newObjectName.data();
 			newObj->transform.Scale = vec3(modelUniformScale);
 			objects.push_back(newObj);
 		}
@@ -161,7 +182,7 @@ void Editor::DrawSceneWindow(std::vector<Object*>& objects)
 				objName += " (Disabled)";
 			}
 
-			if (ImGui::Selectable(objects[i]->name.c_str(), selectedObject == i))
+			if (ImGui::Selectable(objName.c_str(), selectedObject == i))
 			{
 				selectedObject = i;
 				placeholderName = "";
@@ -182,10 +203,7 @@ void Editor::DrawObjectDetails(Object* object)
 	{
 		ImGui::Begin("Object Details");
 
-		// Object Transform
-		// Object Material
-		// Mesh info ( model path, verts? meshes? )
-		// Duplicate & Delete
+		// Object Name & Name update
 		ImGui::Separator();
 		ImGui::Text("Object Name:");
 		ImGui::SameLine();
@@ -207,15 +225,126 @@ void Editor::DrawObjectDetails(Object* object)
 			}
 		}
 		ImGui::Separator();
+
+		// Transform
 		ImGui::PushFont(boldFont);
 		ImGui::Text("Transform:");
 		ImGui::PopFont();
 
-		DrawVector3Edit("Position", object->transform.Position);
-		DrawVector3Edit("Rotation", object->transform.Rotation);
-		DrawVector3Edit("Scale", object->transform.Scale);
+		DrawVector3Edit("Position", object->transform.Position, 0.0f);
+		ImGui::Spacing();
+		DrawVector3Edit("Rotation", object->transform.Rotation, 0.0f);
+		ImGui::Spacing();
+		DrawVector3Edit("Scale", object->transform.Scale, 1.0f);
+		ImGui::Spacing();
+
+		ImGui::Separator();
+
+		// Model Info
+		ImGui::PushFont(boldFont);
+		ImGui::Text("Model Info:");
+		ImGui::PopFont();
+
+		ImGui::Text("Model Name/Location:");
+		ImGui::SameLine();
+		ImGui::TextColored(ImVec4(0.5f, 1.0f, 0.7f, 1.0f), object->modelFileName.c_str());
+
+		if (object->meshRenderer.usesModel)
+		{
+			std::string meshCount = std::to_string(object->meshRenderer.model->meshes.size());
+			std::string textureCount = std::to_string(object->meshRenderer.model->texturesLoaded.size());
+
+			ImGui::Text("Meshes:");
+			ImGui::SameLine();
+			ImGui::TextColored(ImVec4(0.5f, 1.0f, 0.7f, 1.0f), meshCount.c_str());
+
+			ImGui::Text("Textures:");
+			ImGui::SameLine();
+			ImGui::TextColored(ImVec4(0.5f, 1.0f, 0.7f, 1.0f), textureCount.c_str());
+			
+			// Potential: Amount of verts?
+		}
+		ImGui::Separator();
+
+		// Material Info
+		ImGui::PushFont(boldFont);
+		ImGui::Text("Material Info:");
+		ImGui::PopFont();
+
+		ImGui::InputInt("Material Index", &object->materialIndex);
+
+		// In the future allow to change materials at runtime...
+		// this includes textures
+		ImGui::Separator();
+
+		// Option buttons ( delete, duplicate... enc. )
+		ImGui::PushFont(boldFont);
+		ImGui::Text("Functions:");
+		ImGui::PopFont();
+
+		if (ImGui::Button("Duplicate"))
+		{
+			object->Duplicate = true;
+		}
+
+		ImGui::SameLine(0, 3);
+		if (ImGui::Button("Delete"))
+		{
+			object->Deleted = true;
+		}
+		ImGui::Separator();
 
 		ImGui::End();
+	}
+}
+
+void Editor::DrawGizmos(Object* object)
+{
+	if (showGizmos)
+	{
+		static ImGuizmo::MODE mCurrentGizmoMode(ImGuizmo::WORLD);
+		static bool useSnap = false;
+		static float snap[3] = { 1.f, 1.f, 1.f };
+		static float bounds[] = { -0.5f, -0.5f, -0.5f, 0.5f, 0.5f, 0.5f };
+		static float boundsSnap[] = { 0.1f, 0.1f, 0.1f };
+		static bool boundSizing = false;
+		static bool boundSizingSnap = false;
+
+		if (ImGui::IsKeyPressed(87)) // W key
+			mCurrentGizmoOperation = ImGuizmo::TRANSLATE;
+		if (ImGui::IsKeyPressed(69)) // E key
+			mCurrentGizmoOperation = ImGuizmo::ROTATE;
+		if (ImGui::IsKeyPressed(82)) // R Key
+			mCurrentGizmoOperation = ImGuizmo::SCALE;
+
+		ImGuiIO& io = ImGui::GetIO();
+		float viewManipulateRight = io.DisplaySize.x;
+		float viewManipulateTop = 0;
+		static ImGuiWindowFlags gizmoWindowFlags = 0;
+
+		Camera* camera = Camera::GetInstance();
+		float* cameraView = value_ptr(camera->GetViewMatrix());
+		float* cameraProjection = value_ptr(camera->GetProjectionMatrix());
+
+		ImGuizmo::SetRect(0, 0, io.DisplaySize.x, io.DisplaySize.y);
+
+		glm::mat4 tr(1.0f);
+		float* modelMatrix = value_ptr(tr);
+		vec3 pos = object->transform.Position;
+		vec3 rot = object->transform.Rotation;
+		vec3 scale = object->transform.Scale;
+		ImGuizmo::RecomposeMatrixFromComponents(&pos[0], &rot[0], &scale[0], modelMatrix);
+		ImGuizmo::Manipulate(cameraView, cameraProjection, mCurrentGizmoOperation, mCurrentGizmoMode, modelMatrix, NULL, useSnap ? &snap[0] : NULL, boundSizing ? bounds : NULL, boundSizingSnap ? boundsSnap : NULL);
+		ImGuizmo::DecomposeMatrixToComponents(modelMatrix, &pos[0], &rot[0], &scale[0]);
+		object->transform.Position = pos;
+		object->transform.Rotation = rot;
+		object->transform.Scale = scale;
+
+		vec3 camPos = Camera::GetInstance()->CameraPosition;
+		float camDistance = (camPos - object->transform.Position).length();
+
+		float rightOffset = showObjectDetails ? 485 : 128;
+		ImGuizmo::ViewManipulate(cameraView, 8.0f, ImVec2(viewManipulateRight - rightOffset, viewManipulateTop), ImVec2(128, 128), 0);
 	}
 }
 
@@ -240,6 +369,80 @@ void Editor::GetAllModelFilePaths(std::vector<std::string>& files, std::string p
 	}
 }
 
-void Editor::DrawVector3Edit(const std::string& name, glm::vec3& data)
+void Editor::DrawVector3Edit(const std::string& name, glm::vec3& data, float resetValue)
 {
+	// Credits for this function go to Yan Chernikov, a.k.a. 'The Cherno'
+	// source: https://youtu.be/oESRecjuLNY
+
+	ImGuiIO& io = ImGui::GetIO();
+	auto boldFont = io.Fonts->Fonts[1];
+
+	ImGui::PushID(name.c_str());
+	ImGui::Columns(2);
+	ImGui::SetColumnWidth(0, 70.0f);
+	ImGui::Text(name.c_str());
+	ImGui::NextColumn();
+
+	ImGui::PushMultiItemsWidths(3, ImGui::CalcItemWidth());
+	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(3, 1));
+
+	float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
+	ImVec2 buttonSize = { lineHeight + 3.0f, lineHeight };
+
+	ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.1f, 0.15f, 1.0f));
+	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.9f, 0.2f, 0.2f, 1.0f));
+	ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.81f, 0.1f, 0.15f, 1.0f));
+
+	ImGui::PushFont(boldFont);
+	if (ImGui::Button("X", buttonSize))
+	{
+		data.x = 0.0f;
+	}
+	ImGui::PopFont();
+	ImGui::PopStyleColor(3);
+
+	ImGui::SameLine();
+	ImGui::DragFloat("##X", &data.x, 0.1f, 0.0f, 0.0f, "%.2f");
+	ImGui::PopItemWidth();
+	ImGui::SameLine();
+
+	ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.7f, 0.2f, 1.0f));
+	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.3f, 0.8f, 0.3f, 1.0f));
+	ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.2f, 0.7f, 0.2f, 1.0f));
+
+	ImGui::PushFont(boldFont);
+	if (ImGui::Button("Y", buttonSize))
+	{
+		data.y = 0.0f;
+	}
+	ImGui::PopFont();
+
+	ImGui::PopStyleColor(3);
+
+	ImGui::SameLine();
+	ImGui::DragFloat("##Y", &data.y, 0.1f, 0.0f, 0.0f, "%.2f");
+	ImGui::PopItemWidth();
+	ImGui::SameLine();
+
+	ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.1f, 0.25f, 0.8f, 1.0f));
+	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.2f, 0.35f, 0.9f, 1.0f));
+	ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.1f, 0.25f, 0.8f, 1.0f));
+
+	ImGui::PushFont(boldFont);
+	if (ImGui::Button("Z", buttonSize))
+	{
+		data.z = 0.0f;
+	}
+	ImGui::PopFont();
+
+	ImGui::PopStyleColor(3);
+
+	ImGui::SameLine();
+	ImGui::DragFloat("##Z", &data.z, 0.1f, 0.0f, 0.0f, "%.2f");
+	ImGui::PopItemWidth();
+	ImGui::SameLine();
+
+	ImGui::PopStyleVar();
+	ImGui::Columns(1);
+	ImGui::PopID();
 }

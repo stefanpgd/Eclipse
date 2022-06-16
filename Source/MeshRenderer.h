@@ -11,10 +11,11 @@ public:
 
 	void Draw(Shader* shader);
 
-private:
+public:
 	Model* model = nullptr;
 	bool usesModel = false;
 
+private:
 	unsigned int VBO = 0;
 	unsigned int VAO = 0;
 	unsigned int vertexCount = 0;

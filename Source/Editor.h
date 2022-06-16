@@ -16,9 +16,10 @@ private:
 	void DrawMenubar();
 	void DrawSceneWindow(std::vector<Object*>& objects);
 	void DrawObjectDetails(Object* object);
+	void DrawGizmos(Object* object);
 
 	void GetAllModelFilePaths(std::vector<std::string>& files, std::string path, std::string originalPath);
-	void DrawVector3Edit(const std::string& name, glm::vec3& data);
+	void DrawVector3Edit(const std::string& name, glm::vec3& data, float resetValue);
 
 private:
 	float lastDeltaTime = 1.0f;
@@ -34,6 +35,7 @@ private:
 	bool showCameraSettings = false;
 	bool showObjectDetails = true;
 	bool showStatistics = false;
+	bool showGizmos = true;
 
 	// Scene details
 	int selectedObject = 0;
@@ -45,6 +47,7 @@ private:
 	int activeModelIndex = 0;
 	int modelMaterialIndex = 0;
 	float modelUniformScale = 1.0f;
+	Object* objectToAdd = nullptr;
 
 	// Object Details
 	std::string placeholderName = "";

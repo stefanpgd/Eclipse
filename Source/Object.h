@@ -27,10 +27,9 @@ public:
 	virtual void Update(float deltaTime);
 	virtual void Draw();
 
-	virtual void EditorInfo(bool show);
-
 public:
 	Transform transform;
+	MeshRenderer meshRenderer;
 
 	std::string name{ "Object" };
 	std::string modelFileName;
@@ -45,5 +44,4 @@ private:
 
 	Camera* camera;
 	Material* material;
-	MeshRenderer meshRenderer;
 };

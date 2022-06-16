@@ -24,9 +24,9 @@ private:
 	Mesh ProcessMesh(aiMesh* mesh, const aiScene* scene);
 	std::vector<ATexture> LoadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName);
 
-private:
-	std::vector<Mesh> meshes;
+public:
 	std::string directory;
+	std::vector<Mesh> meshes;
 	std::vector<ATexture> texturesLoaded;
 };
 

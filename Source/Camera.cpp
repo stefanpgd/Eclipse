@@ -133,10 +133,3 @@ void Camera::SetupCameraFromSaveData(CameraSaveData& data)
 
 	ProcessMouseMovement(0, 0);
 }
-
-void Camera::EditorInfo()
-{
-	ImguiHandler* imgui = ImguiHandler::GetInstance();
-
-	
-}
