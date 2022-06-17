@@ -82,10 +82,6 @@ void Renderer::Initialize()
 		{
 			CreateTestScene();
 		}
-
-		ConsoleLog("Deez");
-		ConsoleLog("Nuts", WarningLevel::Warning);
-		ConsoleLog("Gottem", WarningLevel::Error);
 	}
 }
 
@@ -101,9 +97,12 @@ void Renderer::Update()
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 
+		DrawCalls = 0;
+
 		glViewport(0, 0, ScreenWidth, ScreenHeight);
 		glClearColor(0.05f, 0.05f, 0.05f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 		imgui->Update();
 
 		ProcessContinuesInputEvents();

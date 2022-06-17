@@ -34,6 +34,9 @@ public:
 	void ProcessSingleInputEvents(int key, int action);
 	void ConsoleLog(std::string message, WarningLevel warningLevel = WarningLevel::Log, bool showTimeStamp = true);
 
+public:
+	int DrawCalls = 0;
+
 private:
 	void Initialize();
 	void Update();

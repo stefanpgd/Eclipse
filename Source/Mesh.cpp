@@ -1,6 +1,7 @@
 #include "precomp.h"
 #include "Shader.h"
 #include "Mesh.h"
+#include "Renderer.h"
 
 Mesh::Mesh(std::vector<AVertex> vertices, std::vector<unsigned int> indices, std::vector<ATexture> textures) : 
 	Vertices(vertices), Indices(indices), textures(textures)
@@ -60,4 +61,5 @@ void Mesh::Draw(Shader* shader)
 
 	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, Indices.size(), GL_UNSIGNED_INT, 0);
+	Renderer::GetInstance()->DrawCalls++;
 }

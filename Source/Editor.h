@@ -18,6 +18,7 @@ private:
 	void DrawObjectDetails(Object* object);
 	void DrawGizmos(Object* object);
 	void DrawConsole(std::vector<std::string>& consoleLog);
+	void DrawStatistics();
 
 	void GetAllModelFilePaths(std::vector<std::string>& files, std::string path, std::string originalPath);
 	void DrawVector3Edit(const std::string& name, glm::vec3& data, float resetValue);

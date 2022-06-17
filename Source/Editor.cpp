@@ -27,6 +27,7 @@ void Editor::DrawEditor(std::vector<Object*>& objects, std::vector<std::string>&
 	DrawObjectDetails(objects[selectedObject]);
 	DrawGizmos(objects[selectedObject]);
 	DrawConsole(consoleLog);
+	DrawStatistics();
 }
 
 void Editor::SetWindowParameters()
@@ -41,6 +42,16 @@ void Editor::SetWindowParameters()
 		ImGui::SetNextWindowPos(ImVec2(1254, 20));
 		ImGui::SetNextWindowSize(ImVec2(350, 475));
 		ImGui::Begin("Object Details", nullptr, ImGuiWindowFlags_NoMove);
+		ImGui::End();
+	}
+
+	if (showStatistics)
+	{
+		ImGui::SetNextWindowPos(ImVec2(285, 25));
+		ImGui::SetNextWindowSize(ImVec2(100, 75));
+		ImGui::SetNextWindowBgAlpha(0.45f); 
+		ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav;
+		ImGui::Begin("Statistics", nullptr, windowFlags);
 		ImGui::End();
 	}
 }
@@ -427,6 +438,36 @@ void Editor::DrawConsole(std::vector<std::string>& consoleLog)
 		ImGui::PopStyleVar();
 		ImGui::EndChild();
 		ImGui::Separator();
+
+		ImGui::End();
+	}
+}
+
+void Editor::DrawStatistics()
+{
+	if (showStatistics)
+	{
+		ImGuiIO& io = ImGui::GetIO();
+		auto boldFont = io.Fonts->Fonts[1];
+
+		ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav;
+		ImGui::Begin("Statistics", nullptr, windowFlags);
+
+		ImGui::PushFont(boldFont);
+		ImGui::Text("Statistics:");
+		ImGui::PopFont();
+
+		ImGui::Text("FPS:");
+		ImGui::SameLine();
+		ImGui::PushFont(boldFont);
+		ImGui::TextColored(ImVec4(0.5f, 1.0f, 0.7f, 1.0f), std::to_string(FPS).c_str());
+		ImGui::PopFont();
+
+		ImGui::Text("Draw Calls:");
+		ImGui::SameLine();
+		ImGui::PushFont(boldFont);
+		ImGui::TextColored(ImVec4(0.5f, 1.0f, 0.7f, 1.0f), std::to_string(Renderer::GetInstance()->DrawCalls).c_str());
+		ImGui::PopFont();
 
 		ImGui::End();
 	}
