@@ -1,4 +1,5 @@
 #include "precomp.h"
+#include "Renderer.h"
 #include "Editor.h"
 #include "Object.h"
 #include "Camera.h"
@@ -20,8 +21,6 @@ void Editor::DrawEditor(std::vector<Object*>& objects, std::vector<std::string>&
 {
 	lastDeltaTime = deltaTime;
 	
-	ImGui::ShowDemoWindow();
-
 	SetWindowParameters();
 	DrawMenubar();
 	DrawSceneWindow(objects);
@@ -121,21 +120,28 @@ void Editor::DrawSceneWindow(std::vector<Object*>& objects)
 
 		if (ImGui::Button("Create Object"))
 		{
-			Material* mat;
-			if (modelMaterialIndex == 0)
+			if (newObjectName.size() > 0)
 			{
-				mat = new DiffuseMaterial();
+				Material* mat;
+				if (modelMaterialIndex == 0)
+				{
+					mat = new DiffuseMaterial();
+				}
+				else
+				{
+					mat = new DefaultMaterial();
+				}
+
+				Object* newObj = new Object(modelFilePaths[activeModelIndex], mat);
+				newObj->materialIndex = modelMaterialIndex;
+				newObj->name = newObjectName.data();
+				newObj->transform.Scale = vec3(modelUniformScale);
+				objects.push_back(newObj);
 			}
 			else
 			{
-				mat = new DefaultMaterial();
+				Renderer::GetInstance()->ConsoleLog("Object needs to have a name/ID to be created", WarningLevel::Warning);
 			}
-
-			Object* newObj = new Object(modelFilePaths[activeModelIndex], mat);
-			newObj->materialIndex = modelMaterialIndex;
-			newObj->name = newObjectName.data();
-			newObj->transform.Scale = vec3(modelUniformScale);
-			objects.push_back(newObj);
 		}
 		ImGui::SameLine();
 		if (ImGui::Button("Reload Model Paths"))
@@ -226,6 +232,10 @@ void Editor::DrawObjectDetails(Object* object)
 			{
 				object->name = placeholderName;
 				placeholderName = "";
+			}
+			else
+			{
+				Renderer::GetInstance()->ConsoleLog("Can't update the Object name with an empty string", WarningLevel::Warning);
 			}
 		}
 		ImGui::Separator();
