@@ -21,8 +21,10 @@ int main()
 }
 
 // Things to do:
-// Expand the menu bar with: Scene Details, Camera (within scene details?) and Create Objects menu, Make it a checklist like Examples?
-// Start locking window positions
 // Console in game for logging/messages
 // Statistics menu ( FPS/Draw calls/Objects enc... ), check Demo/Examples/Simple Overlay
 // Right mouse-click to control camera
+
+// Bugs:
+// Deleting object causes crash
+// Duplicates of objects have the wrong material index

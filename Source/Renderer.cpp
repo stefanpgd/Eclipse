@@ -6,6 +6,9 @@
 #include "DiffuseMaterial.h"
 #include "DefaultMaterial.h"
 #include "SceneLoader.h"
+#include <iomanip>
+#include <ctime>
+#include <sstream>
 
 inline float Random01()
 {
@@ -79,6 +82,10 @@ void Renderer::Initialize()
 		{
 			CreateTestScene();
 		}
+
+		ConsoleLog("Deez");
+		ConsoleLog("Nuts", WarningLevel::Warning);
+		ConsoleLog("Gottem", WarningLevel::Error);
 	}
 }
 
@@ -115,7 +122,7 @@ void Renderer::Update()
 			objects[i]->Draw();
 		}
 
-		editor.DrawEditor(objects, deltaTime);
+		editor.DrawEditor(objects, consoleLog, deltaTime);
 
 		for (int i = 0; i < objects.size(); i++)
 		{
@@ -224,6 +231,39 @@ void Renderer::ProcessSingleInputEvents(int key, int action)
 	{
 		Camera::GetInstance()->Sprinting = false;
 	}
+}
+
+void Renderer::ConsoleLog(std::string message, WarningLevel warningLevel, bool showTimeStamp)
+{
+	std::string consoleMessage;
+	switch (warningLevel)
+	{
+	case WarningLevel::Log:
+		consoleMessage += "[Log] ";
+		break;
+
+	case WarningLevel::Warning:
+		consoleMessage += "[Warning] ";
+		break;
+
+	case WarningLevel::Error:
+		consoleMessage += "[ERROR] ";
+		break;
+	}
+
+	if (showTimeStamp)
+	{
+		auto t = std::time(nullptr);
+		auto tm = *std::localtime(&t);
+
+		std::ostringstream oss;
+		oss << std::put_time(&tm, "%H:%M:%S");
+		std::string time = "(" + oss.str() + ") ";
+		consoleMessage += time;
+	}
+
+	consoleMessage += message.data();
+	consoleLog.push_back(consoleMessage);
 }
 
 void KeyboardCallback(GLFWwindow* window, int key, int scancode, int action, int mods)

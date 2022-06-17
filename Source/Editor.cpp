@@ -16,15 +16,18 @@ Editor::Editor()
 	GetAllModelFilePaths(modelFilePaths, modelFolderLoadPath, modelFolderLoadPath);
 }
 
-void Editor::DrawEditor(std::vector<Object*>& objects, float deltaTime)
+void Editor::DrawEditor(std::vector<Object*>& objects, std::vector<std::string>& consoleLog, float deltaTime)
 {
 	lastDeltaTime = deltaTime;
+	
+	ImGui::ShowDemoWindow();
 
 	SetWindowParameters();
 	DrawMenubar();
 	DrawSceneWindow(objects);
 	DrawObjectDetails(objects[selectedObject]);
 	DrawGizmos(objects[selectedObject]);
+	DrawConsole(consoleLog);
 }
 
 void Editor::SetWindowParameters()
@@ -62,8 +65,9 @@ void Editor::DrawMenubar()
 		if (ImGui::Checkbox("Object Details", &showObjectDetails)) {}
 		if (ImGui::Checkbox("Statistics", &showStatistics)) {}
 		if (ImGui::Checkbox("Gizmos", &showGizmos)) {}
+		if (ImGui::Checkbox("Console", &showConsole)) {}
 
-		ImGui::Dummy(ImVec2(ScreenWidth - 685, 0));
+		ImGui::Dummy(ImVec2(ScreenWidth - 755, 0));
 		ImGui::Text("FPS:");
 		ImGui::TextColored(ImVec4(0.21f, 1.0f, 0.42f, 1.0f), std::to_string(FPS).c_str());
 		ImGui::EndMainMenuBar();
@@ -345,6 +349,76 @@ void Editor::DrawGizmos(Object* object)
 
 		float rightOffset = showObjectDetails ? 485 : 128;
 		ImGuizmo::ViewManipulate(cameraView, 8.0f, ImVec2(viewManipulateRight - rightOffset, viewManipulateTop), ImVec2(128, 128), 0);
+	}
+}
+
+void Editor::DrawConsole(std::vector<std::string>& consoleLog)
+{
+	// Maybe add an filter to only filter for logs/warnings/messages? Example does this as well.
+	if (showConsole)
+	{
+		ImGui::Begin("Console");
+
+		if(ImGui::Button("Clear Console"))
+		{
+			consoleLog.clear();
+		}
+
+		ImGui::Separator();
+
+		ImGui::Checkbox("Auto Scroll", &autoScrollConsole);
+
+		ImGui::Checkbox("Logs", &showLogs);
+		ImGui::SameLine();
+		ImGui::Checkbox("Warnings", &showWarnings);
+		ImGui::SameLine();
+		ImGui::Checkbox("Errors", &showErrors);
+		ImGui::Separator();
+
+
+		// Console is mainly based on the 'Example Console'
+		// in the ImGui::ShowDemoWindow function
+
+		const float footerHeightReserve = ImGui::GetStyle().ItemSpacing.y + ImGui::GetFrameHeightWithSpacing();
+		ImGui::BeginChild("ScrollingRegion", ImVec2(0, -footerHeightReserve), false, ImGuiWindowFlags_HorizontalScrollbar);
+		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(4, 1));
+
+		for (size_t i = 0; i < consoleLog.size(); i++)
+		{
+			const char* message = consoleLog[i].c_str();
+
+			ImVec4 textColor;
+			if(strstr(message, "[Log]")) 
+			{
+				if (showLogs) { textColor = ImVec4(0.85f, 0.85f, 0.85f, 1.0f); }
+				else { continue; }
+			}
+			else if (strstr(message, "[Warning]"))
+			{
+				if (showWarnings) { textColor = ImVec4(0.9f, 0.8f, 0.3f, 1.0f); }
+				else { continue; }
+			}
+			else if (strstr(message, "[ERROR]"))
+			{
+				if (showErrors) { textColor = ImVec4(1.0f, 0.4f, 0.4f, 1.0f); }
+				else { continue; }
+			}
+
+			ImGui::PushStyleColor(ImGuiCol_Text, textColor);
+			ImGui::TextUnformatted(message);
+			ImGui::PopStyleColor();
+		}
+
+		if (autoScrollConsole && ImGui::GetScrollY() >= ImGui::GetScrollMaxY())
+		{
+			ImGui::SetScrollHereY(1.0f);
+		}
+
+		ImGui::PopStyleVar();
+		ImGui::EndChild();
+		ImGui::Separator();
+
+		ImGui::End();
 	}
 }
 

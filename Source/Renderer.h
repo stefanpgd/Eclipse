@@ -5,6 +5,13 @@ class Camera;
 class Object;
 class ImguiHandler;
 
+enum class WarningLevel
+{
+	Log,
+	Warning,
+	Error
+};
+
 #include <vector>
 #include <string>
 #include "Editor.h"
@@ -25,6 +32,7 @@ public:
 	void Run();
 	void ProcessContinuesInputEvents();
 	void ProcessSingleInputEvents(int key, int action);
+	void ConsoleLog(std::string message, WarningLevel warningLevel = WarningLevel::Log, bool showTimeStamp = true);
 
 private:
 	void Initialize();
@@ -42,6 +50,7 @@ private:
 	ImguiHandler* imgui;
 
 	std::vector<Object*> objects;
+	std::vector<std::string> consoleLog;
 
 	bool FocusWindow = true;
 

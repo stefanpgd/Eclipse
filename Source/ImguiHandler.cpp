@@ -44,7 +44,7 @@ void ImguiHandler::SetupStyle()
 
 	ImVec4* colors = ImGui::GetStyle().Colors;
 	colors[ImGuiCol_TextDisabled] = ImVec4(0.46f, 0.46f, 0.46f, 1.00f);
-	colors[ImGuiCol_WindowBg] = ImVec4(0.06f, 0.06f, 0.06f, 1.00f);
+	colors[ImGuiCol_WindowBg] = ImVec4(0.1f, 0.1f, 0.1f, 1.00f);
 	colors[ImGuiCol_Border] = ImVec4(1.00f, 0.56f, 0.00f, 0.50f);
 	colors[ImGuiCol_FrameBg] = ImVec4(0.24f, 0.24f, 0.24f, 0.54f);
 	colors[ImGuiCol_FrameBgHovered] = ImVec4(0.64f, 0.64f, 0.64f, 0.40f);

@@ -9,7 +9,7 @@ class Editor
 {
 public:
 	Editor();
-	void DrawEditor(std::vector<Object*>& objects, float deltaTime);
+	void DrawEditor(std::vector<Object*>& objects, std::vector<std::string>& consoleLog, float deltaTime);
 
 private:
 	void SetWindowParameters();
@@ -17,6 +17,7 @@ private:
 	void DrawSceneWindow(std::vector<Object*>& objects);
 	void DrawObjectDetails(Object* object);
 	void DrawGizmos(Object* object);
+	void DrawConsole(std::vector<std::string>& consoleLog);
 
 	void GetAllModelFilePaths(std::vector<std::string>& files, std::string path, std::string originalPath);
 	void DrawVector3Edit(const std::string& name, glm::vec3& data, float resetValue);
@@ -36,6 +37,7 @@ private:
 	bool showObjectDetails = true;
 	bool showStatistics = false;
 	bool showGizmos = true;
+	bool showConsole = false;
 
 	// Scene details
 	int selectedObject = 0;
@@ -51,4 +53,10 @@ private:
 
 	// Object Details
 	std::string placeholderName = "";
+
+	// Console
+	bool autoScrollConsole = true;
+	bool showLogs = true;
+	bool showWarnings = true;
+	bool showErrors = true;
 };
