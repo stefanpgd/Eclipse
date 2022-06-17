@@ -30,6 +30,7 @@ public:
 public:
 	Transform transform;
 	MeshRenderer meshRenderer;
+	Material* material;
 
 	std::string name{ "Object" };
 	std::string modelFileName;
@@ -41,7 +42,5 @@ public:
 
 private:
 	int ID;
-
 	Camera* camera;
-	Material* material;
 };

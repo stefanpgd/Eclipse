@@ -297,6 +297,7 @@ void Editor::DrawObjectDetails(Object* object)
 		ImGui::PopFont();
 
 		ImGui::InputInt("Material Index", &object->materialIndex);
+		object->material->EditorInfo();
 
 		// In the future allow to change materials at runtime...
 		// this includes textures

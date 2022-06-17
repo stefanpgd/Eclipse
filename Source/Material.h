@@ -6,6 +6,7 @@ class Material
 {
 public:
 	virtual void ActivateMaterial(glm::mat4& model, glm::mat4& view, glm::mat4& projection) = 0;
+	virtual void EditorInfo();
 
 	Shader* shader;
 };
