@@ -24,8 +24,20 @@ void Editor::DrawEditor(std::vector<Object*>& objects, std::vector<std::string>&
 	SetWindowParameters();
 	DrawMenubar();
 	DrawSceneWindow(objects);
-	DrawObjectDetails(objects[selectedObject]);
-	DrawGizmos(objects[selectedObject]);
+
+	if (objects.size() > 0)
+	{
+		if (objects[selectedObject] != nullptr)
+		{
+			DrawObjectDetails(objects[selectedObject]);
+			DrawGizmos(objects[selectedObject]);
+		}
+		else
+		{
+			selectedObject = 0;
+		}
+	}
+
 	DrawConsole(consoleLog);
 	DrawStatistics();
 }
@@ -126,7 +138,7 @@ void Editor::DrawSceneWindow(std::vector<Object*>& objects)
 
 		ImGui::DragFloat("Uniform Scale", &modelUniformScale, 1.0f, 0.0f, 0.0f, "%.0f");
 		ImGui::InputInt("Material Index", &modelMaterialIndex);
-		ImGui::InputText("Name", &newObjectName[0], 50);
+		ImGui::InputText("Name", &newObjectName);
 		ImGui::InputText("Model Dir", &modelFolderLoadPath[0], modelFolderLoadPath.size());
 
 		if (ImGui::Button("Create Object"))
@@ -196,6 +208,7 @@ void Editor::DrawSceneWindow(std::vector<Object*>& objects)
 
 		for (size_t i = 0; i < objects.size(); i++)
 		{
+			ImGui::PushID(objects[i]->ID);
 			std::string objName = objects[i]->name.c_str();
 
 			if (!objects[i]->isActive)
@@ -208,6 +221,7 @@ void Editor::DrawSceneWindow(std::vector<Object*>& objects)
 				selectedObject = i;
 				placeholderName = "";
 			}
+			ImGui::PopID();
 		}
 		ImGui::Separator();
 	}
@@ -522,7 +536,7 @@ void Editor::DrawVector3Edit(const std::string& name, glm::vec3& data, float res
 	ImGui::PushFont(boldFont);
 	if (ImGui::Button("X", buttonSize))
 	{
-		data.x = 0.0f;
+		data.x = resetValue;
 	}
 	ImGui::PopFont();
 	ImGui::PopStyleColor(3);
@@ -539,7 +553,7 @@ void Editor::DrawVector3Edit(const std::string& name, glm::vec3& data, float res
 	ImGui::PushFont(boldFont);
 	if (ImGui::Button("Y", buttonSize))
 	{
-		data.y = 0.0f;
+		data.y = resetValue;
 	}
 	ImGui::PopFont();
 
@@ -557,7 +571,7 @@ void Editor::DrawVector3Edit(const std::string& name, glm::vec3& data, float res
 	ImGui::PushFont(boldFont);
 	if (ImGui::Button("Z", buttonSize))
 	{
-		data.z = 0.0f;
+		data.z = resetValue;
 	}
 	ImGui::PopFont();
 

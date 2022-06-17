@@ -40,7 +40,8 @@ public:
 	bool Deleted = false;
 	bool Duplicate = false;
 
-private:
 	int ID;
+
+private:
 	Camera* camera;
 };
