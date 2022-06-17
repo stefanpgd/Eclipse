@@ -23,7 +23,9 @@ Object::~Object()
 Object::Object(const Object& obj)
 {
 	ID = rand();
+	name = obj.name;
 	material = obj.material;
+	materialIndex = obj.materialIndex;
 	modelFileName = obj.modelFileName;
 	meshRenderer.Initialize(modelFileName);
 	camera = obj.camera;
