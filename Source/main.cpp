@@ -21,8 +21,8 @@ int main()
 }
 
 // Things to do:
-// Statistics menu ( FPS/Draw calls/Objects enc... ), check Demo/Examples/Simple Overlay
 // Right mouse-click to control camera
+// Click in scene to select object
 
 // Bugs:
-// Deleting object causes crash
+// Objects still spawn in with the wrong material? test.

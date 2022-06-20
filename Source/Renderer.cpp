@@ -131,22 +131,21 @@ void Renderer::Update()
 				objects.push_back(obj);
 				objects[i]->Duplicate = false;
 			}
-
-			if (objects[i]->Deleted)
-			{
-				Object* obj = objects[i];
-				delete obj;
-				objects[i] = nullptr;
-			}
 		}
 
 		imgui->Draw();
 
-		for (auto it = objects.begin(); it != objects.end(); it++)
+		for (std::vector<Object*>::iterator it = objects.begin(); it != objects.end();)
 		{
-			if (*it == nullptr)
+			if((*it)->Deleted)
 			{
-				objects.erase(it--);
+				Object* obj = (*it);
+				delete obj;
+				it = objects.erase(it);
+			}
+			else
+			{
+				++it;
 			}
 		}
 
