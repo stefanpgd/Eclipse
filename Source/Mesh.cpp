@@ -2,9 +2,11 @@
 #include "Shader.h"
 #include "Mesh.h"
 #include "Renderer.h"
+#include "Camera.h"
 
-Mesh::Mesh(std::vector<AVertex> vertices, std::vector<unsigned int> indices, std::vector<ATexture> textures, vec3 ambientColor) : 
-	Vertices(vertices), Indices(indices), textures(textures), AmbientColor(ambientColor)
+Mesh::Mesh(std::vector<AVertex> vertices, std::vector<unsigned int> indices, std::vector<ATexture> textures, 
+	vec3 ambientColor, vec3 diffuseColor, vec3 specularColor, float shininess) : 
+	Vertices(vertices), Indices(indices), textures(textures), AmbientColor(ambientColor), DiffuseColor(diffuseColor), SpecularColor(specularColor), Shininess(shininess)
 {
 	SetupMesh();
 }
@@ -41,9 +43,16 @@ void Mesh::Draw(Shader* shader)
 {
 	unsigned int diffuseNr = 1;
 	unsigned int specularNr = 1;
+	vec3 cameraPos = Camera::GetInstance()->CameraPosition;
 
-	shader->SetVec3("materialColor", AmbientColor);
+	shader->SetVec3("materialAmbient", AmbientColor);
+	shader->SetVec3("materialDiffuse", DiffuseColor);
+	shader->SetVec3("materialSpecular", SpecularColor);
+	shader->SetFloat("materialShininess", Shininess);
+	shader->SetVec3("cameraPosition", cameraPos);
+	shader->SetVec3("globalLightDirection", Renderer::GetInstance()->GlobalLightDirection);
 
+	int specularTextureAmount = 0;
 	for (unsigned int i = 0; i < textures.size(); i++)
 	{
 		glActiveTexture(GL_TEXTURE0 + i); // activate proper texture unit before binding
@@ -54,13 +63,19 @@ void Mesh::Draw(Shader* shader)
 		if (name == "texture_diffuse")
 			number = std::to_string(diffuseNr++);
 		else if (name == "texture_specular")
+		{
 			number = std::to_string(specularNr++);
+			specularTextureAmount++;
+		}
 
-		shader->SetInt(("material." + name + number).c_str(), i);
+		shader->SetInt((name + number).c_str(), i);
 		glBindTexture(GL_TEXTURE_2D, textures[i].ID);
 	}
 
-	glActiveTexture(GL_TEXTURE0);
+	if (specularTextureAmount == 0)
+	{
+		shader->SetInt("texture_specular1", 0);
+	}
 
 	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, Indices.size(), GL_UNSIGNED_INT, 0);

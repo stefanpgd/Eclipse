@@ -53,7 +53,13 @@ void Model::LoadModel(std::string path)
 		throw std::runtime_error("ERROR: Assimp" + (std::string)import.GetErrorString());
 	}
 
-	directory = path.substr(0, path.find_last_of('\\'));
+	directory = path.substr(0, path.find_last_of('/'));
+
+	if (directory == "Assets/Models")
+	{
+		directory = path.substr(0, path.find_last_of('\\'));
+	}
+
 	ProcessNode(scene->mRootNode, scene);
 }
 
@@ -117,6 +123,9 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 	}
 
 	vec3 Ambient = vec3(0.0f);
+	vec3 Diffuse = vec3(0.0f);
+	vec3 Specular = vec3(0.0f);
+	float shininess = 1.0f;
 
 	if (mesh->mMaterialIndex >= 0)
 	{
@@ -128,15 +137,37 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 		textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
 
 		aiColor3D ambientColor;
-		if (material->Get(AI_MATKEY_COLOR_DIFFUSE, ambientColor) == AI_SUCCESS)
+		if (material->Get(AI_MATKEY_COLOR_AMBIENT, ambientColor) == AI_SUCCESS)
 		{
 			Ambient.r = ambientColor.r;
 			Ambient.g = ambientColor.g;
 			Ambient.b = ambientColor.b;
 		}
+
+		aiColor3D diffuseColor;
+		if (material->Get(AI_MATKEY_COLOR_DIFFUSE, diffuseColor) == AI_SUCCESS)
+		{
+			Diffuse.r = diffuseColor.r;
+			Diffuse.g = diffuseColor.g;
+			Diffuse.b = diffuseColor.b;
+		}
+
+		aiColor3D specularColor;
+		if (material->Get(AI_MATKEY_COLOR_SPECULAR, specularColor) == AI_SUCCESS)
+		{
+			Specular.r = specularColor.r;
+			Specular.g = specularColor.g;
+			Specular.b = specularColor.b;
+		}
+
+		float shine;
+		if (material->Get(AI_MATKEY_SHININESS, shine) == AI_SUCCESS)
+		{
+			shininess = shine;
+		}
 	}
 	
-	return Mesh(vertices, indices, textures, Ambient);
+	return Mesh(vertices, indices, textures, Ambient, Diffuse, Specular, shininess);
 }
 
 std::vector<ATexture> Model::LoadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName)
