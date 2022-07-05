@@ -53,7 +53,7 @@ void Model::LoadModel(std::string path)
 		throw std::runtime_error("ERROR: Assimp" + (std::string)import.GetErrorString());
 	}
 
-	directory = path.substr(0, path.find_last_of('/'));
+	directory = path.substr(0, path.find_last_of('\\'));
 	ProcessNode(scene->mRootNode, scene);
 }
 
@@ -135,7 +135,7 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 			Ambient.b = ambientColor.b;
 		}
 	}
-
+	
 	return Mesh(vertices, indices, textures, Ambient);
 }
 
@@ -147,6 +147,7 @@ std::vector<ATexture> Model::LoadMaterialTextures(aiMaterial* mat, aiTextureType
 		aiString str;
 		mat->GetTexture(type, i, &str);
 		bool skip = false;
+
 		for (unsigned int j = 0; j < texturesLoaded.size(); j++)
 		{
 			if (std::strcmp(texturesLoaded[j].Path.data(), str.C_Str()) == 0)
@@ -156,6 +157,7 @@ std::vector<ATexture> Model::LoadMaterialTextures(aiMaterial* mat, aiTextureType
 				break;
 			}
 		}
+
 		if (!skip)
 		{   // if texture hasn't been loaded already, load it
 			ATexture texture;
@@ -187,7 +189,7 @@ std::vector<glm::vec3> Model::GetAllVertices()
 unsigned int TextureFromFile(const char* path, const std::string& directory, bool gamma)
 {
 	std::string filename = std::string(path);
-	filename = directory + '/' + filename;
+	filename = directory + "/" + filename;
 
 	unsigned int textureID;
 	glGenTextures(1, &textureID);
