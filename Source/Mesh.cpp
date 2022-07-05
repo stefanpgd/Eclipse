@@ -3,8 +3,8 @@
 #include "Mesh.h"
 #include "Renderer.h"
 
-Mesh::Mesh(std::vector<AVertex> vertices, std::vector<unsigned int> indices, std::vector<ATexture> textures) : 
-	Vertices(vertices), Indices(indices), textures(textures)
+Mesh::Mesh(std::vector<AVertex> vertices, std::vector<unsigned int> indices, std::vector<ATexture> textures, vec3 ambientColor) : 
+	Vertices(vertices), Indices(indices), textures(textures), AmbientColor(ambientColor)
 {
 	SetupMesh();
 }
@@ -41,6 +41,9 @@ void Mesh::Draw(Shader* shader)
 {
 	unsigned int diffuseNr = 1;
 	unsigned int specularNr = 1;
+
+	shader->SetVec3("materialColor", AmbientColor);
+
 	for (unsigned int i = 0; i < textures.size(); i++)
 	{
 		glActiveTexture(GL_TEXTURE0 + i); // activate proper texture unit before binding

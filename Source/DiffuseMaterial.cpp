@@ -4,7 +4,8 @@
 
 DiffuseMaterial::DiffuseMaterial()
 {
-	shader = new Shader("default.vert", "diffuse.frag");
+	//shader = new Shader("default.vert", "diffuse.frag");
+	shader = new Shader("Phong.vert", "Phong.frag");
 }
 
 void DiffuseMaterial::ActivateMaterial(glm::mat4& model, glm::mat4& view, glm::mat4& projection)

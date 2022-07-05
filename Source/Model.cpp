@@ -116,6 +116,8 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 		}
 	}
 
+	vec3 Ambient = vec3(0.0f);
+
 	if (mesh->mMaterialIndex >= 0)
 	{
 		aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
@@ -124,9 +126,17 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 
 		std::vector<ATexture> specularMaps = LoadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
 		textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
+
+		aiColor3D ambientColor;
+		if (material->Get(AI_MATKEY_COLOR_DIFFUSE, ambientColor) == AI_SUCCESS)
+		{
+			Ambient.r = ambientColor.r;
+			Ambient.g = ambientColor.g;
+			Ambient.b = ambientColor.b;
+		}
 	}
 
-	return Mesh(vertices, indices, textures);
+	return Mesh(vertices, indices, textures, Ambient);
 }
 
 std::vector<ATexture> Model::LoadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName)

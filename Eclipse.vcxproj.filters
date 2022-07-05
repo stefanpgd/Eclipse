@@ -82,5 +82,7 @@
     <None Include="Source\Shaders\default.frag" />
     <None Include="Source\Shaders\depthTest.frag" />
     <None Include="Source\Shaders\diffuse.frag" />
+    <None Include="Source\Shaders\Phong.vert" />
+    <None Include="Source\Shaders\Phong.frag" />
   </ItemGroup>
 </Project>

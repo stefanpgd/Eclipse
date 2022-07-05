@@ -22,7 +22,7 @@ struct ATexture
 class Mesh
 {
 public:
-	Mesh(std::vector<AVertex> vertices, std::vector<unsigned int> indices, std::vector<ATexture> textures);
+	Mesh(std::vector<AVertex> vertices, std::vector<unsigned int> indices, std::vector<ATexture> textures, vec3 ambientColor);
 	void Draw(Shader* shader);
 
 private:
@@ -32,6 +32,8 @@ public:
 	std::vector<AVertex> Vertices;
 	std::vector<unsigned int> Indices;
 	std::vector<ATexture> textures;
+
+	vec3 AmbientColor;
 
 private:
 	unsigned int VBO, VAO, EBO;

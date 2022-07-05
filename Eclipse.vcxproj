@@ -238,6 +238,8 @@
     <None Include="Source\Shaders\default.vert" />
     <None Include="Source\Shaders\depthTest.frag" />
     <None Include="Source\Shaders\diffuse.frag" />
+    <None Include="Source\Shaders\Phong.frag" />
+    <None Include="Source\Shaders\Phong.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
