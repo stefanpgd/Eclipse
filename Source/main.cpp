@@ -21,6 +21,7 @@ int main()
 }
 
 // Things to do:
+// Blinn-Phong ( LearnOpenGL )
 // Fix texture loading for models. 
 // Save editor window settings ( are windows open, closed, enc. )
 // Proper material/shader management

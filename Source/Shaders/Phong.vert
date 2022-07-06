@@ -13,7 +13,7 @@ uniform mat4 model;
 void main()
 {
     gl_Position = MVP * vec4(aPos, 1.0);
-    FragPosition = vec3(gl_Position);
+    FragPosition = vec3(model * vec4(aPos, 1.0));
     Normal = mat3(transpose(inverse(model))) * aNormal;
     TextureCoord = aTexCoord;
 }

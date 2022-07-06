@@ -103,11 +103,11 @@ void Renderer::Update()
 		glClearColor(0.05f, 0.05f, 0.05f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		timeElasped += deltaTime;
+		timeElasped += deltaTime * 1.35f;
 		GlobalLightDirection.x = 0.3f;
 		GlobalLightDirection.y = -0.75f;
 		GlobalLightDirection.z = cosf(timeElasped) * 0.3f;
-		//normalize(GlobalLightDirection);
+		normalize(GlobalLightDirection);
 
 		imgui->Update();
 
