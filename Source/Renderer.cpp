@@ -103,13 +103,24 @@ void Renderer::Update()
 		glClearColor(0.05f, 0.05f, 0.05f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		timeElasped += deltaTime * 1.35f;
-		GlobalLightDirection.x = 0.3f;
+		timeElasped += deltaTime * lightSpeed;
+		GlobalLightDirection.x = sinf(timeElasped) * 0.8f;
 		GlobalLightDirection.y = -0.75f;
-		GlobalLightDirection.z = cosf(timeElasped) * 0.3f;
+		GlobalLightDirection.z = cosf(timeElasped) * 0.8f;
 		normalize(GlobalLightDirection);
 
+		if (disco)
+		{
+			GlobalLightColor.x = (cosf(timeElasped * 1.5) + 1.0f) * 0.5f;
+			GlobalLightColor.y = (sinf(timeElasped * 0.74) + 1.0f) * 0.5f;
+			GlobalLightColor.z = (cosf(timeElasped * 1.2) + 1.0f) * 0.5f;
+		}
+
 		imgui->Update();
+
+		ImGui::Begin("Placeholder");
+		ImGui::SliderFloat("LightSpeed", &lightSpeed, 0.00f, 10.0f);
+		ImGui::End();
 
 		ProcessContinuesInputEvents();
 
@@ -212,6 +223,12 @@ void Renderer::ProcessSingleInputEvents(int key, int action)
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 	{
 		glfwSetWindowShouldClose(window, true);
+	}
+
+	if (key == GLFW_KEY_L && action == GLFW_PRESS)
+	{
+		lightSpeed = 4.0f;
+		disco = true;
 	}
 
 	if (key == GLFW_KEY_U && action == GLFW_PRESS)

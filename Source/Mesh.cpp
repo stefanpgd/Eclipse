@@ -51,6 +51,7 @@ void Mesh::Draw(Shader* shader)
 	shader->SetFloat("materialShininess", Shininess);
 	shader->SetVec3("cameraPosition", cameraPos);
 	shader->SetVec3("globalLightDirection", Renderer::GetInstance()->GlobalLightDirection);
+	shader->SetVec3("globalLightColor", Renderer::GetInstance()->GlobalLightColor);
 
 	int specularTextureAmount = 0;
 	for (unsigned int i = 0; i < textures.size(); i++)

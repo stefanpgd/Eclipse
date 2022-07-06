@@ -37,6 +37,7 @@ public:
 public:
 	int DrawCalls = 0;
 	glm::vec3 GlobalLightDirection;
+	glm::vec3 GlobalLightColor = glm::vec3(1.0, 1.0, 1.0);
 
 private:
 	void Initialize();
@@ -61,4 +62,7 @@ private:
 	float deltaTime = 0.0f;
 	float lastFrame = 0.0f;
 	float timeElasped = 0.0f;
+
+	float lightSpeed = 0.1f;
+	bool disco = false;
 };
