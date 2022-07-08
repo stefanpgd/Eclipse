@@ -4,12 +4,13 @@
 #include <fstream>
 #include "Camera.h"
 #include "Object.h"
+#include "Editor.h"
 
 SceneLoader::SceneLoader()
 {
 }
 
-void SceneLoader::SaveScene(std::string sceneName, std::vector<Object*>& objects)
+void SceneLoader::SaveScene(std::string sceneName, std::vector<Object*>& objects, Editor* editor)
 {
 	std::cout << "Saving scene: " << sceneName << std::endl;
 	std::ofstream mySaveFile;
@@ -57,10 +58,18 @@ void SceneLoader::SaveScene(std::string sceneName, std::vector<Object*>& objects
 	mySaveFile << camera->CameraTiltSpeed << "\n";
 	mySaveFile << camera->CameraMovementSprintSpeed << "\n";
 
+	mySaveFile << editor->showSceneObjects << "\n";
+	mySaveFile << editor->showObjectCreation << "\n";
+	mySaveFile << editor->showCameraSettings << "\n";
+	mySaveFile << editor->showObjectDetails << "\n";
+	mySaveFile << editor->showStatistics << "\n";
+	mySaveFile << editor->showGizmos << "\n";
+	mySaveFile << editor->showConsole << "\n";
+
 	mySaveFile.close();
 }
 
-bool SceneLoader::LoadScene(std::string sceneName, std::vector<Object*>& objects)
+bool SceneLoader::LoadScene(std::string sceneName, std::vector<Object*>& objects, Editor* editor)
 {
 	std::string line;
 	std::ifstream myScene("Assets/Scenes/" + sceneName + ".txt");
@@ -113,6 +122,15 @@ bool SceneLoader::LoadScene(std::string sceneName, std::vector<Object*>& objects
 		}
 
 		camera->SetupCameraFromSaveData(cameraData);
+
+		std::vector<bool> editorSettings;
+		for (int i = 0; i < 7; i++)
+		{
+			std::getline(myScene, line);
+			editorSettings.push_back(std::stoi(line));
+		}
+		editor->LoadEditorSaveProfile(editorSettings);
+
 		myScene.close();
 
 		return true;

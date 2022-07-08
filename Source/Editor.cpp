@@ -42,6 +42,17 @@ void Editor::DrawEditor(std::vector<Object*>& objects, std::vector<std::string>&
 	DrawStatistics();
 }
 
+void Editor::LoadEditorSaveProfile(std::vector<bool> settings)
+{
+	showSceneObjects = settings[0];
+	showObjectCreation = settings[1];
+	showCameraSettings = settings[2];
+	showObjectDetails = settings[3];
+	showStatistics = settings[4];
+	showGizmos = settings[5];
+	showConsole = settings[6];
+}
+
 void Editor::SetWindowParameters()
 {
 	ImGui::SetNextWindowPos(ImVec2(0, 20));

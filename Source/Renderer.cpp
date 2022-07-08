@@ -78,7 +78,7 @@ void Renderer::Initialize()
 
 		SceneLoader sceneLoader;
 
-		if (!sceneLoader.LoadScene("testScene", objects))
+		if (!sceneLoader.LoadScene("testScene", objects, &editor))
 		{
 			CreateTestScene();
 		}
@@ -173,11 +173,11 @@ void Renderer::Update()
 
 void Renderer::CloseRenderer()
 {
+	SceneLoader loader;
+	loader.SaveScene("testScene", objects, &editor);
+
 	glfwDestroyWindow(window);
 	glfwTerminate();
-
-	SceneLoader loader;
-	loader.SaveScene("testScene", objects);
 }
 
 void Renderer::CreateTestScene()

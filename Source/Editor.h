@@ -10,6 +10,7 @@ class Editor
 public:
 	Editor();
 	void DrawEditor(std::vector<Object*>& objects, std::vector<std::string>& consoleLog, float deltaTime);
+	void LoadEditorSaveProfile(std::vector<bool> settings);
 
 private:
 	void SetWindowParameters();
@@ -23,13 +24,7 @@ private:
 	void GetAllModelFilePaths(std::vector<std::string>& files, std::string path, std::string originalPath);
 	void DrawVector3Edit(const std::string& name, glm::vec3& data, float resetValue);
 
-private:
-	float lastDeltaTime = 1.0f;
-
-	// FPS Counter (Top-Right)
-	float frameCounterTimer = 0.0f;
-	float frameCounterInterval = 0.075f;
-	int FPS = 0;
+public:
 
 	// Menu bar toggles
 	bool showSceneObjects = true;
@@ -39,6 +34,14 @@ private:
 	bool showStatistics = false;
 	bool showGizmos = true;
 	bool showConsole = false;
+
+private:
+	float lastDeltaTime = 1.0f;
+
+	// FPS Counter (Top-Right)
+	float frameCounterTimer = 0.0f;
+	float frameCounterInterval = 0.075f;
+	int FPS = 0;
 
 	// Scene details
 	int selectedObject = 0;
