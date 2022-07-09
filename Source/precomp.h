@@ -31,5 +31,15 @@ using namespace glm;
 const float AspectRatio = (16.0f / 9.0f);
 const unsigned int ScreenWidth = 1600;
 const unsigned int ScreenHeight = (unsigned int)(ScreenWidth / AspectRatio);
-
+const unsigned int MaxNumberOfPointLights = 16;
 static bool objectMenu = false;
+
+inline float Random01()
+{
+	return float(rand() / (RAND_MAX + 1.0));
+}
+
+inline float RandomInRange(float min, float max)
+{
+	return min + (max - min) * Random01();
+}

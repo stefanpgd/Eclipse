@@ -8,7 +8,14 @@ class Object;
 class Editor
 {
 public:
+	static Editor* GetInstance()
+	{
+		static Editor instance;
+		return &instance;
+	}
+
 	Editor();
+
 	void DrawEditor(std::vector<Object*>& objects, std::vector<std::string>& consoleLog, float deltaTime);
 	void LoadEditorSaveProfile(std::vector<bool> settings);
 

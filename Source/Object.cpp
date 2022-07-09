@@ -5,6 +5,8 @@
 #include "DepthMaterial.h"
 #include "DiffuseMaterial.h"
 #include "Object.h"
+#include "Light.h"
+#include "Shader.h"
 
 Object::Object()
 {
@@ -83,16 +85,28 @@ Object::Object(ObjectSaveData& data)
 
 void Object::Update(float deltaTime)
 {
-	transform.Rotation.x += 25.0f * deltaTime;
-	transform.Rotation.y += 15.0f * deltaTime;
-	transform.Rotation.z += 5.0f * deltaTime;
 }
 
-void Object::Draw()
+void Object::Draw(std::vector<Light*>& lights)
 {
 	if (isActive)
 	{
 		material->ActivateMaterial(transform.GetModelMatrix(), camera->GetViewMatrix(), camera->GetProjectionMatrix());
+
+		if (lights.size() > 1)
+		{
+			material->shader->SetInt("amountOfPointLights", lights.size() - 1);
+		}
+		else
+		{
+			material->shader->SetInt("amountOfPointLights", 0);
+		}
+
+		for (int i = 0; i < lights.size(); i++)
+		{
+			lights[i]->BindLightData(material->shader, i);
+		}
+
 		meshRenderer.Draw(material->shader);
 	}
 }

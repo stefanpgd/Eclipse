@@ -5,6 +5,7 @@
 
 class Material;
 class Camera;
+class Light;
 
 struct ObjectSaveData
 {
@@ -25,7 +26,7 @@ public:
 	Object(ObjectSaveData& data);
 
 	virtual void Update(float deltaTime);
-	virtual void Draw();
+	virtual void Draw(std::vector<Light*>& lights);
 
 public:
 	Transform transform;

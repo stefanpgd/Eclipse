@@ -5,20 +5,10 @@
 #include "Object.h"
 #include "DiffuseMaterial.h"
 #include "DefaultMaterial.h"
-#include "SceneLoader.h"
+#include "Scene.h"
 #include <iomanip>
 #include <ctime>
 #include <sstream>
-
-inline float Random01()
-{
-	return float(rand() / (RAND_MAX + 1.0));
-}
-
-inline float RandomInRange(float min, float max)
-{
-	return min + (max - min) * Random01();
-}
 
 bool useWindow = false;
 
@@ -38,6 +28,8 @@ void Renderer::Initialize()
 	if (!isInitialized)
 	{
 		isInitialized = true;
+
+		srand(time(nullptr));
 
 		glfwInit();
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -76,12 +68,8 @@ void Renderer::Initialize()
 		imgui = ImguiHandler::GetInstance();
 		imgui->Initialize(window);
 
-		SceneLoader sceneLoader;
-
-		if (!sceneLoader.LoadScene("testScene", objects, &editor))
-		{
-			CreateTestScene();
-		}
+		editor = Editor::GetInstance();
+		activeScene = new Scene("testScene");
 	}
 }
 
@@ -103,23 +91,12 @@ void Renderer::Update()
 		glClearColor(0.05f, 0.05f, 0.05f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		timeElasped += deltaTime * lightSpeed;
-		GlobalLightDirection.x = sinf(timeElasped) * 0.8f;
-		GlobalLightDirection.y = -0.75f;
-		GlobalLightDirection.z = cosf(timeElasped) * 0.8f;
-		normalize(GlobalLightDirection);
-
-		if (disco)
-		{
-			GlobalLightColor.x = (cosf(timeElasped * 1.5) + 1.0f) * 0.5f;
-			GlobalLightColor.y = (sinf(timeElasped * 0.74) + 1.0f) * 0.5f;
-			GlobalLightColor.z = (cosf(timeElasped * 1.2) + 1.0f) * 0.5f;
-		}
+		activeScene->Update(deltaTime);
 
 		imgui->Update();
 
 		ImGui::Begin("Placeholder");
-		ImGui::SliderFloat("LightSpeed", &lightSpeed, 0.00f, 10.0f);
+		ImGui::SliderFloat3("Light Position", &lightPosition[0], -250.0f, 500.0f);
 		ImGui::End();
 
 		ProcessContinuesInputEvents();
@@ -133,38 +110,11 @@ void Renderer::Update()
 			camera->FirstMouse = true;
 		}
 
-		for (int i = 0; i < objects.size(); i++)
-		{
-			objects[i]->Draw();
-		}
+		activeScene->Draw();
 
-		editor.DrawEditor(objects, consoleLog, deltaTime);
-
-		for (int i = 0; i < objects.size(); i++)
-		{
-			if (objects[i]->Duplicate)
-			{
-				Object* obj = new Object(*objects[i]);
-				objects.push_back(obj);
-				objects[i]->Duplicate = false;
-			}
-		}
+		editor->DrawEditor(activeScene->Objects, consoleLog, deltaTime);
 
 		imgui->Draw();
-
-		for (std::vector<Object*>::iterator it = objects.begin(); it != objects.end();)
-		{
-			if((*it)->Deleted)
-			{
-				Object* obj = (*it);
-				delete obj;
-				it = objects.erase(it);
-			}
-			else
-			{
-				++it;
-			}
-		}
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
@@ -173,26 +123,10 @@ void Renderer::Update()
 
 void Renderer::CloseRenderer()
 {
-	SceneLoader loader;
-	loader.SaveScene("testScene", objects, &editor);
+	activeScene->SaveScene();
 
 	glfwDestroyWindow(window);
 	glfwTerminate();
-}
-
-void Renderer::CreateTestScene()
-{
-	DiffuseMaterial* diffuseMat = new DiffuseMaterial();
-	Object* sponza = new Object("Sponza/sponza.obj", diffuseMat);
-	objects.push_back(sponza);
-	sponza->materialIndex = 0;
-	sponza->name = "Sponza";
-
-	DefaultMaterial* defaultMat = new DefaultMaterial();
-	Object* Lucy = new Object("Lucy.obj", defaultMat);
-	objects.push_back(Lucy);
-	Lucy->materialIndex = 1;
-	Lucy->name = "Lucy";
 }
 
 void Renderer::ProcessContinuesInputEvents()
@@ -223,12 +157,6 @@ void Renderer::ProcessSingleInputEvents(int key, int action)
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 	{
 		glfwSetWindowShouldClose(window, true);
-	}
-
-	if (key == GLFW_KEY_L && action == GLFW_PRESS)
-	{
-		lightSpeed = 4.0f;
-		disco = true;
 	}
 
 	if (key == GLFW_KEY_U && action == GLFW_PRESS)

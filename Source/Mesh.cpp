@@ -43,15 +43,12 @@ void Mesh::Draw(Shader* shader)
 {
 	unsigned int diffuseNr = 1;
 	unsigned int specularNr = 1;
-	vec3 cameraPos = Camera::GetInstance()->CameraPosition;
 
-	shader->SetVec3("materialAmbient", AmbientColor);
-	shader->SetVec3("materialDiffuse", DiffuseColor);
-	shader->SetVec3("materialSpecular", SpecularColor);
-	shader->SetFloat("materialShininess", Shininess);
-	shader->SetVec3("cameraPosition", cameraPos);
-	shader->SetVec3("globalLightDirection", Renderer::GetInstance()->GlobalLightDirection);
-	shader->SetVec3("globalLightColor", Renderer::GetInstance()->GlobalLightColor);
+	shader->SetVec3("cameraPosition", Camera::GetInstance()->CameraPosition);
+	shader->SetVec3("material.Ambient", AmbientColor);
+	shader->SetVec3("material.Diffuse", DiffuseColor);
+	shader->SetVec3("material.Specular", SpecularColor);
+	shader->SetFloat("material.Shininess", Shininess);
 
 	int specularTextureAmount = 0;
 	for (unsigned int i = 0; i < textures.size(); i++)

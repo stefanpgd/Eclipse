@@ -4,6 +4,7 @@ struct GLFWwindow;
 class Camera;
 class Object;
 class ImguiHandler;
+class Scene;
 
 enum class WarningLevel
 {
@@ -38,23 +39,23 @@ public:
 	int DrawCalls = 0;
 	glm::vec3 GlobalLightDirection;
 	glm::vec3 GlobalLightColor = glm::vec3(1.0, 1.0, 1.0);
+	glm::vec3 lightPosition;
 
 private:
 	void Initialize();
 	void Update();
 	void CloseRenderer();
-	void CreateTestScene();
 
 private:
 	bool isRunning = false;
 	bool isInitialized = false;
 
-	Editor editor;
+	Editor* editor;
+	Scene* activeScene;
 	Camera* camera;
 	GLFWwindow* window;
 	ImguiHandler* imgui;
 
-	std::vector<Object*> objects;
 	std::vector<std::string> consoleLog;
 
 	bool FocusWindow = true;
@@ -62,7 +63,4 @@ private:
 	float deltaTime = 0.0f;
 	float lastFrame = 0.0f;
 	float timeElasped = 0.0f;
-
-	float lightSpeed = 0.1f;
-	bool disco = false;
 };
