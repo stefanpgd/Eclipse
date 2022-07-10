@@ -18,7 +18,7 @@ void Light::BindLightData(Shader* shader, unsigned int index)
 {
 	if (IsPointLight)
 	{
-		if (index >= MaxNumberOfPointLights)
+		if (index > MaxNumberOfPointLights)
 		{
 			Renderer::GetInstance()->ConsoleLog("Exceeding max amount of point lights", WarningLevel::Error);
 			return;
@@ -37,6 +37,8 @@ void Light::BindLightData(Shader* shader, unsigned int index)
 	}
 	else
 	{
+		GlobalLightRotation = normalize(GlobalLightRotation);
+
 		shader->SetVec3("directionalLight.Color", Color);
 		shader->SetVec3("directionalLight.Direction", GlobalLightRotation);
 		shader->SetVec3("directionalLight.Ambient", AmbientAmount);

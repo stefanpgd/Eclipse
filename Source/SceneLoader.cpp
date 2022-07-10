@@ -5,8 +5,9 @@
 #include "Camera.h"
 #include "Object.h"
 #include "Editor.h"
+#include "Light.h"
 
-void SceneLoader::SaveScene(std::string sceneName, std::vector<Object*>& objects)
+void SceneLoader::SaveScene(std::string sceneName, std::vector<Object*>& objects, std::vector<Light*>& lights)
 {
 	std::cout << "Saving scene: " << sceneName << std::endl;
 	std::ofstream mySaveFile;
@@ -32,6 +33,37 @@ void SceneLoader::SaveScene(std::string sceneName, std::vector<Object*>& objects
 		mySaveFile << objects[i]->transform.Scale.z << "\n";
 
 		mySaveFile << objects[i]->materialIndex << "\n";
+	}
+
+	mySaveFile << lights.size() << "\n";
+	for (int i = 0; i < lights.size(); i++)
+	{
+		mySaveFile << lights[i]->Name << "\n";
+		mySaveFile << lights[i]->IsPointLight << "\n";
+
+		mySaveFile << lights[i]->Intensity << "\n";
+		mySaveFile << lights[i]->LinearFalloff << "\n";
+		mySaveFile << lights[i]->ExponentialFalloff << "\n";
+
+		mySaveFile << lights[i]->Position.x << "\n";
+		mySaveFile << lights[i]->Position.y << "\n";
+		mySaveFile << lights[i]->Position.z << "\n";
+
+		mySaveFile << lights[i]->Color.x << "\n";
+		mySaveFile << lights[i]->Color.y << "\n";
+		mySaveFile << lights[i]->Color.z << "\n";
+
+		mySaveFile << lights[i]->GlobalLightRotation.x << "\n";
+		mySaveFile << lights[i]->GlobalLightRotation.y << "\n";
+		mySaveFile << lights[i]->GlobalLightRotation.z << "\n";
+
+		mySaveFile << lights[i]->AmbientAmount.x << "\n";
+		mySaveFile << lights[i]->AmbientAmount.y << "\n";
+		mySaveFile << lights[i]->AmbientAmount.z << "\n";
+
+		mySaveFile << lights[i]->DiffuseAmount.x << "\n";
+		mySaveFile << lights[i]->DiffuseAmount.y << "\n";
+		mySaveFile << lights[i]->DiffuseAmount.z << "\n";
 	}
 
 	Camera* camera = Camera::GetInstance();
@@ -68,7 +100,7 @@ void SceneLoader::SaveScene(std::string sceneName, std::vector<Object*>& objects
 	mySaveFile.close();
 }
 
-bool SceneLoader::LoadScene(std::string sceneName, std::vector<Object*>& objects)
+bool SceneLoader::LoadScene(std::string sceneName, std::vector<Object*>& objects, std::vector<Light*>& lights)
 {
 	std::string line;
 	std::ifstream myScene("Assets/Scenes/" + sceneName + ".txt");
@@ -101,6 +133,46 @@ bool SceneLoader::LoadScene(std::string sceneName, std::vector<Object*>& objects
 
 			Object* object = new Object(data);
 			objects.push_back(object);
+		}
+
+		std::getline(myScene, line);
+		int lightCount = std::stoi(line);
+
+		for (int i = 0; i < lightCount; i++)
+		{
+			Light* light = new Light();
+			std::getline(myScene, line);
+			light->Name = line;
+
+			std::getline(myScene, line);
+			light->IsPointLight = std::stoi(line);
+
+			std::getline(myScene, line);
+			light->Intensity = std::stof(line);
+
+			std::getline(myScene, line);
+			light->LinearFalloff = std::stof(line);
+
+			std::getline(myScene, line);
+			light->ExponentialFalloff = std::stof(line);
+
+			vec3 data[5];
+			for (int i = 0; i < 5; i++)
+			{
+				std::getline(myScene, line);
+				data[i].x = std::stof(line);
+				std::getline(myScene, line);
+				data[i].y = std::stof(line);
+				std::getline(myScene, line);
+				data[i].z = std::stof(line);
+			}
+
+			light->Position = data[0];
+			light->Color = data[1];
+			light->GlobalLightRotation = data[2];
+			light->AmbientAmount = data[3];
+			light->DiffuseAmount = data[4];
+			lights.push_back(light);
 		}
 
 		Camera* camera = Camera::GetInstance();

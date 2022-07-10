@@ -20,8 +20,8 @@ public:
 	vec3 AmbientAmount = vec3(0.1f);
 	vec3 DiffuseAmount = vec3(1.0f);
 	float LinearFalloff = 0.02f;
-	float ExponentialFalloff = 0.01f;
+	float ExponentialFalloff = 0.001f;
 
 	bool IsPointLight = true;
-	vec3 GlobalLightRotation; // only relevant when Light is a 'Global Light/Directional Light'
+	vec3 GlobalLightRotation; // rotation is in degrees
 };

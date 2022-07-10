@@ -8,19 +8,6 @@ Scene::Scene(std::string sceneName)
 {
 	this->sceneName = sceneName;
 	LoadScene();
-
-	Light* directional = new Light();
-	directional->IsPointLight = false;
-	directional->Color = vec3(1.0f, 1.0f, 1.0f);
-	directional->GlobalLightRotation = normalize(vec3(0.2f, -1.0f, 0.3f));
-	Lights.push_back(directional);
-
-	Light* point = new Light();
-	point->IsPointLight = true;
-	point->Color = vec3(1.0f, 1.0f, 1.0f);
-	point->Intensity = 25.0f;
-	point->Position = vec3(0.0f, 150.0f, 0.0f);
-	Lights.push_back(point);
 }
 
 void Scene::Update(float deltaTime)
@@ -69,12 +56,12 @@ void Scene::Draw()
 
 void Scene::SaveScene()
 {
-	sceneLoader.SaveScene(sceneName, Objects);
+	sceneLoader.SaveScene(sceneName, Objects, Lights);
 }
 
 void Scene::LoadScene()
 {
-	if (!sceneLoader.LoadScene(sceneName, Objects))
+	if (!sceneLoader.LoadScene(sceneName, Objects, Lights))
 	{
 		Renderer::GetInstance()->ConsoleLog("Couldn't find a scene with the name: " + sceneName, WarningLevel::Warning);
 	}

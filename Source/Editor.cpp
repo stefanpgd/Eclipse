@@ -14,8 +14,6 @@
 static ImGuizmo::OPERATION mCurrentGizmoOperation(ImGuizmo::TRANSLATE);
 
 // What do I want to do?
-// If a light is selected, gizmos should appear & details about the light
-// Be able to add lights, get warnings when there are too many enc.
 // Lights should have a little image, part of gizmos toggle
 
 Editor::Editor()
@@ -53,7 +51,8 @@ void Editor::DrawEditor(std::vector<Object*>& objects, std::vector<Light*>& ligh
 			if (lights[selectedLight] != nullptr)
 			{
 				DrawSelectedLightDetails(lights[selectedLight]);
-				// gizmos soon...
+				DrawGizmos(lights[selectedLight]);
+
 			}
 			else
 			{
@@ -289,9 +288,51 @@ void Editor::DrawSceneWindow(std::vector<Object*>& objects, std::vector<Light*>&
 
 			ImGui::PopID();
 		}
-		ImGui::Separator();
 
-		ImGui::End();
+		if (ImGui::Button("Add Point Light"))
+		{
+			if (lights.size() - 1 < MaxNumberOfPointLights)
+			{
+				Light* pointLight = new Light();
+				vec3 position = Camera::GetInstance()->CameraPosition;
+				position += Camera::GetInstance()->CameraFront * 500.0f;
+				pointLight->Position = position;
+				pointLight->Color = vec3(1.0f);
+				lights.push_back(pointLight);
+			}
+			else
+			{
+				Renderer::GetInstance()->ConsoleLog("Can't exceed MAX Point Light amount", WarningLevel::Error);
+			}
+		}
+
+		ImGui::SameLine();
+
+		if (ImGui::Button("Add Directional Light"))
+		{
+			bool directionalLightFound = false;
+			for (int i = 0; i < lights.size(); i++)
+			{
+				if (!lights[i]->IsPointLight)
+				{
+					directionalLightFound = true;
+				}
+			}
+
+			if (!directionalLightFound)
+			{
+				Light* directionalLight = new Light();
+				directionalLight->IsPointLight = false;
+				directionalLight->GlobalLightRotation = normalize(vec3(0.2f, -1.0f, 0.3f));
+				lights.push_back(directionalLight);
+			}
+			else
+			{
+				Renderer::GetInstance()->ConsoleLog("Can't add an directional light since the scene already has one", WarningLevel::Warning);
+			}
+		}
+
+		ImGui::Separator();
 	}
 
 	ImGui::End();
@@ -341,6 +382,56 @@ void Editor::DrawGizmos(Object* object)
 
 		vec3 camPos = Camera::GetInstance()->CameraPosition;
 		float camDistance = (camPos - object->transform.Position).length();
+
+		float rightOffset = showObjectDetails ? 485 : 128;
+		ImGuizmo::ViewManipulate(cameraView, 8.0f, ImVec2(viewManipulateRight - rightOffset, viewManipulateTop), ImVec2(128, 128), 0);
+	}
+}
+
+void Editor::DrawGizmos(Light* light)
+{
+	if (showGizmos)
+	{
+		static ImGuizmo::MODE mCurrentGizmoMode(ImGuizmo::LOCAL);
+		static bool useSnap = false;
+		static float snap[3] = { 1.f, 1.f, 1.f };
+		static float bounds[] = { -0.5f, -0.5f, -0.5f, 0.5f, 0.5f, 0.5f };
+		static float boundsSnap[] = { 0.1f, 0.1f, 0.1f };
+		static bool boundSizing = false;
+		static bool boundSizingSnap = false;
+
+		if (ImGui::IsKeyPressed(87)) // W key
+			mCurrentGizmoOperation = ImGuizmo::TRANSLATE;
+		if (ImGui::IsKeyPressed(82)) // R Key
+			mCurrentGizmoOperation = ImGuizmo::SCALE;
+
+		ImGuiIO& io = ImGui::GetIO();
+		float viewManipulateRight = io.DisplaySize.x;
+		float viewManipulateTop = 0;
+		static ImGuiWindowFlags gizmoWindowFlags = 0;
+
+		Camera* camera = Camera::GetInstance();
+		float* cameraView = value_ptr(camera->GetViewMatrix());
+		float* cameraProjection = value_ptr(camera->GetProjectionMatrix());
+
+		if (light->IsPointLight)
+		{
+			ImGuizmo::SetRect(0, 0, io.DisplaySize.x, io.DisplaySize.y);
+
+			glm::mat4 tr(1.0f);
+			float* modelMatrix = value_ptr(tr);
+			vec3 pos = light->Position;
+			vec3 rot = light->GlobalLightRotation;
+			vec3 scale = vec3(light->Intensity);
+			ImGuizmo::RecomposeMatrixFromComponents(&pos[0], &rot[0], &scale[0], modelMatrix);
+			ImGuizmo::Manipulate(cameraView, cameraProjection, mCurrentGizmoOperation, mCurrentGizmoMode, modelMatrix, NULL, useSnap ? &snap[0] : NULL, boundSizing ? bounds : NULL, boundSizingSnap ? boundsSnap : NULL);
+			ImGuizmo::DecomposeMatrixToComponents(modelMatrix, &pos[0], &rot[0], &scale[0]);
+			light->Position = pos;
+			light->Intensity = scale.x;
+		}
+
+		vec3 camPos = Camera::GetInstance()->CameraPosition;
+		float camDistance = (camPos - light->Position).length();
 
 		float rightOffset = showObjectDetails ? 485 : 128;
 		ImGuizmo::ViewManipulate(cameraView, 8.0f, ImVec2(viewManipulateRight - rightOffset, viewManipulateTop), ImVec2(128, 128), 0);

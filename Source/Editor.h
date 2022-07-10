@@ -25,6 +25,7 @@ private:
 	void DrawMenubar();
 	void DrawSceneWindow(std::vector<Object*>& objects, std::vector<Light*>& lights);
 	void DrawGizmos(Object* object);
+	void DrawGizmos(Light* light);
 	void DrawConsole(std::vector<std::string>& consoleLog);
 	void DrawStatistics();
 
