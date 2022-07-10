@@ -63,6 +63,7 @@ void SceneLoader::SaveScene(std::string sceneName, std::vector<Object*>& objects
 	mySaveFile << editor->showStatistics << "\n";
 	mySaveFile << editor->showGizmos << "\n";
 	mySaveFile << editor->showConsole << "\n";
+	mySaveFile << editor->showSceneLights << "\n";
 
 	mySaveFile.close();
 }
@@ -122,7 +123,7 @@ bool SceneLoader::LoadScene(std::string sceneName, std::vector<Object*>& objects
 		camera->SetupCameraFromSaveData(cameraData);
 
 		std::vector<bool> editorSettings;
-		for (int i = 0; i < 7; i++)
+		for (int i = 0; i < 8; i++)
 		{
 			std::getline(myScene, line);
 			editorSettings.push_back(std::stoi(line));

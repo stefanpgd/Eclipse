@@ -9,32 +9,56 @@
 #include "MeshRenderer.h"
 #include "Mesh.h"
 #include "Model.h"
+#include "Light.h"
 
 static ImGuizmo::OPERATION mCurrentGizmoOperation(ImGuizmo::TRANSLATE);
+
+// What do I want to do?
+// If a light is selected, gizmos should appear & details about the light
+// Be able to add lights, get warnings when there are too many enc.
+// Lights should have a little image, part of gizmos toggle
 
 Editor::Editor()
 {
 	GetAllModelFilePaths(modelFilePaths, modelFolderLoadPath, modelFolderLoadPath);
 }
 
-void Editor::DrawEditor(std::vector<Object*>& objects, std::vector<std::string>& consoleLog, float deltaTime)
+void Editor::DrawEditor(std::vector<Object*>& objects, std::vector<Light*>& lights, std::vector<std::string>& consoleLog, float deltaTime)
 {
 	lastDeltaTime = deltaTime;
 	
 	SetWindowParameters();
 	DrawMenubar();
-	DrawSceneWindow(objects);
+	DrawSceneWindow(objects, lights);
 
-	if (objects.size() > 0)
+	if (isSelectedAnObject)
 	{
-		if (objects[selectedObject] != nullptr)
+		if (objects.size() > 0)
 		{
-			DrawObjectDetails(objects[selectedObject]);
-			DrawGizmos(objects[selectedObject]);
+			if (objects[selectedObject] != nullptr)
+			{
+				DrawSelectedObjectDetails(objects[selectedObject]);
+				DrawGizmos(objects[selectedObject]);
+			}
+			else
+			{
+				selectedObject = -1;
+			}
 		}
-		else
+	}
+	else
+	{
+		if (lights.size() > 0)
 		{
-			selectedObject = 0;
+			if (lights[selectedLight] != nullptr)
+			{
+				DrawSelectedLightDetails(lights[selectedLight]);
+				// gizmos soon...
+			}
+			else
+			{
+				selectedLight = -1;
+			}
 		}
 	}
 
@@ -51,6 +75,7 @@ void Editor::LoadEditorSaveProfile(std::vector<bool> settings)
 	showStatistics = settings[4];
 	showGizmos = settings[5];
 	showConsole = settings[6];
+	showSceneLights = settings[7];
 }
 
 void Editor::SetWindowParameters()
@@ -99,6 +124,7 @@ void Editor::DrawMenubar()
 		if (ImGui::Checkbox("Statistics", &showStatistics)) {}
 		if (ImGui::Checkbox("Gizmos", &showGizmos)) {}
 		if (ImGui::Checkbox("Console", &showConsole)) {}
+		if (ImGui::Checkbox("Scene Lights", &showSceneLights)) {}
 
 		ImGui::Dummy(ImVec2(ScreenWidth - 755, 0));
 		ImGui::Text("FPS:");
@@ -109,7 +135,7 @@ void Editor::DrawMenubar()
 	ImGui::End();
 }
 
-void Editor::DrawSceneWindow(std::vector<Object*>& objects)
+void Editor::DrawSceneWindow(std::vector<Object*>& objects, std::vector<Light*>& lights)
 {
 	ImGuiIO& io = ImGui::GetIO();
 	auto boldFont = io.Fonts->Fonts[1];
@@ -117,7 +143,7 @@ void Editor::DrawSceneWindow(std::vector<Object*>& objects)
 
 	if (selectedObject > objects.size() - 1)
 	{
-		selectedObject = 0;
+		selectedObject = -1;
 	}
 
 	if (showObjectCreation)
@@ -229,124 +255,46 @@ void Editor::DrawSceneWindow(std::vector<Object*>& objects)
 
 			if (ImGui::Selectable(objName.c_str(), selectedObject == i))
 			{
+				isSelectedAnObject = true;
 				selectedObject = i;
+				selectedLight = -1;
 				placeholderName = "";
 			}
+
 			ImGui::PopID();
 		}
 		ImGui::Separator();
 	}
 
-	ImGui::End();
-}
-
-void Editor::DrawObjectDetails(Object* object)
-{
-	ImGuiIO& io = ImGui::GetIO();
-	auto boldFont = io.Fonts->Fonts[1];
-
-	if (showObjectDetails)
+	if (showSceneLights)
 	{
-		ImGui::Begin("Object Details");
-
-		// Object Name & Name update
 		ImGui::Separator();
-		ImGui::Text("Object Name:");
-		ImGui::SameLine();
+
 		ImGui::PushFont(boldFont);
-		ImGui::Text(object->name.c_str());
+		ImGui::TextColored(ImVec4(0.5f, 1.0f, 0.35f, 1.0f), "Lights in Scene:");
 		ImGui::PopFont();
 
-		ImGui::SameLine();
-		if (ImGui::Checkbox("Is Active", &object->isActive)) {}
-
-		ImGui::InputText("##", &placeholderName);
-		ImGui::SameLine();
-		if (ImGui::Button("Update Name"))
+		for (size_t i = 0; i < lights.size(); i++)
 		{
-			if (placeholderName.size() > 0)
+			ImGui::PushID(lights[i]->ID);
+			std::string objName = lights[i]->Name.c_str();
+
+			if (ImGui::Selectable(objName.c_str(), selectedLight == i))
 			{
-				object->name = placeholderName;
+				isSelectedAnObject = false;
+				selectedLight = i;
+				selectedObject = -1;
 				placeholderName = "";
 			}
-			else
-			{
-				Renderer::GetInstance()->ConsoleLog("Can't update the Object name with an empty string", WarningLevel::Warning);
-			}
-		}
-		ImGui::Separator();
 
-		// Transform
-		ImGui::PushFont(boldFont);
-		ImGui::Text("Transform:");
-		ImGui::PopFont();
-
-		DrawVector3Edit("Position", object->transform.Position, 0.0f);
-		ImGui::Spacing();
-		DrawVector3Edit("Rotation", object->transform.Rotation, 0.0f);
-		ImGui::Spacing();
-		DrawVector3Edit("Scale", object->transform.Scale, 1.0f);
-		ImGui::Spacing();
-
-		ImGui::Separator();
-
-		// Model Info
-		ImGui::PushFont(boldFont);
-		ImGui::Text("Model Info:");
-		ImGui::PopFont();
-
-		ImGui::Text("Model Name/Location:");
-		ImGui::SameLine();
-		ImGui::TextColored(ImVec4(0.5f, 1.0f, 0.7f, 1.0f), object->modelFileName.c_str());
-
-		if (object->meshRenderer.usesModel)
-		{
-			std::string meshCount = std::to_string(object->meshRenderer.model->meshes.size());
-			std::string textureCount = std::to_string(object->meshRenderer.model->texturesLoaded.size());
-
-			ImGui::Text("Meshes:");
-			ImGui::SameLine();
-			ImGui::TextColored(ImVec4(0.5f, 1.0f, 0.7f, 1.0f), meshCount.c_str());
-
-			ImGui::Text("Textures:");
-			ImGui::SameLine();
-			ImGui::TextColored(ImVec4(0.5f, 1.0f, 0.7f, 1.0f), textureCount.c_str());
-			
-			// Potential: Amount of verts?
-		}
-		ImGui::Separator();
-
-		// Material Info
-		ImGui::PushFont(boldFont);
-		ImGui::Text("Material Info:");
-		ImGui::PopFont();
-
-		ImGui::InputInt("Material Index", &object->materialIndex);
-		object->material->EditorInfo();
-
-		// In the future allow to change materials at runtime...
-		// this includes textures
-		ImGui::Separator();
-
-		// Option buttons ( delete, duplicate... enc. )
-		ImGui::PushFont(boldFont);
-		ImGui::Text("Functions:");
-		ImGui::PopFont();
-
-		if (ImGui::Button("Duplicate"))
-		{
-			object->Duplicate = true;
-		}
-
-		ImGui::SameLine(0, 3);
-		if (ImGui::Button("Delete"))
-		{
-			object->Deleted = true;
+			ImGui::PopID();
 		}
 		ImGui::Separator();
 
 		ImGui::End();
 	}
+
+	ImGui::End();
 }
 
 void Editor::DrawGizmos(Object* object)
@@ -497,6 +445,185 @@ void Editor::DrawStatistics()
 
 		ImGui::End();
 	}
+}
+
+void Editor::DrawSelectedObjectDetails(Object* object)
+{
+	ImGuiIO& io = ImGui::GetIO();
+	auto boldFont = io.Fonts->Fonts[1];
+
+	ImGui::Begin("Object Details");
+
+	// Object Name & Name update
+	ImGui::Separator();
+	ImGui::Text("Object Name:");
+	ImGui::SameLine();
+	ImGui::PushFont(boldFont);
+	ImGui::Text(object->name.c_str());
+	ImGui::PopFont();
+
+	ImGui::SameLine();
+	if (ImGui::Checkbox("Is Active", &object->isActive)) {}
+
+	ImGui::InputText("##", &placeholderName);
+	ImGui::SameLine();
+	if (ImGui::Button("Update Name"))
+	{
+		if (placeholderName.size() > 0)
+		{
+			object->name = placeholderName;
+			placeholderName = "";
+		}
+		else
+		{
+			Renderer::GetInstance()->ConsoleLog("Can't update the Object name with an empty string", WarningLevel::Warning);
+		}
+	}
+	ImGui::Separator();
+
+	// Transform
+	ImGui::PushFont(boldFont);
+	ImGui::Text("Transform:");
+	ImGui::PopFont();
+
+	DrawVector3Edit("Position", object->transform.Position, 0.0f);
+	ImGui::Spacing();
+	DrawVector3Edit("Rotation", object->transform.Rotation, 0.0f);
+	ImGui::Spacing();
+	DrawVector3Edit("Scale", object->transform.Scale, 1.0f);
+	ImGui::Spacing();
+
+	ImGui::Separator();
+
+	// Model Info
+	ImGui::PushFont(boldFont);
+	ImGui::Text("Model Info:");
+	ImGui::PopFont();
+
+	ImGui::Text("Model Name/Location:");
+	ImGui::SameLine();
+	ImGui::TextColored(ImVec4(0.5f, 1.0f, 0.7f, 1.0f), object->modelFileName.c_str());
+
+	if (object->meshRenderer.usesModel)
+	{
+		std::string meshCount = std::to_string(object->meshRenderer.model->meshes.size());
+		std::string textureCount = std::to_string(object->meshRenderer.model->texturesLoaded.size());
+
+		ImGui::Text("Meshes:");
+		ImGui::SameLine();
+		ImGui::TextColored(ImVec4(0.5f, 1.0f, 0.7f, 1.0f), meshCount.c_str());
+
+		ImGui::Text("Textures:");
+		ImGui::SameLine();
+		ImGui::TextColored(ImVec4(0.5f, 1.0f, 0.7f, 1.0f), textureCount.c_str());
+
+		// Potential: Amount of verts?
+	}
+	ImGui::Separator();
+
+	// Material Info
+	ImGui::PushFont(boldFont);
+	ImGui::Text("Material Info:");
+	ImGui::PopFont();
+
+	ImGui::InputInt("Material Index", &object->materialIndex);
+	object->material->EditorInfo();
+
+	// In the future allow to change materials at runtime...
+	// this includes textures
+	ImGui::Separator();
+
+	// Option buttons ( delete, duplicate... enc. )
+	ImGui::PushFont(boldFont);
+	ImGui::Text("Functions:");
+	ImGui::PopFont();
+
+	if (ImGui::Button("Duplicate"))
+	{
+		object->Duplicate = true;
+	}
+
+	ImGui::SameLine(0, 3);
+	if (ImGui::Button("Delete"))
+	{
+		object->Deleted = true;
+	}
+	ImGui::Separator();
+
+	ImGui::End();
+}
+
+void Editor::DrawSelectedLightDetails(Light* light)
+{
+	ImGuiIO& io = ImGui::GetIO();
+	auto boldFont = io.Fonts->Fonts[1];
+
+	ImGui::Begin("Object Details");
+
+	// Object Name & Name update
+	ImGui::Separator();
+	ImGui::Text("Light Name:");
+	ImGui::SameLine();
+	ImGui::PushFont(boldFont);
+	ImGui::Text(light->Name.c_str());
+	ImGui::PopFont();
+
+	ImGui::InputText("##", &placeholderName);
+	ImGui::SameLine();
+	if (ImGui::Button("Update Name"))
+	{
+		if (placeholderName.size() > 0)
+		{
+			light->Name = placeholderName;
+			placeholderName = "";
+		}
+		else
+		{
+			Renderer::GetInstance()->ConsoleLog("Can't update the light name with an empty string", WarningLevel::Warning);
+		}
+	}
+
+	ImGui::Separator();
+	ImGui::PushFont(boldFont);
+	ImGui::Text("Transform:");
+	ImGui::PopFont();
+
+	if (light->IsPointLight)
+	{
+		DrawVector3Edit("Position",	light->Position, 0.0f);
+	}
+	else
+	{
+		DrawVector3Edit("Rotation", light->GlobalLightRotation, 0.0f);
+	}
+
+	ImGui::Spacing();
+	ImGui::Separator();
+
+	ImGui::PushFont(boldFont);
+	ImGui::Text("Properties:");
+	ImGui::PopFont();
+
+	if (light->IsPointLight)
+	{
+		ImGui::DragFloat("Intensity", &light->Intensity, 2.5f, 0.0f, 1000.0);
+		ImGui::DragFloat("Linear Falloff", &light->LinearFalloff, 0.0001f, 0.0f, 1.0f);
+		ImGui::DragFloat("Exponential Falloff", &light->ExponentialFalloff, 0.0001f, 0.0f, 1.0f);
+	
+		ImGui::Separator();
+
+		ImGui::ColorEdit3("Color", &light->Color[0]);
+		ImGui::DragFloat3("Ambient", &light->AmbientAmount[0], 0.01f, 0.0f, 1.0f);
+		ImGui::DragFloat3("Diffuse", &light->DiffuseAmount[0], 0.01f, 0.0f, 1.0f);
+	}
+	else
+	{
+		ImGui::ColorEdit3("Color", &light->Color[0]);
+		ImGui::DragFloat3("Ambient", &light->AmbientAmount[0], 0.01f, 0.0f, 1.0f);
+		ImGui::DragFloat3("Diffuse", &light->DiffuseAmount[0], 0.01f, 0.0f, 1.0f);
+	}
+
+	ImGui::End();
 }
 
 void Editor::GetAllModelFilePaths(std::vector<std::string>& files, std::string path, std::string originalPath)

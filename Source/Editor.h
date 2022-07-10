@@ -4,6 +4,7 @@
 #include <glm/glm.hpp>
 
 class Object;
+class Light;
 
 class Editor
 {
@@ -16,23 +17,24 @@ public:
 
 	Editor();
 
-	void DrawEditor(std::vector<Object*>& objects, std::vector<std::string>& consoleLog, float deltaTime);
+	void DrawEditor(std::vector<Object*>& objects, std::vector<Light*>& lights, std::vector<std::string>& consoleLog, float deltaTime);
 	void LoadEditorSaveProfile(std::vector<bool> settings);
 
 private:
 	void SetWindowParameters();
 	void DrawMenubar();
-	void DrawSceneWindow(std::vector<Object*>& objects);
-	void DrawObjectDetails(Object* object);
+	void DrawSceneWindow(std::vector<Object*>& objects, std::vector<Light*>& lights);
 	void DrawGizmos(Object* object);
 	void DrawConsole(std::vector<std::string>& consoleLog);
 	void DrawStatistics();
+
+	void DrawSelectedObjectDetails(Object* object);
+	void DrawSelectedLightDetails(Light* light);
 
 	void GetAllModelFilePaths(std::vector<std::string>& files, std::string path, std::string originalPath);
 	void DrawVector3Edit(const std::string& name, glm::vec3& data, float resetValue);
 
 public:
-
 	// Menu bar toggles
 	bool showSceneObjects = true;
 	bool showObjectCreation = false;
@@ -41,6 +43,7 @@ public:
 	bool showStatistics = false;
 	bool showGizmos = true;
 	bool showConsole = false;
+	bool showSceneLights = true;
 
 private:
 	float lastDeltaTime = 1.0f;
@@ -49,9 +52,6 @@ private:
 	float frameCounterTimer = 0.0f;
 	float frameCounterInterval = 0.075f;
 	int FPS = 0;
-
-	// Scene details
-	int selectedObject = 0;
 
 	// Object Creation
 	std::string modelFolderLoadPath = "Assets/Models";
@@ -64,6 +64,9 @@ private:
 
 	// Object Details
 	std::string placeholderName = "";
+	int selectedObject = 0;
+	int selectedLight = -1;
+	bool isSelectedAnObject = true;
 
 	// Console
 	bool autoScrollConsole = true;

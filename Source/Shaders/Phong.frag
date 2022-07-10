@@ -62,7 +62,10 @@ void main()
 
     vec3 result;
 
-    result += CalculateDirectionalLight(directionalLight, normal, viewDirection, vec3(diffuseTex), vec3(specularTex));
+    if(directionalLight.Color != 0)
+    {
+        result += CalculateDirectionalLight(directionalLight, normal, viewDirection, vec3(diffuseTex), vec3(specularTex));
+    }
 
     for(int i = 0; i < amountOfPointLights; i++)
     {
@@ -125,10 +128,11 @@ vec3 CalculatePointLight(PointLight light, vec3 norm, vec3 viewDirection, vec3 d
 
     float lightDistance = length(light.Position - FragPosition);
     float attentuation = 1.0 / (1.0 + (light.LinearFalloff * lightDistance) + (light.ExponentialFalloff * lightDistance * lightDistance));
+    float intensity = light.Intensity * attentuation;
 
-    ambient *= attentuation;
-    diffuse *= attentuation;
-    specular *= attentuation;
+    ambient *= intensity;
+    diffuse *= intensity;
+    specular *= intensity;
 
     vec3 result = ambient + diffuse + specular;
     return result;

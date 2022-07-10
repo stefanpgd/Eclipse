@@ -27,6 +27,5 @@ int main()
 // Proper material/shader management
 // Click in scene to select object
 // Right mouse-click to control camera
-
-// Bugs:
-// Objects still spawn in with the wrong material? test.
+// Whenever a model is unable to load in, instead of closing the app, just don't load in the model/skip it.
+// When removing objects, the data attached to it doesn't get used at all. These are likely textures & Models, removes these.

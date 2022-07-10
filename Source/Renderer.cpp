@@ -95,10 +95,6 @@ void Renderer::Update()
 
 		imgui->Update();
 
-		ImGui::Begin("Placeholder");
-		ImGui::SliderFloat3("Light Position", &lightPosition[0], -250.0f, 500.0f);
-		ImGui::End();
-
 		ProcessContinuesInputEvents();
 
 		if (FocusWindow)
@@ -112,7 +108,7 @@ void Renderer::Update()
 
 		activeScene->Draw();
 
-		editor->DrawEditor(activeScene->Objects, consoleLog, deltaTime);
+		editor->DrawEditor(activeScene->Objects, activeScene->Lights, consoleLog, deltaTime);
 
 		imgui->Draw();
 

@@ -5,11 +5,13 @@
 
 Light::Light()
 {
+	ID = rand();
 }
 
 Light::Light(vec3 position, vec3 color, float intensity) :
 	Position(position), Color(color), Intensity(intensity)
 {
+	ID = rand();
 }
 
 void Light::BindLightData(Shader* shader, unsigned int index)
@@ -26,7 +28,7 @@ void Light::BindLightData(Shader* shader, unsigned int index)
 
 		shader->SetFloat(arrayLocation + "Intensity", Intensity);
 		shader->SetFloat(arrayLocation + "LinearFalloff", LinearFalloff);
-		shader->SetFloat(arrayLocation + "ExponentialFalloff", ExponentialFallof);
+		shader->SetFloat(arrayLocation + "ExponentialFalloff", ExponentialFalloff);
 
 		shader->SetVec3(arrayLocation + "Position", Position);
 		shader->SetVec3(arrayLocation + "Color", Color);

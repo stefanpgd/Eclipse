@@ -24,7 +24,4 @@ public:
 private:
 	SceneLoader sceneLoader;
 	std::string sceneName;
-
-	// temp
-	float timeElasped;
 };

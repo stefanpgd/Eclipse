@@ -37,9 +37,6 @@ public:
 
 public:
 	int DrawCalls = 0;
-	glm::vec3 GlobalLightDirection;
-	glm::vec3 GlobalLightColor = glm::vec3(1.0, 1.0, 1.0);
-	glm::vec3 lightPosition;
 
 private:
 	void Initialize();
