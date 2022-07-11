@@ -12,31 +12,7 @@ Scene::Scene(std::string sceneName)
 
 void Scene::Update(float deltaTime)
 {
-	// Duplication Function
-	for (int i = 0; i < Objects.size(); i++)
-	{
-		if (Objects[i]->Duplicate)
-		{
-			Object* obj = new Object(*Objects[i]);
-			Objects.push_back(obj);
-			Objects[i]->Duplicate = false;
-		}
-	}
-
-	// Delete Function
-	for (std::vector<Object*>::iterator it = Objects.begin(); it != Objects.end();)
-	{
-		if ((*it)->Deleted)
-		{
-			Object* obj = (*it);
-			delete obj;
-			it = Objects.erase(it);
-		}
-		else
-		{
-			++it;
-		}
-	}
+	DuplicationAndDeletionOfEntities();
 
 	for (int i = 0; i < Objects.size(); i++)
 	{
@@ -64,5 +40,60 @@ void Scene::LoadScene()
 	if (!sceneLoader.LoadScene(sceneName, Objects, Lights))
 	{
 		Renderer::GetInstance()->ConsoleLog("Couldn't find a scene with the name: " + sceneName, WarningLevel::Warning);
+	}
+}
+
+void Scene::DuplicationAndDeletionOfEntities()
+{
+	// Duplication Function
+	for (int i = 0; i < Objects.size(); i++)
+	{
+		if (Objects[i]->Duplicate)
+		{
+			Object* obj = new Object(*Objects[i]);
+			Objects.push_back(obj);
+			Objects[i]->Duplicate = false;
+		}
+	}
+
+	// Delete Function
+	for (std::vector<Object*>::iterator it = Objects.begin(); it != Objects.end();)
+	{
+		if ((*it)->Deleted)
+		{
+			Object* obj = (*it);
+			delete obj;
+			it = Objects.erase(it);
+		}
+		else
+		{
+			++it;
+		}
+	}
+
+	// Duplication Function
+	for (int i = 0; i < Lights.size(); i++)
+	{
+		if (Lights[i]->Duplicate)
+		{
+			Light* light = new Light(*Lights[i]);
+			Lights.push_back(light);
+			Lights[i]->Duplicate = false;
+		}
+	}
+
+	// Delete Function
+	for (std::vector<Light*>::iterator it = Lights.begin(); it != Lights.end();)
+	{
+		if ((*it)->Deleted)
+		{
+			Light* light = (*it);
+			delete light;
+			it = Lights.erase(it);
+		}
+		else
+		{
+			++it;
+		}
 	}
 }

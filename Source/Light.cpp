@@ -14,6 +14,21 @@ Light::Light(vec3 position, vec3 color, float intensity) :
 	ID = rand();
 }
 
+Light::Light(const Light& light)
+{
+	ID = rand();
+	Name = light.Name;
+	Intensity = light.Intensity;
+	Position = light.Position;
+	Color = light.Color;
+	AmbientAmount = light.AmbientAmount;
+	DiffuseAmount = light.DiffuseAmount;
+	LinearFalloff = light.LinearFalloff;
+	ExponentialFalloff = light.ExponentialFalloff;
+	IsPointLight = light.IsPointLight;
+	GlobalLightRotation = light.GlobalLightRotation;
+}
+
 void Light::BindLightData(Shader* shader, unsigned int index)
 {
 	if (IsPointLight)

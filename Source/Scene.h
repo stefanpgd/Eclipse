@@ -16,6 +16,7 @@ public:
 
 private:
 	void LoadScene();
+	void DuplicationAndDeletionOfEntities();
 
 public:
 	std::vector<Object*> Objects;

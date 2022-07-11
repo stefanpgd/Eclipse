@@ -13,9 +13,6 @@
 
 static ImGuizmo::OPERATION mCurrentGizmoOperation(ImGuizmo::TRANSLATE);
 
-// What do I want to do?
-// Lights should have a little image, part of gizmos toggle
-
 Editor::Editor()
 {
 	GetAllModelFilePaths(modelFilePaths, modelFolderLoadPath, modelFolderLoadPath);
@@ -50,7 +47,7 @@ void Editor::DrawEditor(std::vector<Object*>& objects, std::vector<Light*>& ligh
 		{
 			if (lights[selectedLight] != nullptr)
 			{
-				DrawSelectedLightDetails(lights[selectedLight]);
+				DrawSelectedLightDetails(lights, lights[selectedLight]);
 				DrawGizmos(lights[selectedLight]);
 
 			}
@@ -639,12 +636,13 @@ void Editor::DrawSelectedObjectDetails(Object* object)
 	{
 		object->Deleted = true;
 	}
+
 	ImGui::Separator();
 
 	ImGui::End();
 }
 
-void Editor::DrawSelectedLightDetails(Light* light)
+void Editor::DrawSelectedLightDetails(std::vector<Light*>& lights, Light* light)
 {
 	ImGuiIO& io = ImGui::GetIO();
 	auto boldFont = io.Fonts->Fonts[1];
@@ -712,6 +710,42 @@ void Editor::DrawSelectedLightDetails(Light* light)
 		ImGui::ColorEdit3("Color", &light->Color[0]);
 		ImGui::DragFloat3("Ambient", &light->AmbientAmount[0], 0.01f, 0.0f, 1.0f);
 		ImGui::DragFloat3("Diffuse", &light->DiffuseAmount[0], 0.01f, 0.0f, 1.0f);
+	}
+
+	ImGui::Separator();
+
+	if (ImGui::Button("Duplicate"))
+	{
+		bool directionalLightFound = false;
+		for (int i = 0; i < lights.size(); i++)
+		{
+			if (!lights[i]->IsPointLight)
+			{
+				directionalLightFound = true;
+			}
+		}
+
+		if (!directionalLightFound)
+		{
+			if (lights.size() - 1 < MaxNumberOfPointLights)
+			{
+				light->Duplicate = true;
+			}
+			else
+			{
+				Renderer::GetInstance()->ConsoleLog("Can't exceed MAX Point Light amount", WarningLevel::Error);
+			}
+		}
+		else
+		{
+			Renderer::GetInstance()->ConsoleLog("Can't add an directional light since the scene already has one", WarningLevel::Warning);
+		}
+	}
+
+	ImGui::SameLine(0, 3);
+	if (ImGui::Button("Delete"))
+	{
+		light->Deleted = true;
 	}
 
 	ImGui::End();

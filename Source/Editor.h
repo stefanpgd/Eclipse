@@ -30,7 +30,7 @@ private:
 	void DrawStatistics();
 
 	void DrawSelectedObjectDetails(Object* object);
-	void DrawSelectedLightDetails(Light* light);
+	void DrawSelectedLightDetails(std::vector<Light*>& lights, Light* light);
 
 	void GetAllModelFilePaths(std::vector<std::string>& files, std::string path, std::string originalPath);
 	void DrawVector3Edit(const std::string& name, glm::vec3& data, float resetValue);

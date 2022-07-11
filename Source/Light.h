@@ -7,6 +7,7 @@ class Light
 public:
 	Light();
 	Light(vec3 position, vec3 color, float intensity);
+	Light(const Light& light);
 
 	void BindLightData(Shader* shader, unsigned int index);
 
@@ -24,4 +25,7 @@ public:
 
 	bool IsPointLight = true;
 	vec3 GlobalLightRotation; // rotation is in degrees
+
+	bool Deleted = false;
+	bool Duplicate = false;
 };

@@ -21,11 +21,11 @@ int main()
 }
 
 // Things to do:
-// Abstract objects & lights into a Scene ( requires a Light class ).
-// Blinn-Phong ( LearnOpenGL )
+// Understand and Implement Blinn-Phong ( LearnOpenGL )
 // Fix texture loading for models. 
-// Proper material/shader management
-// Click in scene to select object
-// Right mouse-click to control camera
+// Proper material/shader management ( techniques )
 // Whenever a model is unable to load in, instead of closing the app, just don't load in the model/skip it.
 // When removing objects, the data attached to it doesn't get used at all. These are likely textures & Models, removes these.
+// Lights should have a little image, part of gizmos toggle
+// Right mouse-click to control camera
+// Click in scene to select object
