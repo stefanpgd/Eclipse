@@ -4,6 +4,7 @@
 #include "SceneLoader.h"
 
 class Object;
+class Skybox;
 
 class Scene
 {
@@ -23,6 +24,8 @@ public:
 	std::vector<Light*> Lights;
 
 private:
+	Skybox* skybox;
+
 	SceneLoader sceneLoader;
 	std::string sceneName;
 };

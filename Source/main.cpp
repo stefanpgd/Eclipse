@@ -22,6 +22,7 @@ int main()
 
 // Things to do:
 // Understand and Implement Blinn-Phong ( LearnOpenGL )
+// consider making a static enum for the slots textures can use so it's always consistent ( OpenGlDev )
 // Fix texture loading for models. 
 // Proper material/shader management ( techniques )
 // Whenever a model is unable to load in, instead of closing the app, just don't load in the model/skip it.

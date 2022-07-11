@@ -3,15 +3,16 @@
 #include "TextureLibrary.h"
 #include "Texture.h"
 #include "DefaultMaterial.h"
+#include "Camera.h"
 
 DefaultMaterial::DefaultMaterial()
 {
-	shader = new Shader("default.vert", "default.frag");
+	shader = new Shader("ReflectSkybox.vert", "ReflectSkybox.frag");
 }
 
 DefaultMaterial::DefaultMaterial(std::string textureName)
 {
-	shader = new Shader("default.vert", "default.frag");
+	shader = new Shader("ReflectSkybox.vert", "ReflectSkybox.frag");
 	texture = TextureLibrary::GetInstance()->GetTexture(textureName);
 }
 
@@ -22,6 +23,7 @@ void DefaultMaterial::ActivateMaterial(glm::mat4& model, glm::mat4& view, glm::m
 	mat4 MVP = projection * view * model;
 	shader->SetMat4("MVP", MVP);
 	shader->SetMat4("model", model);
+	shader->SetVec3("cameraPosition", Camera::GetInstance()->CameraPosition);
 
 	if (texture)
 	{

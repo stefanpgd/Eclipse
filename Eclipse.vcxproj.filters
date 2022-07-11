@@ -39,6 +39,7 @@
     <ClCompile Include="Source\ImGui\imgui_stdlib.cpp" />
     <ClCompile Include="Source\Scene.cpp" />
     <ClCompile Include="Source\Light.cpp" />
+    <ClCompile Include="Source\Skybox.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Renderer.h" />
@@ -80,6 +81,7 @@
     <ClInclude Include="Source\ImGui\imgui_stdlib.h" />
     <ClInclude Include="Source\Scene.h" />
     <ClInclude Include="Source\Light.h" />
+    <ClInclude Include="Source\Skybox.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Source\Shaders\default.vert" />
@@ -88,5 +90,9 @@
     <None Include="Source\Shaders\diffuse.frag" />
     <None Include="Source\Shaders\Phong.vert" />
     <None Include="Source\Shaders\Phong.frag" />
+    <None Include="Source\Shaders\Skybox.vert" />
+    <None Include="Source\Shaders\Skybox.frag" />
+    <None Include="Source\Shaders\ReflectSkybox.vert" />
+    <None Include="Source\Shaders\ReflectSkybox.frag" />
   </ItemGroup>
 </Project>

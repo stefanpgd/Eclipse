@@ -157,6 +157,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Skybox.cpp" />
     <ClCompile Include="Source\Light.cpp" />
     <ClCompile Include="Source\Scene.cpp" />
     <ClCompile Include="Source\Editor.cpp" />
@@ -197,6 +198,7 @@
     <ClCompile Include="Source\TextureLibrary.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Skybox.h" />
     <ClInclude Include="Source\Light.h" />
     <ClInclude Include="Source\Scene.h" />
     <ClInclude Include="Source\Editor.h" />
@@ -244,6 +246,10 @@
     <None Include="Source\Shaders\diffuse.frag" />
     <None Include="Source\Shaders\Phong.frag" />
     <None Include="Source\Shaders\Phong.vert" />
+    <None Include="Source\Shaders\ReflectSkybox.frag" />
+    <None Include="Source\Shaders\ReflectSkybox.vert" />
+    <None Include="Source\Shaders\Skybox.frag" />
+    <None Include="Source\Shaders\Skybox.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

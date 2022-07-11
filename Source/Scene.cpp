@@ -3,11 +3,13 @@
 #include "Scene.h"
 #include "Light.h"
 #include "Renderer.h"
+#include "Skybox.h"
 
 Scene::Scene(std::string sceneName)
 {
 	this->sceneName = sceneName;
 	LoadScene();
+	skybox = new Skybox("Assets/Skyboxes/Space");
 }
 
 void Scene::Update(float deltaTime)
@@ -28,6 +30,8 @@ void Scene::Draw()
 		// so they only have to be bound once.
 		Objects[i]->Draw(Lights);
 	}
+
+	skybox->Draw();
 }
 
 void Scene::SaveScene()
