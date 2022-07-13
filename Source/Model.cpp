@@ -136,6 +136,9 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 		std::vector<ATexture> specularMaps = LoadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
 		textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
 
+		std::vector<ATexture> normalMaps = LoadMaterialTextures(material, aiTextureType_NORMALS, "texture_normal");
+		textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
+
 		aiColor3D ambientColor;
 		if (material->Get(AI_MATKEY_COLOR_AMBIENT, ambientColor) == AI_SUCCESS)
 		{
