@@ -36,43 +36,25 @@ void Mesh::SetupMesh()
 	glEnableVertexAttribArray(2);
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(AVertex), (void*)offsetof(AVertex, TexCoords));
 
+	glEnableVertexAttribArray(3);
+	glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(AVertex), (void*)offsetof(AVertex, Tangent));
+
 	glBindVertexArray(0);
 }
 
 void Mesh::Draw(Shader* shader)
 {
-	unsigned int diffuseNr = 1;
-	unsigned int specularNr = 1;
-
 	shader->SetVec3("cameraPosition", Camera::GetInstance()->CameraPosition);
 	shader->SetVec3("material.Ambient", AmbientColor);
 	shader->SetVec3("material.Diffuse", DiffuseColor);
 	shader->SetVec3("material.Specular", SpecularColor);
 	shader->SetFloat("material.Shininess", Shininess);
 
-	int specularTextureAmount = 0;
 	for (unsigned int i = 0; i < textures.size(); i++)
 	{
-		glActiveTexture(GL_TEXTURE0 + i); // activate proper texture unit before binding
-		// retrieve texture number (the N in diffuse_textureN)
-		std::string number;
-		std::string name = textures[i].Type;
-
-		if (name == "texture_diffuse")
-			number = std::to_string(diffuseNr++);
-		else if (name == "texture_specular")
-		{
-			number = std::to_string(specularNr++);
-			specularTextureAmount++;
-		}
-
-		shader->SetInt((name + number).c_str(), i);
+		glActiveTexture(GL_TEXTURE0 + i);
+		shader->SetInt((textures[i].Type).c_str(), i);
 		glBindTexture(GL_TEXTURE_2D, textures[i].ID);
-	}
-
-	if (specularTextureAmount == 0)
-	{
-		shader->SetInt("texture_specular1", 0);
 	}
 
 	glBindVertexArray(VAO);

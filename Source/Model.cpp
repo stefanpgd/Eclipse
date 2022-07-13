@@ -110,6 +110,10 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 			vertex.TexCoords.y = 0.0f;
 		}
 
+		vertex.Tangent.x = mesh->mTangents[i].x;
+		vertex.Tangent.y = mesh->mTangents[i].y;
+		vertex.Tangent.z = mesh->mTangents[i].z;
+
 		vertices.push_back(vertex);
 	}
 

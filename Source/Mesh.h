@@ -10,6 +10,7 @@ struct AVertex
 	vec3 Position;
 	vec3 Normal;
 	vec2 TexCoords;
+	vec3 Tangent;
 };
 
 struct ATexture
