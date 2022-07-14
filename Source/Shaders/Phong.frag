@@ -72,6 +72,7 @@ void main()
         result += CalculatePointLight(pointLights[i], normal, viewDirection, vec3(diffuseTex), vec3(specularTex));
     }
 
+    result = clamp(result, vec3(0.0, 0.0, 0.0), vec3(1.0, 1.0, 1.0));
     FragColor = vec4(result, 1.0);
 }
 
@@ -88,8 +89,8 @@ vec3 CalculateDirectionalLight(DirectionalLight light, vec3 norm, vec3 viewDirec
     {
         diffuse = light.Color * light.Diffuse * diffuseFactor * diffuseTex * material.Diffuse;
 
-        vec3 reflectedLight = reflect(-lightDirection, norm);
-        float specularFactor = dot(viewDirection, reflectedLight);
+        vec3 halfwayDirection = normalize(lightDirection + viewDirection);
+        float specularFactor = dot(norm, halfwayDirection);
 
         if(specularFactor > 0.0)
         {
@@ -115,8 +116,8 @@ vec3 CalculatePointLight(PointLight light, vec3 norm, vec3 viewDirection, vec3 d
     {
         diffuse = light.Color * light.Diffuse * diffuseFactor * diffuseTex * material.Diffuse;
 
-        vec3 reflectedLight = reflect(-lightDirection, norm);
-        float specularFactor = dot(viewDirection, reflectedLight);
+        vec3 halfwayDirection = normalize(lightDirection + viewDirection);
+        float specularFactor = dot(norm, halfwayDirection);
 
         if(specularFactor > 0.0)
         {

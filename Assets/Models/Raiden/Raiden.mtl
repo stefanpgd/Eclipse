@@ -11,6 +11,7 @@ Ni 1.450000
 d 1.000000
 illum 2
 map_Kd textures/rai0_body0_def_bsmout.png
+map_Ks textures/rai0_body0_def_bsmout.png
 map_d textures/rai0_body0_def_bsmout.png
 
 newmtl Hair
@@ -23,6 +24,7 @@ Ni 1.450000
 d 1.000000
 illum 2
 map_Kd textures/rai0_hair0_def_bsm_alpout.png
+map_Ks textures/rai0_hair0_def_bsm_alpout.png
 map_d textures/rai0_hair0_def_bsm_alpout.png
 
 newmtl Hands
@@ -35,6 +37,7 @@ Ni 1.450000
 d 1.000000
 illum 2
 map_Kd textures/rai0_hand0_def_bsmout.png
+map_Ks textures/rai0_hand0_def_bsmout.png
 map_d textures/rai0_hand0_def_bsmout.png
 
 newmtl Jaw
@@ -47,6 +50,7 @@ Ni 1.450000
 d 1.000000
 illum 2
 map_Kd textures/rai0_jaw0_def_bsmout.png
+map_Ks textures/rai0_jaw0_def_bsmout.png
 map_d textures/rai0_jaw0_def_bsmout.png
 
 newmtl Mask
@@ -59,6 +63,7 @@ Ni 1.450000
 d 1.000000
 illum 2
 map_Kd textures/rai0_jaw0_def_bsmout.png
+map_Ks textures/rai0_jaw0_def_bsmout.png
 map_d textures/rai0_jaw0_def_bsmout.png
 
 newmtl rai_decal
@@ -71,6 +76,7 @@ Ni 1.450000
 d 1.000000
 illum 2
 map_Kd textures/rai0_stkr0_def_bsm_alpout.png
+map_Ks textures/rai0_stkr0_def_bsm_alpout.png
 map_d textures/rai0_stkr0_def_bsm_alpout.png
 
 newmtl rai_hand
@@ -83,6 +89,7 @@ Ni 1.450000
 d 1.000000
 illum 2
 map_Kd textures/rai0_hand0_def_bsmout.png
+map_Ks textures/rai0_hand0_def_bsmout.png
 map_d textures/rai0_hand0_def_bsmout.png
 
 newmtl rai_head
@@ -95,6 +102,7 @@ Ni 1.450000
 d 1.000000
 illum 2
 map_Kd textures/rai0_head1_def_bsmout.png
+map_Ks textures/rai0_head1_def_bsmout.png
 map_d textures/rai0_head1_def_bsmout.png
 
 newmtl rai_jaw
@@ -107,4 +115,5 @@ Ni 1.450000
 d 1.000000
 illum 2
 map_Kd textures/rai0_jaw0_def_bsmout.png
+map_Ks textures/rai0_jaw0_def_bsmout.png
 map_d textures/rai0_jaw0_def_bsmout.png
