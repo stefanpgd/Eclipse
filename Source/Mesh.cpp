@@ -50,11 +50,34 @@ void Mesh::Draw(Shader* shader)
 	shader->SetVec3("material.Specular", SpecularColor);
 	shader->SetFloat("material.Shininess", Shininess);
 
-	for (unsigned int i = 0; i < textures.size(); i++)
+	for (int i = 0; i < 3; i++)
 	{
 		glActiveTexture(GL_TEXTURE0 + i);
-		shader->SetInt((textures[i].Type).c_str(), i);
-		glBindTexture(GL_TEXTURE_2D, textures[i].ID);
+		glBindTexture(GL_TEXTURE_2D, 0);
+	}
+
+	for (unsigned int i = 0; i < textures.size(); i++)
+	{
+		if (textures[i].Type == "texture_diffuse")
+		{
+			glActiveTexture(GL_TEXTURE0);
+			glBindTexture(GL_TEXTURE_2D, textures[i].ID);
+			shader->SetInt("texture_diffuse", 0);
+		}
+
+		if (textures[i].Type == "texture_specular")
+		{
+			glActiveTexture(GL_TEXTURE1);
+			glBindTexture(GL_TEXTURE_2D, textures[i].ID);
+			shader->SetInt("texture_specular", 1);
+		}
+
+		if (textures[i].Type == "texture_normal")
+		{
+			glActiveTexture(GL_TEXTURE2);
+			glBindTexture(GL_TEXTURE_2D, textures[i].ID);
+			shader->SetInt("texture_normal", 2);
+		}
 	}
 
 	glBindVertexArray(VAO);

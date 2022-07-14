@@ -7,8 +7,8 @@ in vec3 FragPosition;
 in vec2 TextureCoord;
 in vec3 Normal;
 
-uniform sampler2D texture_diffuse1;
-uniform sampler2D texture_specular1;
+uniform sampler2D texture_diffuse;
+uniform sampler2D texture_specular;
 uniform vec3 cameraPosition;
 
 struct Material
@@ -49,8 +49,8 @@ vec3 CalculatePointLight(PointLight light, vec3 Normal, vec3 viewDirection, vec3
 
 void main()
 {
-	vec4 diffuseTex = texture(texture_diffuse1, TextureCoord);
-    vec4 specularTex = texture(texture_specular1, TextureCoord);
+	vec4 diffuseTex = texture(texture_diffuse, TextureCoord);
+    vec4 specularTex = texture(texture_specular, TextureCoord);
 
 	if(diffuseTex.a <= 0.5)
 	{
@@ -72,7 +72,6 @@ void main()
         result += CalculatePointLight(pointLights[i], normal, viewDirection, vec3(diffuseTex), vec3(specularTex));
     }
 
-    result = clamp(result, vec3(0.0, 0.0, 0.0), vec3(1.0, 1.0, 1.0));
     FragColor = vec4(result, 1.0);
 }
 
@@ -89,13 +88,13 @@ vec3 CalculateDirectionalLight(DirectionalLight light, vec3 norm, vec3 viewDirec
     {
         diffuse = light.Color * light.Diffuse * diffuseFactor * diffuseTex * material.Diffuse;
 
-        vec3 reflectedLight = reflect(lightDirection, norm);
-        float specularFactor = dot(reflectedLight, viewDirection);
+        vec3 reflectedLight = reflect(-lightDirection, norm);
+        float specularFactor = dot(viewDirection, reflectedLight);
 
         if(specularFactor > 0.0)
         {
             float specularExponent = pow(specularFactor, material.Shininess);
-            specular = light.Color * specularExponent * specular.r * material.Specular;
+            specular = light.Color * specularExponent * specularTex.r;
         }
     }
 
@@ -117,12 +116,12 @@ vec3 CalculatePointLight(PointLight light, vec3 norm, vec3 viewDirection, vec3 d
         diffuse = light.Color * light.Diffuse * diffuseFactor * diffuseTex * material.Diffuse;
 
         vec3 reflectedLight = reflect(-lightDirection, norm);
-        float specularFactor = dot(reflectedLight, viewDirection);
+        float specularFactor = dot(viewDirection, reflectedLight);
 
         if(specularFactor > 0.0)
         {
             float specularExponent = pow(specularFactor, material.Shininess);
-            specular = light.Color * specularExponent * specular.r * material.Specular;
+            specular = light.Color * specularExponent * specularTex.r;
         }
     }
 
