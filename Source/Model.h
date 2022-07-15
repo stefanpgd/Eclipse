@@ -30,4 +30,4 @@ public:
 	std::vector<ATexture> texturesLoaded;
 };
 
-unsigned int TextureFromFile(const char* path, const std::string& directory, bool gamma = false);
+unsigned int TextureFromFile(const char* path, aiTextureType type, const std::string& directory, bool gamma = false);

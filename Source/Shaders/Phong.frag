@@ -74,6 +74,7 @@ void main()
 
     result = clamp(result, vec3(0.0, 0.0, 0.0), vec3(1.0, 1.0, 1.0));
     FragColor = vec4(result, 1.0);
+    FragColor.rgb = pow(FragColor.rgb, vec3(1.0/2.2));
 }
 
 vec3 CalculateDirectionalLight(DirectionalLight light, vec3 norm, vec3 viewDirection, vec3 diffuseTex, vec3 specularTex)

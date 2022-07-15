@@ -24,7 +24,7 @@ void Model::Draw(Shader* shader)
 void Model::LoadModel(std::string path)
 {
 	Assimp::Importer import;
-	unsigned int processFlags = 
+	unsigned int processFlags =
 		aiProcess_CalcTangentSpace | // calculate tangents and bitangents if possible
 		aiProcess_JoinIdenticalVertices | // join identical vertices/ optimize indexing
 		//aiProcess_ValidateDataStructure  | // perform a full validation of the loader's output
@@ -110,9 +110,12 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 			vertex.TexCoords.y = 0.0f;
 		}
 
-		vertex.Tangent.x = mesh->mTangents[i].x;
-		vertex.Tangent.y = mesh->mTangents[i].y;
-		vertex.Tangent.z = mesh->mTangents[i].z;
+		if (mesh->mTangents != nullptr)
+		{
+			vertex.Tangent.x = mesh->mTangents[i].x;
+			vertex.Tangent.y = mesh->mTangents[i].y;
+			vertex.Tangent.z = mesh->mTangents[i].z;
+		}
 
 		vertices.push_back(vertex);
 	}
@@ -173,7 +176,7 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 			shininess = shine;
 		}
 	}
-	
+
 	return Mesh(vertices, indices, textures, Ambient, Diffuse, Specular, shininess);
 }
 
@@ -199,7 +202,7 @@ std::vector<ATexture> Model::LoadMaterialTextures(aiMaterial* mat, aiTextureType
 		if (!skip)
 		{   // if texture hasn't been loaded already, load it
 			ATexture texture;
-			texture.ID = TextureFromFile(str.C_Str(), this->directory);
+			texture.ID = TextureFromFile(str.C_Str(), type, this->directory);
 			texture.Type = typeName;
 			texture.Path = str.C_Str();
 			textures.push_back(texture);
@@ -224,7 +227,7 @@ std::vector<glm::vec3> Model::GetAllVertices()
 	return vertices;
 }
 
-unsigned int TextureFromFile(const char* path, const std::string& directory, bool gamma)
+unsigned int TextureFromFile(const char* path, aiTextureType type, const std::string& directory, bool gamma)
 {
 	std::string filename = std::string(path);
 	filename = directory + "/" + filename;
@@ -245,9 +248,18 @@ unsigned int TextureFromFile(const char* path, const std::string& directory, boo
 			format = GL_RGBA;
 
 		glBindTexture(GL_TEXTURE_2D, textureID);
-		glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
-		glGenerateMipmap(GL_TEXTURE_2D);
 
+		if (type == aiTextureType_DIFFUSE)
+		{
+			GLenum mainFormat = format == GL_RGB ? GL_SRGB : GL_SRGB_ALPHA;
+			glTexImage2D(GL_TEXTURE_2D, 0, mainFormat, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+		}
+		else
+		{
+			glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+		}
+
+		glGenerateMipmap(GL_TEXTURE_2D);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
