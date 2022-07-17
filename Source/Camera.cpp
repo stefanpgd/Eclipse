@@ -20,6 +20,7 @@ void Camera::Update(float deltaTime)
 {
 	this->deltaTime = deltaTime;
 	viewMatrix = glm::lookAt(CameraPosition, CameraPosition + CameraFront, CameraUp);
+	projectionMatrix = glm::perspective(glm::radians(FOV), (float)ScreenWidth / (float)ScreenHeight, Near, Far);
 }
 
 glm::mat4& Camera::GetViewMatrix()

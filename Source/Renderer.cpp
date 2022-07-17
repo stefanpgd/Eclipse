@@ -9,6 +9,7 @@
 #include <iomanip>
 #include <ctime>
 #include <sstream>
+#include "Framebuffer.h"
 
 bool useWindow = false;
 
@@ -70,6 +71,8 @@ void Renderer::Initialize()
 
 		editor = Editor::GetInstance();
 		activeScene = new Scene("testScene");
+
+		framebuffer = new Framebuffer();
 	}
 }
 
@@ -88,14 +91,12 @@ void Renderer::Update()
 		DrawCalls = 0;
 
 		glViewport(0, 0, ScreenWidth, ScreenHeight);
-		glClearColor(0.05f, 0.05f, 0.05f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-		activeScene->Update(deltaTime);
-
-		imgui->Update();
+		framebuffer->Bind();
 
 		ProcessContinuesInputEvents();
+
+		activeScene->Update(deltaTime);
+		imgui->Update();
 
 		if (FocusWindow)
 		{
@@ -107,10 +108,10 @@ void Renderer::Update()
 		}
 
 		activeScene->Draw();
-
 		editor->DrawEditor(activeScene->Objects, activeScene->Lights, consoleLog, deltaTime);
-
 		imgui->Draw();
+
+		framebuffer->Draw();
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();

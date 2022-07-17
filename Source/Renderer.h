@@ -5,6 +5,7 @@ class Camera;
 class Object;
 class ImguiHandler;
 class Scene;
+class Framebuffer;
 
 enum class WarningLevel
 {
@@ -52,6 +53,7 @@ private:
 	Camera* camera;
 	GLFWwindow* window;
 	ImguiHandler* imgui;
+	Framebuffer* framebuffer;
 
 	std::vector<std::string> consoleLog;
 

@@ -40,6 +40,7 @@
     <ClCompile Include="Source\Scene.cpp" />
     <ClCompile Include="Source\Light.cpp" />
     <ClCompile Include="Source\Skybox.cpp" />
+    <ClCompile Include="Source\Framebuffer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Renderer.h" />
@@ -82,6 +83,7 @@
     <ClInclude Include="Source\Scene.h" />
     <ClInclude Include="Source\Light.h" />
     <ClInclude Include="Source\Skybox.h" />
+    <ClInclude Include="Source\Framebuffer.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Source\Shaders\default.vert" />
@@ -94,5 +96,7 @@
     <None Include="Source\Shaders\Skybox.frag" />
     <None Include="Source\Shaders\ReflectSkybox.vert" />
     <None Include="Source\Shaders\ReflectSkybox.frag" />
+    <None Include="Source\Shaders\FramebufferDraw.vert" />
+    <None Include="Source\Shaders\FramebufferDraw.frag" />
   </ItemGroup>
 </Project>
