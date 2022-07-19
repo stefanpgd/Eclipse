@@ -98,5 +98,7 @@
     <None Include="Source\Shaders\ReflectSkybox.frag" />
     <None Include="Source\Shaders\FramebufferDraw.vert" />
     <None Include="Source\Shaders\FramebufferDraw.frag" />
+    <None Include="Source\Shaders\depthMask.vert" />
+    <None Include="Source\Shaders\depthMask.frag" />
   </ItemGroup>
 </Project>

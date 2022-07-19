@@ -33,7 +33,7 @@ private:
 	void DrawSelectedLightDetails(std::vector<Light*>& lights, Light* light);
 
 	void GetAllModelFilePaths(std::vector<std::string>& files, std::string path, std::string originalPath);
-	void DrawVector3Edit(const std::string& name, glm::vec3& data, float resetValue);
+	void DrawVector3Edit(const std::string& name, glm::vec3& data, float resetValue, float precision = 0.1f);
 
 public:
 	// Menu bar toggles

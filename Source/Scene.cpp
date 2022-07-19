@@ -4,12 +4,14 @@
 #include "Light.h"
 #include "Renderer.h"
 #include "Skybox.h"
+#include "Shader.h"
 
 Scene::Scene(std::string sceneName)
 {
 	this->sceneName = sceneName;
 	LoadScene();
 	skybox = new Skybox("Assets/Skyboxes/Space");
+	depthMapShader = new Shader("depthMask.vert", "depthMask.frag");
 }
 
 void Scene::Update(float deltaTime)
@@ -24,6 +26,14 @@ void Scene::Update(float deltaTime)
 
 void Scene::Draw()
 {
+	ImGui::Begin("Test Shadows");
+	ImGui::DragFloat("Near", &Lights[0]->n, 10.0f, 0.1f, 100.0f);
+	ImGui::DragFloat("NFarear", &Lights[0]->f, 10.0f, 0.01f, 100000.0f);
+	ImGui::DragFloat("Ortho Size", &Lights[0]->orthoSize, 10.0f, 0.01f, 10000.0f);
+	ImGui::DragFloat3("testPosition", &Lights[0]->testPosition[0], 1.0f, -5000.0f, 5000.0f);
+	ImGui::Checkbox("Use Directional", &Lights[0]->tryOutDirectionalMethod);
+	ImGui::End();
+
 	for (int i = 0; i < Objects.size(); i++)
 	{
 		// For now, light's are passed to individual objects, but after the rework they should be passed to a material/shader technique instead
@@ -32,6 +42,17 @@ void Scene::Draw()
 	}
 
 	skybox->Draw();
+}
+
+void Scene::DrawShadowMap()
+{
+	depthMapShader->Use();
+	depthMapShader->SetMat4("lightSpaceMatrix", Lights[0]->GetLightSpaceMatrix());
+
+	for (int i = 0; i < Objects.size(); i++)
+	{
+		Objects[i]->DrawShadowMap(depthMapShader);
+	}
 }
 
 void Scene::SaveScene()

@@ -2,6 +2,7 @@
 #include "Light.h"
 #include "Shader.h"
 #include "Renderer.h"
+#include "Camera.h"
 
 Light::Light()
 {
@@ -27,6 +28,27 @@ Light::Light(const Light& light)
 	ExponentialFalloff = light.ExponentialFalloff;
 	IsPointLight = light.IsPointLight;
 	GlobalLightRotation = light.GlobalLightRotation;
+}
+
+glm::mat4& Light::GetLightSpaceMatrix()
+{
+	float near = n;
+	float far = f;
+
+	mat4 lightProjection = glm::ortho(-orthoSize, orthoSize, -orthoSize, orthoSize, near, far);
+	mat4 lightView = glm::lookAt(testPosition, vec3(0.0f), vec3(0.0f, 1.0f, 0.0f));
+
+	vec3 position = Camera::GetInstance()->CameraPosition + (-GlobalLightRotation * 5000.0f);
+	vec3 target = Camera::GetInstance()->CameraPosition;
+
+	if (tryOutDirectionalMethod)
+	{
+		// Directional light will follow the camera so that everything around cam will always be lit/shadow
+		lightView = glm::lookAt(position, target, vec3(0.0f, 1.0f, 0.0f));
+	}
+
+	lightSpaceMatrix = lightProjection * lightView;
+	return lightSpaceMatrix;
 }
 
 void Light::BindLightData(Shader* shader, unsigned int index)

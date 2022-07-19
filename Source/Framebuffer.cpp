@@ -5,6 +5,9 @@
 
 Framebuffer::Framebuffer()
 {
+	screenShader = new Shader("FramebufferDraw.vert", "FramebufferDraw.frag");
+	GenerateScreenVAO();
+
 	// Generate framebuffer
 	glGenFramebuffers(1, &FBO);
 	glBindFramebuffer(GL_FRAMEBUFFER, FBO);
@@ -37,17 +40,41 @@ Framebuffer::Framebuffer()
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-	GenerateScreenVAO();
+	// Generate Depth Map Framebuffer 
+	glGenFramebuffers(1, &depthMapFBO);
 
-	screenShader = new Shader("FramebufferDraw.vert", "FramebufferDraw.frag");
+	glGenTextures(1, &depthMap);
+	glBindTexture(GL_TEXTURE_2D, depthMap);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, SHADOW_WIDTH, SHADOW_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+	float borderColor[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+	glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
+
+	glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthMap, 0);
+	glDrawBuffer(GL_NONE);
+	glReadBuffer(GL_NONE);
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 void Framebuffer::Bind()
 {
+	ImGui::Begin("Window 3");
+	ImGui::Image((ImTextureID)depthMap, ImVec2(256, 256), ImVec2(0, 1), ImVec2(1,0));
+	ImGui::End();
+
 	glBindFramebuffer(GL_FRAMEBUFFER, FBO);
-	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+	glViewport(0, 0, ScreenWidth, ScreenHeight);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 	glEnable(GL_DEPTH_TEST);
+	glCullFace(GL_BACK);
+
+	glActiveTexture(GL_TEXTURE10);
+	glBindTexture(GL_TEXTURE_2D, depthMap);
 }
 
 void Framebuffer::Draw()
@@ -57,10 +84,27 @@ void Framebuffer::Draw()
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	screenShader->Use();
+	screenShader->SetInt("screenTexture", 0);
+	screenShader->SetInt("depthMap", 1);
 	glBindVertexArray(screenVAO);
 	glDisable(GL_DEPTH_TEST);
+
+	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, colorBuffer);
+
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, depthMap);
+
 	glDrawArrays(GL_TRIANGLES, 0, 6);
+}
+
+void Framebuffer::BindShadowmaps()
+{
+	glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
+	glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
+	glClear(GL_DEPTH_BUFFER_BIT);
+	glEnable(GL_DEPTH_TEST);
+	glCullFace(GL_FRONT);
 }
 
 void Framebuffer::GenerateScreenVAO()

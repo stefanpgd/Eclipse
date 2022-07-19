@@ -9,6 +9,8 @@ public:
 	Light(vec3 position, vec3 color, float intensity);
 	Light(const Light& light);
 
+	glm::mat4& GetLightSpaceMatrix();
+
 	void BindLightData(Shader* shader, unsigned int index);
 
 public:
@@ -28,4 +30,13 @@ public:
 
 	bool Deleted = false;
 	bool Duplicate = false;
+
+	mat4 lightSpaceMatrix;
+
+	// Temp
+	float n = 1.0f;
+	float f = 10000.0f;
+	float orthoSize = 10000.0f;
+	vec3 testPosition = vec3(0.0f, 10000.0f, 0.0f);
+	bool tryOutDirectionalMethod = true;
 };

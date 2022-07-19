@@ -27,6 +27,7 @@ public:
 
 	virtual void Update(float deltaTime);
 	virtual void Draw(std::vector<Light*>& lights);
+	virtual void DrawShadowMap(Shader* depthShader);
 
 public:
 	Transform transform;

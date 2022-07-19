@@ -244,6 +244,8 @@
   <ItemGroup>
     <None Include="Source\Shaders\default.frag" />
     <None Include="Source\Shaders\default.vert" />
+    <None Include="Source\Shaders\depthMask.frag" />
+    <None Include="Source\Shaders\depthMask.vert" />
     <None Include="Source\Shaders\depthTest.frag" />
     <None Include="Source\Shaders\diffuse.frag" />
     <None Include="Source\Shaders\FramebufferDraw.frag" />

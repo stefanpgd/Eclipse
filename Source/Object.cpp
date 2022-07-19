@@ -92,6 +92,8 @@ void Object::Draw(std::vector<Light*>& lights)
 	if (isActive)
 	{
 		material->ActivateMaterial(transform.GetModelMatrix(), camera->GetViewMatrix(), camera->GetProjectionMatrix());
+		material->shader->SetMat4("lightSpaceMatrix", lights[0]->GetLightSpaceMatrix());
+		material->shader->SetInt("shadowMap", 10);
 
 		if (lights.size() > 1)
 		{
@@ -107,6 +109,15 @@ void Object::Draw(std::vector<Light*>& lights)
 			lights[i]->BindLightData(material->shader, i);
 		}
 
+		meshRenderer.Draw(material->shader);
+	}
+}
+
+void Object::DrawShadowMap(Shader* depthShader)
+{
+	if (isActive)
+	{
+		depthShader->SetMat4("model", transform.GetModelMatrix());
 		meshRenderer.Draw(material->shader);
 	}
 }

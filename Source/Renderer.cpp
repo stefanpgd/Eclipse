@@ -87,11 +87,12 @@ void Renderer::Update()
 		float currentFrame = static_cast<float>(glfwGetTime());
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
+		timeElasped += deltaTime;
 
 		DrawCalls = 0;
 
-		glViewport(0, 0, ScreenWidth, ScreenHeight);
-		framebuffer->Bind();
+		activeScene->Lights[0]->GlobalLightRotation.x = cosf(timeElasped * 0.2) * 0.3f;
+		activeScene->Lights[0]->GlobalLightRotation.z = sinf(timeElasped * 0.3) * 0.2f;
 
 		ProcessContinuesInputEvents();
 
@@ -107,7 +108,11 @@ void Renderer::Update()
 			camera->FirstMouse = true;
 		}
 
+		framebuffer->BindShadowmaps();
+		activeScene->DrawShadowMap();
+		framebuffer->Bind();
 		activeScene->Draw();
+
 		editor->DrawEditor(activeScene->Objects, activeScene->Lights, consoleLog, deltaTime);
 		imgui->Draw();
 

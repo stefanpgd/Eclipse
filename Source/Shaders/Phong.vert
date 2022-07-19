@@ -6,9 +6,11 @@ layout (location = 2) in vec2 aTexCoord;
 out vec3 FragPosition;
 out vec2 TextureCoord;
 out vec3 Normal;
+out vec4 FragPosLightSpace;
 
 uniform mat4 MVP;
 uniform mat4 model;
+uniform mat4 lightSpaceMatrix;
 
 void main()
 {
@@ -16,4 +18,5 @@ void main()
     FragPosition = vec3(model * vec4(aPos, 1.0));
     Normal = mat3(transpose(inverse(model))) * aNormal;
     TextureCoord = aTexCoord;
+    FragPosLightSpace = lightSpaceMatrix * vec4(FragPosition, 1.0);
 }

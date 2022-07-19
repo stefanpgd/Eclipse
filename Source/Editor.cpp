@@ -683,7 +683,7 @@ void Editor::DrawSelectedLightDetails(std::vector<Light*>& lights, Light* light)
 	}
 	else
 	{
-		DrawVector3Edit("Rotation", light->GlobalLightRotation, 0.0f);
+		DrawVector3Edit("Rotation", light->GlobalLightRotation, 0.0f, 0.001f);
 	}
 
 	ImGui::Spacing();
@@ -772,7 +772,7 @@ void Editor::GetAllModelFilePaths(std::vector<std::string>& files, std::string p
 	}
 }
 
-void Editor::DrawVector3Edit(const std::string& name, glm::vec3& data, float resetValue)
+void Editor::DrawVector3Edit(const std::string& name, glm::vec3& data, float resetValue, float precision)
 {
 	// Credits for this function go to Yan Chernikov, a.k.a. 'The Cherno'
 	// source: https://youtu.be/oESRecjuLNY
@@ -805,7 +805,7 @@ void Editor::DrawVector3Edit(const std::string& name, glm::vec3& data, float res
 	ImGui::PopStyleColor(3);
 
 	ImGui::SameLine();
-	ImGui::DragFloat("##X", &data.x, 0.1f, 0.0f, 0.0f, "%.2f");
+	ImGui::DragFloat("##X", &data.x, precision, 0.0f, 0.0f, "%.2f");
 	ImGui::PopItemWidth();
 	ImGui::SameLine();
 
@@ -823,7 +823,7 @@ void Editor::DrawVector3Edit(const std::string& name, glm::vec3& data, float res
 	ImGui::PopStyleColor(3);
 
 	ImGui::SameLine();
-	ImGui::DragFloat("##Y", &data.y, 0.1f, 0.0f, 0.0f, "%.2f");
+	ImGui::DragFloat("##Y", &data.y, precision, 0.0f, 0.0f, "%.2f");
 	ImGui::PopItemWidth();
 	ImGui::SameLine();
 
@@ -841,7 +841,7 @@ void Editor::DrawVector3Edit(const std::string& name, glm::vec3& data, float res
 	ImGui::PopStyleColor(3);
 
 	ImGui::SameLine();
-	ImGui::DragFloat("##Z", &data.z, 0.1f, 0.0f, 0.0f, "%.2f");
+	ImGui::DragFloat("##Z", &data.z, precision, 0.0f, 0.0f, "%.2f");
 	ImGui::PopItemWidth();
 	ImGui::SameLine();
 

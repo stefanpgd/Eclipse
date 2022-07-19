@@ -5,6 +5,7 @@
 
 class Object;
 class Skybox;
+class Shader;
 
 class Scene
 {
@@ -13,6 +14,7 @@ public:
 
 	void Update(float deltaTime);
 	void Draw();
+	void DrawShadowMap();
 	void SaveScene();
 
 private:
@@ -25,6 +27,7 @@ public:
 
 private:
 	Skybox* skybox;
+	Shader* depthMapShader;
 
 	SceneLoader sceneLoader;
 	std::string sceneName;
