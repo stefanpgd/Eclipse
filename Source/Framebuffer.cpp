@@ -15,7 +15,7 @@ Framebuffer::Framebuffer()
 	// Generate color buffer texture
 	glGenTextures(1, &colorBuffer);
 	glBindTexture(GL_TEXTURE_2D, colorBuffer);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, ScreenWidth, ScreenHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, ScreenWidth, ScreenHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
@@ -66,6 +66,14 @@ void Framebuffer::Bind()
 	ImGui::Image((ImTextureID)depthMap, ImVec2(256, 256), ImVec2(0, 1), ImVec2(1,0));
 	ImGui::End();
 
+	ImGui::Begin("Placeholder");
+	ImGui::DragFloat2("R - Offset", &rOffset[0], 0.00001f, -0.5, 0.5);
+	ImGui::DragFloat2("G - Offset", &gOffset[0], 0.00001f, -0.5, 0.5);
+	ImGui::DragFloat2("B - Offset", &bOffset[0], 0.00001f, -0.5, 0.5);
+	ImGui::DragFloat("Vignette Strength", &vignetteStrength, 0.01f, 0.0f, 1.0f);
+	ImGui::DragFloat("Exposure", &exposure, 0.01f, 0.1f, 50.0f);
+	ImGui::End();
+
 	glBindFramebuffer(GL_FRAMEBUFFER, FBO);
 	glViewport(0, 0, ScreenWidth, ScreenHeight);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -86,6 +94,12 @@ void Framebuffer::Draw()
 	screenShader->Use();
 	screenShader->SetInt("screenTexture", 0);
 	screenShader->SetInt("depthMap", 1);
+	screenShader->SetVec2("rOffset", rOffset);
+	screenShader->SetVec2("gOffset", gOffset);
+	screenShader->SetVec2("bOffset", bOffset);
+	screenShader->SetFloat("vignette", vignetteStrength);
+	screenShader->SetFloat("exposure", exposure);
+
 	glBindVertexArray(screenVAO);
 	glDisable(GL_DEPTH_TEST);
 

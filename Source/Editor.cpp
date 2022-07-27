@@ -708,6 +708,7 @@ void Editor::DrawSelectedLightDetails(std::vector<Light*>& lights, Light* light)
 	else
 	{
 		ImGui::ColorEdit3("Color", &light->Color[0]);
+		ImGui::DragFloat("Intensity", &light->Intensity, 0.1f, 0.0f, 1000.0);
 		ImGui::DragFloat3("Ambient", &light->AmbientAmount[0], 0.01f, 0.0f, 1.0f);
 		ImGui::DragFloat3("Diffuse", &light->DiffuseAmount[0], 0.01f, 0.0f, 1.0f);
 	}

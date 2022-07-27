@@ -29,7 +29,6 @@ private:
 
     Shader* screenShader;
 
-    float time = 0.0f;
 
     float screenVertices[24]
     {
@@ -42,4 +41,12 @@ private:
          1.0f, -1.0f,  1.0f, 0.0f,
          1.0f,  1.0f,  1.0f, 1.0f
     };
+
+    // Temp
+    float time = 0.0f;
+    vec2 rOffset = vec2(0.0);
+    vec2 gOffset = vec2(0.0);
+    vec2 bOffset = vec2(0.0);
+    float vignetteStrength = 0.0f;
+    float exposure = 1.0f;
 };

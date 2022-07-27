@@ -38,7 +38,7 @@ glm::mat4& Light::GetLightSpaceMatrix()
 	mat4 lightProjection = glm::ortho(-orthoSize, orthoSize, -orthoSize, orthoSize, near, far);
 	mat4 lightView = glm::lookAt(testPosition, vec3(0.0f), vec3(0.0f, 1.0f, 0.0f));
 
-	vec3 position = Camera::GetInstance()->CameraPosition + (-GlobalLightRotation * 5000.0f);
+	vec3 position = Camera::GetInstance()->CameraPosition + (normalize(-GlobalLightRotation) * height);
 	vec3 target = Camera::GetInstance()->CameraPosition;
 
 	if (tryOutDirectionalMethod)
@@ -80,5 +80,6 @@ void Light::BindLightData(Shader* shader, unsigned int index)
 		shader->SetVec3("directionalLight.Direction", GlobalLightRotation);
 		shader->SetVec3("directionalLight.Ambient", AmbientAmount);
 		shader->SetVec3("directionalLight.Diffuse", DiffuseAmount);
+		shader->SetFloat("directionalLight.Intensity", Intensity);
 	}
 }

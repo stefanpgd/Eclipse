@@ -28,7 +28,8 @@ void Scene::Draw()
 {
 	ImGui::Begin("Test Shadows");
 	ImGui::DragFloat("Near", &Lights[0]->n, 10.0f, 0.1f, 100.0f);
-	ImGui::DragFloat("NFarear", &Lights[0]->f, 10.0f, 0.01f, 100000.0f);
+	ImGui::DragFloat("Far", &Lights[0]->f, 10.0f, 0.01f, 100000.0f);
+	ImGui::DragFloat("height", &Lights[0]->height, 10.0f, 100.0f, 10000.0f);
 	ImGui::DragFloat("Ortho Size", &Lights[0]->orthoSize, 10.0f, 0.01f, 10000.0f);
 	ImGui::DragFloat3("testPosition", &Lights[0]->testPosition[0], 1.0f, -5000.0f, 5000.0f);
 	ImGui::Checkbox("Use Directional", &Lights[0]->tryOutDirectionalMethod);

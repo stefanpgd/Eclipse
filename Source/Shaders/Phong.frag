@@ -25,6 +25,7 @@ struct Material
 struct DirectionalLight
 {
     vec3 Color;
+    float Intensity;
     vec3 Direction;
     vec3 Ambient;
     vec3 Diffuse;
@@ -67,12 +68,6 @@ void main()
     vec3 result;
     float shadow = ShadowCalculation(FragPosLightSpace);
 
-//    if(shadow == 1.0)
-//    {
-//        FragColor = vec4(0.8, 0.2, 0.1, 1.0);
-//        return;
-//    }
-
     if(directionalLight.Color != 0)
     {
         result += CalculateDirectionalLight(directionalLight, normal, viewDirection, vec3(diffuseTex), vec3(specularTex), shadow);
@@ -83,9 +78,7 @@ void main()
         result += CalculatePointLight(pointLights[i], normal, viewDirection, vec3(diffuseTex), vec3(specularTex));
     }
 
-    result = clamp(result, vec3(0.0, 0.0, 0.0), vec3(1.0, 1.0, 1.0));
     FragColor = vec4(result, 1.0);
-    FragColor.rgb = pow(FragColor.rgb, vec3(1.0/2.2));
 }
 
 vec3 CalculateDirectionalLight(DirectionalLight light, vec3 norm, vec3 viewDirection, vec3 diffuseTex, vec3 specularTex, float shadow)
@@ -110,6 +103,10 @@ vec3 CalculateDirectionalLight(DirectionalLight light, vec3 norm, vec3 viewDirec
             specular = light.Color * (specularExponent * specularTex.r);
         }
     }
+
+    ambient *= light.Intensity;
+    diffuse *= light.Intensity;
+    specular *= light.Intensity;
 
     vec3 result = (ambient + (1.0 - shadow) * (diffuse + specular));
     return result;
@@ -179,7 +176,4 @@ float ShadowCalculation(vec4 fragPosLightSpace)
      shadow /= 9.0;
 
      return shadow;
-
-
-    //return currentDepth - shadowBias > storedDepth ? 1.0 : 0.0;
 }

@@ -36,6 +36,7 @@ public:
 	// Temp
 	float n = 1.0f;
 	float f = 10000.0f;
+	float height = 2000.0f;
 	float orthoSize = 10000.0f;
 	vec3 testPosition = vec3(0.0f, 10000.0f, 0.0f);
 	bool tryOutDirectionalMethod = true;
