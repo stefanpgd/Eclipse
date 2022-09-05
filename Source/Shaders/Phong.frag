@@ -68,7 +68,7 @@ void main()
     vec3 result;
     float shadow = ShadowCalculation(FragPosLightSpace);
 
-    if(directionalLight.Color != 0)
+    if(directionalLight.Color != vec3(0))
     {
         result += CalculateDirectionalLight(directionalLight, normal, viewDirection, vec3(diffuseTex), vec3(specularTex), shadow);
     }
@@ -78,6 +78,8 @@ void main()
         result += CalculatePointLight(pointLights[i], normal, viewDirection, vec3(diffuseTex), vec3(specularTex));
     }
 
+    const float gamma = 2.2;
+    result = pow(result, vec3(1.0 / gamma));
     FragColor = vec4(result, 1.0);
 }
 
