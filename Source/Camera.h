@@ -55,7 +55,7 @@ public:
 
     // Projection
     float Near = 0.1f;
-    float Far = 10000.0f;
+    float Far = 500.0f;
     bool FirstMouse = true;
 
 private:
